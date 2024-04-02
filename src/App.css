@@ -1,38 +1,16 @@
-.App {
-  text-align: center;
-}
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+@import url("./assets/css/app-rtl.min.css");
+@import url("./assets/css/app.min.css");
+@import url("./assets/css/bootstrap.min.css");
+@import url("./assets/css/bootstrap-icons.css");
+@import url("./assets/css/tiny-slider.css");
+@import url("./assets/css/venobox.min.css");
+@import url("./assets/css/rangeslider.css");
+@import url("./assets/css/vanilla-dataTables.min.css");
+@import url("./assets/css/apexcharts.css");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap");
+@import url("./assets/css/custom.min.css");
+@import url("./assets/css/icons.min.css");
+@import url("./assets/css/style.css");
+@import url("./assets/css/custom2.css");
+@import url("./assets/css/custom.css");

@@ -1,0 +1,248 @@
+.stackFilter_sec {
+  width: 30px;
+  height: 30px;
+  box-shadow: 0px 6px 12px #efe9ea;
+  position: relative;
+  background: transparent;
+  font-size: 13px;
+}
+[data-bs-theme="dark"] .stackFilter_sec {
+  box-shadow: 0px 6px 12px #4b38b3;
+  background: transparent;
+}
+[data-bs-theme="dark"] .stackFilter_sec button {
+  background: #28273f;
+  border: 1px solid #28273f;
+}
+[data-bs-theme="dark"] .stackFilter_sec i {
+  color: #4b38b3;
+}
+[data-bs-theme="dark"] .stackFilter_sec button:hover {
+  background: #4b38b3;
+  border: 1px solid #4b38b3;
+}
+[data-bs-theme="dark"] .stackFilter_sec button:hover i {
+  color: #fff;
+}
+
+.stackFilter_sec button {
+  font-size: 18px;
+}
+.stackFilter_sec button span.filter_check {
+  position: absolute;
+  font-size: 14px;
+  background: white;
+  top: 19px;
+  left: 25px;
+}
+
+.stackFilter_sec .stackFilter_dropdown {
+  border: 1px solid #fff;
+  border-radius: 5px;
+  box-shadow: 0px 6px 16px #efe9ea;
+  min-width: 320px;
+  height: 240px;
+  position: absolute;
+  right: 0;
+  z-index: 3;
+  top: 40px;
+}
+.stackFilter_sec .stackFilter_dropdown.hide {
+  display: none;
+}
+.stackFilter_sec .stackFilter_dropdown.show {
+  display: block;
+}
+
+.stackFilter_sec.light .stackFilter_dropdown {
+  background: #ffffff;
+}
+[data-bs-theme="dark"] .stackFilter_sec.light .stackFilter_dropdown {
+  background: #262a30;
+  color: #ffffff;
+  border: 1px solid #262a30;
+  box-shadow: 0px 6px 16px #695da875;
+}
+
+.stackFilter_sec.dark .stackFilter_dropdown {
+  background: #000000;
+  color: #ffffff;
+}
+
+.stackFilter_sec .filter_opts {
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #DBDFEA;
+}
+
+.stackFilter_sec .clr_btn {
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.stackFilter_sec.theme1 .clr_btn {
+  color: #FFCC98;
+}
+
+.stackFilter_sec.theme2 .clr_btn {
+  color: #EED6BF;
+}
+
+.stackFilter_sec.theme3 .clr_btn {
+  color: #14C7DE;
+}
+
+.stackFilter_sec.theme4 .clr_btn {
+  color: #009EAA;
+}
+
+.stackFilter_sec.theme5 .clr_btn {
+  color: #1974D3;
+}
+.stackFilter_sec.theme6 .clr_btn {
+  color: #4b38b3;
+}
+
+.stackFilter_sec .filters_block {
+  height: 100%;
+  max-height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
+.stackFilter_sec .filter_box {
+  padding: 0px
+}
+
+.stackFilter_sec .filter_box_title{
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0px 20px
+}
+.stackFilter_sec.theme1 .filter_box.open .filter_box_title{
+  background: rgb(255 204 152 / 40%);
+}
+.stackFilter_sec.theme2 .filter_box.open .filter_box_title{
+  background: rgb(238 214 191 / 40%);
+}
+.stackFilter_sec.theme3 .filter_box.open .filter_box_title{
+  background: rgb(20 199 222 / 40%);
+}
+.stackFilter_sec.theme4 .filter_box.open .filter_box_title{
+  background: rgb(0 158 170 / 40%);
+}
+.stackFilter_sec.theme5 .filter_box.open .filter_box_title{
+  background: rgb(25 116 211 / 40%);
+}
+.stackFilter_sec.theme6 .filter_box.open .filter_box_title{
+  background: rgb(33 56 173 / 40%);
+}
+.stackFilter_sec .filter_box_title h4{
+  font-size: inherit;
+  flex: 1 1 auto;
+  margin-bottom: 0;
+  padding: 15px 0px;
+  position: relative;
+  font-weight: 600;
+}
+.stackFilter_sec .filter_box_title h4:before{
+  /* font-family: 'FontAwesome'; */
+  font: normal normal normal 14px/1.5 "Material Design Icons";
+  position: absolute;
+  right: 5px;
+}
+.stackFilter_sec .filter_box:not(.open) .filter_box_title h4:before{
+  content: "\F0415";
+}
+.stackFilter_sec .filter_box.open .filter_box_title h4:before{
+  content: "\F0374";
+}
+
+.stackFilter_sec .filter_list {
+  padding: 0px;
+  padding-left: 10px;
+  margin: 0px;
+  list-style-type: none;
+  font-size: 14px;
+  font-weight: 500;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+.stackFilter_sec .filter_box.open .filter_list {
+  background: transparent;
+}
+
+.stackFilter_sec .filter_item {
+  font-size: 13px;
+  cursor: pointer;
+  padding: 10px;
+  padding-left: 20px;
+  font-weight: 500;
+}
+
+.stackFilter_sec .filter_item label {
+  cursor: inherit;
+  margin-bottom: 0px;
+  width: 100%;
+}
+
+.stackFilter_sec .filter_item label input {
+  width: 0;
+  height: 0;
+}
+.stackFilter_sec .filter_item label input+span {
+  margin-left: 35px;
+  position: relative;
+}
+
+.stackFilter_sec .filter_item label input+span:before {
+  content: "";
+  /* font-family: 'FontAwesome'; */
+  font: normal normal normal 14px/1.5 "Material Design Icons";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  padding-left: 3px;
+  left: -35px;
+  color: #ffffff;
+  background: transparent;
+  border: 2px solid #efe9ea;
+  border-radius: 3px;
+}
+.stackFilter_sec .filter_item label input:checked+span:before {
+  content: "\F012C";
+  border: 0;
+}
+
+.stackFilter_sec.theme1 .filter_item label input:checked+span:before {
+  background: #FFCC98;
+}
+
+.stackFilter_sec.theme2 .filter_item label input:checked+span:before {
+  background: #EED6BF;
+}
+
+.stackFilter_sec.theme3 .filter_item label input:checked+span:before {
+  background: #14C7DE;
+}
+
+.stackFilter_sec.theme4 .filter_item label input:checked+span:before {
+  background: #009EAA;
+}
+
+.stackFilter_sec.theme5 .filter_item label input:checked+span:before {
+  background: #1974D3;
+}
+.stackFilter_sec.theme6 .filter_item label input:checked+span:before {
+  background: #4b38b3;
+}
+
+@media screen and (max-width:767px) {
+  .stackFilter_sec .stackFilter_dropdown {
+    min-width: 250px;
+  }
+}
+
