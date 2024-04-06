@@ -1,0 +1,10 @@
+
+.custom_err_msg_section .fs_big {
+  font-size: 36px;
+}
+.custom_err_msg_section .fs_22 {
+  font-size: 22px;
+}
+.custom_err_msg_section button {
+  border-radius: 25px;
+}

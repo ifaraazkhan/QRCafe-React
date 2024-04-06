@@ -1,0 +1,12 @@
+:is([data-layout="vertical"], [data-layout="semibox"])[data-sidebar-size="sm"] .text-lg {
+    display: none;
+}
+
+/* home css start */
+
+.bakery_bg_img{
+    background-image: url(../images/home/bg-img/3c.png);
+    opacity: 1;
+}
+
+/* home css end */

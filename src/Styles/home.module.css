@@ -1,0 +1,18 @@
+.pass_cond_list {
+    list-style-type: none;
+    max-width: 400px;
+  }
+.pass_cond_list li span {
+  font-size: 10px;
+}
+.otp_box .otp_input_field{
+  height: 65px;
+  background: none;
+  /* border: none; */
+  border: 1px solid #a8a8ac73;
+  border-radius: 0px;
+  width: 12%;
+  margin: 0 2.3%;
+  text-align: center;
+  outline: none;
+}

@@ -1,0 +1,6 @@
+
+#header .logo_box{
+  width: 150px;
+  height: 50px;
+  object-fit: contain;
+}
