@@ -5,7 +5,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Link } from "react-router-dom";
 
 // Import Images
-import logoLight from "../../assets/images/logo-light.png";
+// import logoLight from "../../assets/images/logo-light.png";
+import logoImg from "../../assets/images/home/core-img/logo.png";
 
 const AuthSlider = () => {
     return (
@@ -16,7 +17,7 @@ const AuthSlider = () => {
                     <div className="position-relative h-100 d-flex flex-column">
                         <div className="mb-4">
                             <Link to="/dashboard" className="d-block">
-                                <img src={logoLight} alt="" height="50" />
+                                <img src={logoImg} alt="" height="50" />
                             </Link>
                         </div>
                         <div className="mt-auto">
@@ -27,17 +28,17 @@ const AuthSlider = () => {
                             <Carousel showThumbs={false} autoPlay={true} showArrows={false} showStatus={false} infiniteLoop={true} className="carousel slide" id="qoutescarouselIndicators" >
                                 <div className="carousel-inner text-center text-white-50 pb-5">
                                     <div className="item">
-                                        <p className="fs-15 fst-italic">" Handles expenses on the go! "</p>
+                                        <p className="fs-15 fst-italic">" Handles on the go! "</p>
                                     </div>
                                 </div>
                                 <div className="carousel-inner text-center text-white-50 pb-5">
                                     <div className="item">
-                                        <p className="fs-15 fst-italic">" Make Expensing fast and easy."</p>
+                                        <p className="fs-15 fst-italic">" Make fast and easy."</p>
                                     </div>
                                 </div>
                                 <div className="carousel-inner text-center text-white-50 pb-5">
                                     <div className="item">
-                                        <p className="fs-15 fst-italic">" A better way to do expense management! "</p>
+                                        <p className="fs-15 fst-italic">" A better way to do management! "</p>
                                     </div>
                                 </div>
                             </Carousel>

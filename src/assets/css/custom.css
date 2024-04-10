@@ -528,6 +528,7 @@ pre {
 
 
   /* bootstrap modal from right css start */
+  .form-group{ margin-bottom: 10px;}
   .modal.left .modal-dialog,
 	.modal.right .modal-dialog {
 		position: fixed;

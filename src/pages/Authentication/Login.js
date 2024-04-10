@@ -46,7 +46,7 @@ const Login = () => {
             let setcookie = SetCookie('currentUser', JSON.stringify(userData))
             let setTimecookie = SetCookie('last_login_activity', JSON.stringify(new Date().getTime()))
             setAuthorization(userData.accessToken)
-            let redirectUrl = "/admin/dashboard"
+            let redirectUrl = "/dashboard"
             navigate(redirectUrl)
             // updateData('user')
         }else{

@@ -46,29 +46,7 @@ const SubHeader = (props) => {
 
     return (
         <React.Fragment>
-            <ul className="card-header-pills nav nav-pills py-2 bg-white justify-content-center">
-                {primaryUrlPath == "expenses" && (authRoles.length > 1 || (authRoles.length == 1 && !authRoles.includes(1))) && 
-                    <React.Fragment>
-                        {authRoles.some(item => [1,4].includes(item)) && <li className="nav-item link_url"><a className={`nav-link ${expenseType == 1 ? "active" : ""}`} onClick={() => changeUserAccType(1)}>Personal</a></li>}
-                        {authRoles.some(item => [2,4].includes(item)) && <li className="nav-item link_url"><a className={`nav-link ${expenseType == 2 ? "active" : ""}`} onClick={() => changeUserAccType(2)}>Approver</a></li>}
-                        {authRoles.some(item => [3,4].includes(item)) && <li className="nav-item link_url"><a className={`nav-link ${expenseType == 3 ? "active" : ""}`} onClick={() => changeUserAccType(3)}>Finance</a></li>}
-                    </React.Fragment>
-                }
-                {primaryUrlPath == "dashboard" && (authRoles.length > 1 || (authRoles.length == 1 && !authRoles.includes(1))) && 
-                    <React.Fragment>
-                        {authRoles.some(item => [1,4].includes(item)) && <li className="nav-item link_url"><a className={`nav-link ${dashboardType == 1 ? "active" : ""}`} onClick={() => changeUserAccType(1)}>Personal</a></li>}
-                        {authRoles.some(item => [2,4].includes(item)) && <li className="nav-item link_url"><a className={`nav-link ${dashboardType == 2 ? "active" : ""}`} onClick={() => changeUserAccType(2)}>Approver</a></li>}
-                        {authRoles.some(item => [3,4].includes(item)) && <li className="nav-item link_url"><a className={`nav-link ${dashboardType == 3 ? "active" : ""}`} onClick={() => changeUserAccType(3)}>Finance</a></li>}
-                    </React.Fragment>
-                }
-                {primaryUrlPath == "transactions" && (authRoles.length > 1 || (authRoles.length == 1 && !authRoles.includes(1))) && 
-                    <React.Fragment>
-                        {authRoles.some(item => [1,4].includes(item)) && <li className="nav-item link_url"><a className={`nav-link ${txnType == 1 ? "active" : ""}`} onClick={() => changeUserAccType(1)}>Personal</a></li>}
-                        {authRoles.some(item => [3,4].includes(item)) && <li className="nav-item link_url"><a className={`nav-link ${txnType == 3 ? "active" : ""}`} onClick={() => changeUserAccType(3)}>Finance</a></li>}
-                    </React.Fragment>
-                }
-                
-            </ul>
+            
         </React.Fragment>
     )
 }

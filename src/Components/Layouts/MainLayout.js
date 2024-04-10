@@ -80,7 +80,7 @@ const MainLayout = (props) => {
                     {/* <Loader showLoader={true} pos={'fixed'} /> */}
                     {showLoader && <Loader showLoader={showLoader} pos={'fixed'} />}
                     {PageId &&
-                        <div key={PageId} id="layout-wrapper" data-bs-theme={layoutModeType == "dark" ? "dark" : "light"} data-sidebar-size={sidebartype} data-layout={layoutType} data-layout-style="default" data-sidebar={`dark`} data-layout-width="fluid" data-layout-position="fixed" data-topbar={layoutModeType == "dark" ? "dark" : "light"} data-sidebar-image="none" data-sidebar-visibility={sidebarVisibilitytype} className={showMobileSideBar ? "twocolumn-panel vertical-sidebar-enable" : ""} >
+                        <div key={PageId} id="layout-wrapper" data-bs-theme={layoutModeType == "dark" ? "dark" : "light"} data-sidebar-size={sidebartype} data-layout={layoutType} data-layout-style="default" data-sidebar={layoutModeType == "dark" ? "dark" : "light"} data-layout-width="fluid" data-layout-position="fixed" data-topbar={layoutModeType == "dark" ? "dark" : "light"} data-sidebar-image="none" data-sidebar-visibility={sidebarVisibilitytype} className={showMobileSideBar ? "twocolumn-panel vertical-sidebar-enable" : ""} >
                             <Header headerClass={headerClass} layoutModeType={layoutModeType} onChangeLayoutMode={onChangeLayoutMode} pageId={PageId}/>
                             <Asidebar layoutType={layoutType} pageId={PageId} />
                             <div className="main-content">
