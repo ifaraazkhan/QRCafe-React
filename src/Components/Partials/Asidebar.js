@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 //import logo
-import logoSm from "../../assets/images/logo-sm.png";
-import logoDark from "../../assets/images/logo-dark.png";
-import logoLight from "../../assets/images/logo-light.png";
+import logoDark from "../../assets/images/home/core-img/logo-dark.png";
+import logoLight from "../../assets/images/home/core-img/logo.png";
+import logoSm from "../../assets/images/home/core-img/favicon.ico";
 
 import { Container, Collapse, Dropdown } from "../../Helpers/UiHelper";
 import { AuthContext } from "../../ContextProvider/AuthContext";
@@ -59,71 +59,14 @@ const Asidebar = ({ layoutType }) => {
         label: "Menu",
         isHeader: true,
       },
-      // {
-      //   id: "dashboard",
-      //   label: "Dashborad",
-      //   link: `/dashboard/${subHeaderView}`,
-      //   parentId: "dashboard",
-      //   icon: "mdi mdi-speedometer",
-      //   roles:[1, 2, 3, 4]
-      // },
       {
-        id: "expenses",
-        label: "Expenses",
-        link: `/expenses/all`,
-        parentId: "expenses",
-        icon: "mdi mdi-currency-inr",
+        id: "dashboard",
+        label: "Dashborad",
+        link: `/dashboard`,
+        parentId: "dashboard",
+        icon: "mdi mdi-speedometer",
         roles:[1, 2, 3, 4]
       },
-      // {
-      //   id: "invoices",
-      //   label: "Invoices",
-      //   link: "/invoices",
-      //   parentId: "invoices",
-      //   icon: "mdi mdi-printer-pos",
-      //   roles:[3, 4]
-      // },
-      // {
-      //   id: "transactions",
-      //   label: "Transactions",
-      //   link: `/transactions/${subHeaderView != "approver" ? subHeaderView : "personal"}`,
-      //   parentId: "transactions",
-      //   icon:"mdi mdi-clipboard-flow",
-      //   roles:[1, 3, 4]
-      // },
-      // {
-      //   id: "log_transaction",
-      //   label: "Log Transaction",
-      //   link: `/transactions/logs`,
-      //   parentId: "transactions",
-      //   icon:"mdi mdi-clipboard-flow",
-      //   roles:[1, 3, 4]
-      // },
-      // {
-      //   id: "ledger",
-      //   label: "Reports",
-      //   link: "/#",
-      //   parentId: "ledger",
-      //   icon:"mdi mdi-export-variant",
-      //   roles:[1, 4],
-      //   subItems: [
-      //     {
-      //       id: "projectledger",
-      //       label: "Project Ledger",
-      //       link: "/ledger/project",
-      //       parentId: "ledger",
-      //       roles:[1, 4],
-      //     },
-      //     {
-      //       id: "userledger",
-      //       label: "User Ledger",
-      //       link: "/ledger/user",
-      //       parentId: "ledger",
-      //       roles:[1, 4],
-      //     },
-      //   ]
-        
-      // },
       {
         id: "admin",
         label: "Admin",
@@ -219,7 +162,7 @@ const Asidebar = ({ layoutType }) => {
               <img src={logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
-              <img src={logoDark} alt="" height="40" />
+              <img src={logoLight} alt="" height="40" />
             </span>
           </Link>
 
@@ -228,7 +171,7 @@ const Asidebar = ({ layoutType }) => {
               <img src={logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
-              <img src={logoLight} alt="" height="40" />
+              <img src={logoDark} alt="" height="40" />
             </span>
           </Link>
           <button
@@ -241,30 +184,6 @@ const Asidebar = ({ layoutType }) => {
           </button>
         </div>
         <div className="new_actn_sec px-3">
-        <Dropdown>
-        <Dropdown.Toggle className="btn btn-outline-light w-100 no-caret">
-          <i className="fa fa-plus"></i> <span className="text-lg">New</span>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-                <div className="d-flex min_w_320 p-3">
-                  {/* <div className="items-list pr-3">
-                    <p className="list_name fs-14 fw-500">CUSTOMERS</p>
-                  </div> */}
-                  <div className="items-list pr-3">
-                    {/* <p className="list_name fs-14 fw-500">VENDORS</p> */}
-                    <ul className="mb-0 pl-0 list-unstyled">
-                      <li><Dropdown.Item className="p-1 py-2"><span onClick={() => navigate(`/expenses/add?redirect_url=${window.location.href}`)} >Expense</span></Dropdown.Item></li>
-                    </ul>
-                  </div>
-                  {/* <div className="items-list pr-3">
-                    <p className="list_name fs-14 fw-500">EMPLOYEES</p>
-                  </div>
-                  <div className="items-list">
-                    <p className="list_name fs-14 fw-500">OTHERS</p>
-                  </div> */}
-                </div>
-        </Dropdown.Menu>
-        </Dropdown>
         </div>
         <React.Fragment>
           <SimpleBar id="scrollbar" className="h-100">

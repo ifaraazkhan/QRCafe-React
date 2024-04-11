@@ -7,9 +7,10 @@ const PublicRouterOutlet = (props) => {
     // check if user us loggedin or not
     const getAuthUser = IsAuthenticated(true)
     const isAuthenticated = getAuthUser && getAuthUser.isLoggedIn ? true : false
-
+    const isSuperAdmin = getAuthUser && getAuthUser?.user?.account_type == -97 ? true : false;
+    const redirectUrl = !isSuperAdmin ? "/dashboard" : "/admin/users"
     if(isAuthenticated){
-        return <Navigate to={"/admin/dashboard"} />
+        return <Navigate to={redirectUrl} />
     }
 
     return PageLayout ? <PageLayout><Outlet /></PageLayout> : <Outlet />
