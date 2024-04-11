@@ -16,7 +16,7 @@ const RoutesList = () => {
             <Router>
                 <Suspense fallback={<Loader showLoader={true} pos={'fixed'} />}>
                     <Routes>
-                        <Route path="/dashboard" element={<AuthRouterOutlet layout={MainLayout} authorizeLevel={[1,2,3,4]} />}>
+                        <Route path="/dashboard" element={<AuthRouterOutlet layout={MainLayout} authorizeLevel={[1, -97]} />}>
                             {dashboardRoutes && React.Children.toArray(dashboardRoutes.map((item) => {
                                 return <Route path={item.path} element={item.component} />
                             }))}
@@ -27,7 +27,7 @@ const RoutesList = () => {
                             }))}
                         </Route>
 
-                        <Route path="/admin" element={<AuthRouterOutlet layout={MainLayout} authorizeLevel={[1,2,3,4]} />}>
+                        <Route path="/admin" element={<AuthRouterOutlet layout={MainLayout} authorizeLevel={[-97]} />}>
                             {adminRoutes && React.Children.toArray(adminRoutes.map((item) => {
                                 return <Route path={item.path} element={item.component} />
                             }))}

@@ -24,6 +24,7 @@ const C_MSG =  {
     payee_gst_required: "Please enter gst number",
     payee_invoice_required: "Please enter invoice",
     
+    uname_required: "Please enter username",
     fname_required: "Please enter first name",
     lname_required: "Please enter last name",
     email_required: "Please enter email",

@@ -18,8 +18,9 @@ const AuthRouterOutlet = (props) => {
     const [userAccType, setUserAccType] = useState( savedUserAccType );
     const getAuthUser = IsAuthenticated(true)
     const isAuthenticated = getAuthUser && getAuthUser.isLoggedIn ? true : false
-    // const isAuthorized = isAuthenticated && otherProps?.authorizeLevel && getAuthUser?.user.role.some(item => otherProps?.authorizeLevel.includes(item)) ? true : false ;
-    const isAuthorized = isAuthenticated && otherProps?.authorizeLevel && getAuthUser?.user.role.some(item => otherProps?.authorizeLevel.includes(item)) ? true : false ;
+    // const isSuperAdmin = getAuthUser && getAuthUser?.user?.account_type == -97 ? true : false;
+    // const isAuthorized = isAuthenticated && otherProps?.authorizeLevel && getAuthUser?.user?.account_type.some(item => otherProps?.authorizeLevel.includes(item)) ? true : false ;
+    const isAuthorized = isAuthenticated && otherProps?.authorizeLevel && otherProps?.authorizeLevel.includes(getAuthUser?.user?.account_type) ? true : false ;
     useEffect(() => {
       if(user == null && isAuthenticated == true){
         updateData("user")
