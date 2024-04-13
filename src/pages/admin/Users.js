@@ -179,7 +179,7 @@ const AdminUsers = (props) => {
 
     const getUsers = async () => {
         setFormSbmt(true)
-        let payloadUrl = `admin/getUser/${5006}`
+        let payloadUrl = `admin/getUser`
         let method = "GET"
         
         const res = await ApiService.fetchData(payloadUrl,method)
@@ -295,11 +295,11 @@ const AdminUsers = (props) => {
         if(usr_ids == null || usr_ids.length == 0){
             return false
         }
+        toggleAlert({ show: false, type: 'success', message: ""})
         setFormSbmt(true)
         let payloadUrl = `admin/deleteUser`
         let method = "POST"
-        let formData = {user_id:usr_ids}
-        formData.project_id = projectId
+        let formData = {user_id:usr_ids[0]}
         const res = await ApiService.fetchData(payloadUrl,method, formData)
         // const res = await ApiService.fetchData(payloadUrl,method)
         if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
@@ -347,7 +347,7 @@ const AdminUsers = (props) => {
                                 <div className="col-sm-auto">
                                     <div>
                                         <button type="button" className="btn btn-success add-btn" onClick={() => showModal("create_user_modal")}><i className="ri-add-line align-bottom me-1"></i> Add</button>
-                                        {/* <button className="btn btn-soft-danger ml-3" onClick={() => onDelUsers(selectedUsers)} disabled={formSubmitted || selectedUsers.length == 0}><i className="ri-delete-bin-2-line"></i></button> */}
+                                        {/* <button className="btn btn-soft-danger ms-3" onClick={() => onDelUsers(selectedUsers)} disabled={formSubmitted || selectedUsers.length == 0}><i className="ri-delete-bin-2-line"></i></button> */}
                                     </div>
                                 </div>
                                 

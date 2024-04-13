@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import PublicRouterOutlet from "./PublicRouterOutlet"
-import { adminRoutes, adminAuthRoutes, dashboardRoutes, publicRoutes} from "./allRoutes"
+import { adminRoutes, adminAuthRoutes, dashboardRoutes, publicRoutes, userRoutes} from "./allRoutes"
 import AuthRouterOutlet from "./AuthRouterOutlet"
 import Loader from "../Components/Partials/Loader"
 
@@ -21,13 +21,18 @@ const RoutesList = () => {
                                 return <Route path={item.path} element={item.component} />
                             }))}
                         </Route>
+                        <Route path="/user" element={<AuthRouterOutlet layout={MainLayout} authorizeLevel={[1, -97]} />}>
+                            {userRoutes && React.Children.toArray(userRoutes.map((item) => {
+                                return <Route path={item.path} element={item.component} />
+                            }))}
+                        </Route>
                         <Route path="/admin" element={<PublicRouterOutlet layout={PublicLayout} />}>
                             {adminAuthRoutes && React.Children.toArray(adminAuthRoutes.map((item) => {
                                 return <Route path={item.path} element={item.component} />
                             }))}
                         </Route>
 
-                        <Route path="/admin" element={<AuthRouterOutlet layout={MainLayout} authorizeLevel={[-97]} />}>
+                        <Route path="/admin" element={<AuthRouterOutlet layout={MainLayout} authorizeLevel={[1, -97]} />}>
                             {adminRoutes && React.Children.toArray(adminRoutes.map((item) => {
                                 return <Route path={item.path} element={item.component} />
                             }))}

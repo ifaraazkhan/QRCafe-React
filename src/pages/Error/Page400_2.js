@@ -31,7 +31,7 @@ const Page400_2 = (props) => {
                   </p>
                   <div className="mt-4">
                     <button className={`btn btn-primary-2 btn_04 fs-18 px-4`} onClick={() => pageRefresh()}>Try Again</button>
-                    <a className={`ml-4 btn btn_2 fs-18 px-4`} href="mailto:support@qrcafe.com">Report an issue</a>
+                    <a className={`ms-4 btn btn_2 fs-18 px-4`} href="mailto:support@qrcafe.com">Report an issue</a>
                   </div>
                 </div>
               </div>
