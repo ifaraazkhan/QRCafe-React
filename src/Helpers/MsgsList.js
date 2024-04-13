@@ -9,13 +9,9 @@ const C_MSG =  {
     user_settings_document_title : `User Settings | ${process.env.REACT_APP_SITE_NAME} - User Settings Page`,
     admin_settings_document_title : `Admin Settings | ${process.env.REACT_APP_SITE_NAME} - Admin Settings Page`,
     admin_users_settings_document_title : `Admin Settings | ${process.env.REACT_APP_SITE_NAME} - Users Setting Page`,
-    admin_requests_settings_document_title : `User Requests | ${process.env.REACT_APP_SITE_NAME} - User Requests Page`,
-    user_expense_personal_page_title : `Personal Expenses | ${process.env.REACT_APP_SITE_NAME} - Users Personal Expenses`,
-    user_expense_approver_page_title : `Approver Expenses | ${process.env.REACT_APP_SITE_NAME} - Users Approver Expenses`,
-    user_expense_finance_page_title : `Finance Expenses | ${process.env.REACT_APP_SITE_NAME} - Users Finance Expenses`,
-    user_txns_personal_page_title : `Personal Transactions | ${process.env.REACT_APP_SITE_NAME} - Users Personal Transactions`,
-    user_txns_approver_page_title : `Approver Transactions | ${process.env.REACT_APP_SITE_NAME} - Users Approver Transactions`,
-    user_txns_finance_page_title : `Finance Transactions | ${process.env.REACT_APP_SITE_NAME} - Users Finance Transactions`,
+    admin_category_settings_document_title : `Admin Settings | ${process.env.REACT_APP_SITE_NAME} - Categories Setting Page`,
+    admin_accounts_settings_document_title : `Admin Settings | ${process.env.REACT_APP_SITE_NAME} - Accounts Setting Page`,
+    admin_account_settings_document_title : `Admin Settings | ${process.env.REACT_APP_SITE_NAME} - Account Setting Page`,
     user_invoices_page_title : `Invoices | ${process.env.REACT_APP_SITE_NAME} - Users Invoices`,
     user_reports_page_title : `User Report | ${process.env.REACT_APP_SITE_NAME} - Users Report`,
 
@@ -70,6 +66,8 @@ const C_MSG =  {
     file_upload_success: "Files uploaded successfully",
     select_valid_file_format: "Please Select Valid File Format",
     supported_file_format:"Supported Format : doc, docx, pdf, xls, xlsx, png, gif, jpg, jpeg, jfif, svg, webp, msg, eml, zip",
+    supported_img_format:"Supported Format : png, gif, jpg, jpeg",
+    supported_pdf_format:"Supported Format : pdf",
     
 
 }

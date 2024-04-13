@@ -204,7 +204,7 @@ const StackFilter = (props) => {
 
     return (
         <React.Fragment>
-            <div id={id} ref={stackFilters} className={`stackFilter_sec ml-2 ${Styles[theme.style]} ${Styles[theme.type]} ${Styles.stackFilter_sec} ${className}`}>
+            <div id={id} ref={stackFilters} className={`stackFilter_sec ms-2 ${Styles[theme.style]} ${Styles[theme.type]} ${Styles.stackFilter_sec} ${className}`}>
                 <button type="button" className="btn btn-primary w-100 h-100 p-0 fs-14 position-relative" onClick={() => toggleFilterDropdown()}>
                     {showFilterCheck && <span className={`text-success ${Styles.filter_check}`}><i className="fa fa-check-circle"></i></span>}
                     {showTooltip &&
@@ -258,7 +258,7 @@ const StackFilter = (props) => {
                                                     </Tooltip>
                                                   }
                                                 >
-                                                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                                                  <span className="info_icon d-inline-block ms-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                                                 </OverlayTrigger>
                                             </h4>
                                         </div>

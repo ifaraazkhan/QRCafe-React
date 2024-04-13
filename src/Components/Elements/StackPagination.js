@@ -86,7 +86,7 @@ const StackPagination = (props) => {
                                 <option value={100}>100</option>
                             </select>
                         </div>
-                        <div className="pagination_infon fs-13 d-flex align-items-center justify-content-center ml-3" style={{ color: "#05172A", fontWeight: "600" }}>
+                        <div className="pagination_infon fs-13 d-flex align-items-center justify-content-center ms-3" style={{ color: "#05172A", fontWeight: "600" }}>
                             {/* <span>Showing {offset + 1} to {offset + limit <= totalItems ? offset + limit : totalItems} of {totalItems} entries </span> */}
                             <span>Showing {offset + 1} to {offset + limit <= totalItems ? offset + limit : totalItems} of {totalItems} entries </span>
                         </div>

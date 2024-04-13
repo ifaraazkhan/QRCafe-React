@@ -18,7 +18,7 @@ const AuthRouterOutlet = (props) => {
     const [userAccType, setUserAccType] = useState( savedUserAccType );
     const getAuthUser = IsAuthenticated(true)
     const isAuthenticated = getAuthUser && getAuthUser.isLoggedIn ? true : false
-    // const isSuperAdmin = getAuthUser && getAuthUser?.user?.account_type == -97 ? true : false;
+    const isSuperAdmin = getAuthUser && getAuthUser?.user?.account_type == -97 ? true : false;
     // const isAuthorized = isAuthenticated && otherProps?.authorizeLevel && getAuthUser?.user?.account_type.some(item => otherProps?.authorizeLevel.includes(item)) ? true : false ;
     const isAuthorized = isAuthenticated && otherProps?.authorizeLevel && otherProps?.authorizeLevel.includes(getAuthUser?.user?.account_type) ? true : false ;
     useEffect(() => {
@@ -44,7 +44,8 @@ const AuthRouterOutlet = (props) => {
                 let userData = IsAuthenticated(true)
                 if (userData) {
                     setUser(userData);
-                    setAuthRoles(userData?.user.role)
+                    const auth_roles = [userData?.user?.account_type]
+                    setAuthRoles(auth_roles)
                 }
                 break;
             case 'clear':
@@ -55,7 +56,7 @@ const AuthRouterOutlet = (props) => {
         }
     }
 
-    const authContextObj = {user, setUser, updateData, projectId, authRoles, setAuthRoles, setProjectId, showLoader, setShowLoader, reloadHeader, setReloadHeader, reloadPage, setReloadPage, userAccType, setUserAccType}
+    const authContextObj = {user, setUser, updateData, projectId, authRoles, setAuthRoles, setProjectId, showLoader, setShowLoader, reloadHeader, setReloadHeader, reloadPage, setReloadPage, userAccType, setUserAccType, isSuperAdmin}
 
 
     if(!isAuthorized || !isAuthenticated){

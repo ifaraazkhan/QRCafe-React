@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
 import Page400 from "../pages/Error/Page400";
-import Dashboard from "../pages/admin/Dashboard";
+
 
 const Login = lazy(() => import("../pages/Authentication/Login"))
 const LoginOTP = lazy(() => import("../pages/Authentication/LoginOTP"))
@@ -11,6 +11,8 @@ const ResetPassword = lazy(() => import("../pages/Authentication/ResetPassword")
 const LockScreen = lazy(() => import("../pages/Authentication/LockScreen"))
 const Home = lazy(() => import("../pages/Home"))
 
+const Dashboard = lazy(() => import("../pages/admin/Dashboard"))
+const UserAccounts = lazy(() => import("../pages/admin/UserAccounts"))
 const AdminSetttings = lazy(() => import("../pages/admin/Settings"))
 
 
@@ -32,6 +34,8 @@ const adminRoutes = [
     {path:"/admin/users", component: <AdminSetttings />},
     {path:"/admin/categories", component: <AdminSetttings />},
     {path:"/admin/roles", component: <AdminSetttings />},
+    {path:"/admin/accounts", component: <AdminSetttings />},
+    // {path:"/admin/account-info", component: <AdminSetttings />},
     {path:"/admin", component: <Navigate to={"/admin/users"} />},
     {path:"*", component: <Navigate to={"/dashboard"} />}
 ]
@@ -43,6 +47,13 @@ const dashboardRoutes = [
     // {path:"/dashboard", component: <Navigate to={"/dashboard/personal"} />},
 ]
 
+const userRoutes = [
+    {path:"/user/accounts", component: <UserAccounts />},
+    {path:"/user", component: <Navigate to={"/user/accounts"} />},
+    {path:"*", component: <Navigate to={"/user/accounts"} />}
+]
+
+
 // Authenticated routes
 
 const publicRoutes = [
@@ -53,4 +64,4 @@ const publicRoutes = [
     {path:"/", component: <Navigate to={"/home"} />},
 ]
 
-export { adminAuthRoutes, publicRoutes, adminRoutes, dashboardRoutes }
+export { adminAuthRoutes, publicRoutes, adminRoutes, dashboardRoutes, userRoutes }
