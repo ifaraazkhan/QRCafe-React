@@ -9,6 +9,7 @@ import Loader from "../Components/Partials/Loader"
 const MainLayout = lazy(() => import("../Components/Layouts/MainLayout"))
 const PublicLayout = lazy(() => import("../Components/Layouts/PublicLayout"))
 const Page404 = lazy(() => import("../pages/Error/Page404"))
+const Home = lazy(() => import("../pages/Home"))
 
 const RoutesList = () => {
     return (
@@ -38,12 +39,15 @@ const RoutesList = () => {
                             }))}
                         </Route>
 
+                        <Route path="/home" element={<PublicLayout><Home /></PublicLayout>}></Route>
+                        
                         <Route path="/" element={<PublicRouterOutlet layout={PublicLayout} />}>
                             {publicRoutes && React.Children.toArray(publicRoutes.map((item) => {
                                 return <Route path={item.path} element={item.component} />
                             }))}
                             <Route path="*" element={<PublicLayout><Page404 /></PublicLayout>}></Route>
                         </Route>
+                        
                     </Routes>
                 </Suspense>
             </Router>

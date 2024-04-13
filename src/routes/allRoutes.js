@@ -12,7 +12,7 @@ const LockScreen = lazy(() => import("../pages/Authentication/LockScreen"))
 const Home = lazy(() => import("../pages/Home"))
 
 const Dashboard = lazy(() => import("../pages/admin/Dashboard"))
-const UserAccounts = lazy(() => import("../pages/admin/UserAccounts"))
+const UserAccounts = lazy(() => import("../pages/user/UserAccounts"))
 const AdminSetttings = lazy(() => import("../pages/admin/Settings"))
 
 
@@ -60,7 +60,7 @@ const publicRoutes = [
     {path:"/faq", component: <Navigate to={"/dashboard"} />},
     {path:"/termscondition", component: <Navigate to={"/dashboard"} />},
     {path:"/privacypolicy", component: <Navigate to={"/dashboard"} />},
-    {path:"/home", component: <Home />},
+    // {path:"/home", component: <Home />},
     {path:"/", component: <Navigate to={"/home"} />},
 ]
 

@@ -46,6 +46,8 @@ const Accounts = (props) => {
     useEffect(() => {
         // if(projectId != null && accounts && accounts.length == 0){
             getAccounts()
+            getUsers()
+            getCategories()
         // }
     }, [])
 
@@ -251,8 +253,6 @@ const Accounts = (props) => {
             }
             break;
           case "create_account_modal":
-            getUsers()
-            getCategories()
             setModalType(modalName);
             setShowModal(true);
             break;
@@ -260,8 +260,6 @@ const Accounts = (props) => {
             if(data != null){
               setModalData(data)
             }
-            getUsers()
-            getCategories()
             setModalType(modalName);
             setShowModal(true);
             break;

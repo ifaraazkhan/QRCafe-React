@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 
 import logoImg from "../assets/images/home/core-img/logo.png";
@@ -11,17 +11,86 @@ import starImg from "../assets/images/home/demo-img/star.png";
 import elegantImg from "../assets/images/home/demo-img/elegant.png";
 import lightningtImg from "../assets/images/home/demo-img/lightning.png";
 
+import SweetAlert from "react-bootstrap-sweetalert";
+import { useSearchParams } from "react-router-dom";
+import { ApiService } from "../Services/ApiService";
+import StackModal from "../Components/Elements/StackModal";
+
 const Home = (props) => {
 
     const [showMenu, setShowMenu] = useState(false)
     const [darkTheme, setDarkTheme] = useState(false)
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [accInfo, setAccInfo] = useState({});
+    const [modalType, setModalType] = useState(null)
+    const [modalData, setModalData] = useState({});
+    const [openModal, setShowModal] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const qrc = searchParams.get("qrc")
+
+    useEffect(() => {
+        if(accInfo && Object.keys(accInfo).length == 0){
+            getAccountInfo(qrc)
+        }
+        
+    }, [qrc])
+
+    const getAccountInfo = async (uniqId = null) => {
+        if(uniqId == null){
+            return false
+        }
+        let payloadUrl = `public/account/${uniqId}`
+        let method = "GET"
+        const res = await ApiService.fetchData(payloadUrl,method)
+        if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
+            let account = res.results[0]
+            console.log(account);
+            setAccInfo(oldVal => ({...account}))
+        }else{
+            toggleAlert({ show: true, type: 'danger', message: res.message })
+        }
+    }
+
+    const toggleAlert = (val) => {
+        setShowAlert(val)
+    }
+    
     const toggleMenu = (value) => {
         setShowMenu(value)
     }
     const toggleDarkTheme = (value) => {
         setDarkTheme(value == true ? true : false)
     }
+
+    const showModal = async (modalName = null, data = null) => {
+        if (modalName == null) {
+          return false;
+        }
+        setModalData({})
+        switch (modalName) {
+          case "view_text_modal":
+            if(data != null){
+               setModalData(data)
+            }
+            setModalType(modalName);
+            setShowModal(true);
+            break;
+        }
+        
+    };
+
+    const hideModal = () => {
+        setModalType(null);
+        setShowModal(false);
+    };
+
+    const newtabURL = (url = "", data = {}, ev) => {
+        if (url == "") {
+          return;
+        }
+        window.open(url, '_blank', 'noreferrer')
+      };
 
     return(
         <React.Fragment>
@@ -63,8 +132,8 @@ const Home = (props) => {
                             <div className="sidenav-profile bg-gradient">
                                 <div className="sidenav-style1"></div>
                                 <div className="user-info">
-                                    <h6 className="user-name mb-0">Mordern Bakery</h6>
-                                    <span>Fresh cupcakes and special breads</span>
+                                    <h6 className="user-name mb-0">{accInfo?.title}</h6>
+                                    <span>{accInfo?.sub_title}</span>
                                 </div>
                             </div>
 
@@ -73,11 +142,11 @@ const Home = (props) => {
                                     <a href="home.html"><i className="bi bi-house-door"></i> Food Menu</a>
                                 </li>
                                 <li>
-                                    <a href="elements.html"><i className="bi bi-folder2-open"></i> About us
+                                    <a className={"link_url"} onClick={() => showModal("view_text_modal", {title: "About Us",text:accInfo?.about_us})}><i className="bi bi-folder2-open"></i> About us
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="pages.html"><i className="bi bi-collection"></i> Direction
+                                    <a className={"link_url"} onClick={() => newtabURL(accInfo?.g_map_url)}><i className="bi bi-collection"></i> Direction
 
                                     </a>
                                 </li>
@@ -100,7 +169,7 @@ const Home = (props) => {
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="settings.html"><i className="bi bi-gear"></i> Promotions and Offers </a>
+                                    <a className={"link_url"} onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}><i className="bi bi-gear"></i> Promotions and Offers </a>
                                 </li>
                                 <li>
                                     <div className="night-mode-nav">
@@ -113,13 +182,13 @@ const Home = (props) => {
                             </ul>
 
                             <div className="social-info-wrap">
-                                <a href="#">
+                                <a className={"link_url"} onClick={() => newtabURL(accInfo?.fb_url)}>
                                     <i className="bi bi-facebook"></i>
                                 </a>
-                                <a href="#">
+                                <a className={"link_url"} onClick={() => newtabURL(accInfo?.twitter_url)}>
                                     <i className="bi bi-twitter"></i>
                                 </a>
-                                <a href="#">
+                                <a className={"link_url"} onClick={() => newtabURL(accInfo?.linkedin_url)}>
                                     <i className="bi bi-linkedin"></i>
                                 </a>
                             </div>
@@ -127,7 +196,7 @@ const Home = (props) => {
                             <div className="copyright-info">
                                 <p>
                                     <span id="copyrightYear"></span>
-                                    &copy; Powered by <a href="#">HappyVibes</a>
+                                    &copy; Powered by <a className={"link_url"} onClick={() => newtabURL("")}>HappyVibes</a>
                                 </p>
                             </div>
                         </div>
@@ -139,7 +208,7 @@ const Home = (props) => {
                     <div className="container">
                         <div className="card card-bg-img bg-img bg-overlay bakery_bg_img" >
                             <div className="card-body p-5 direction-rtl">
-                                <h2 className="text-white display-3 mb-4 text-center">Modern Bakery</h2>
+                                <h2 className="text-white display-3 mb-4 text-center">{accInfo?.title}</h2>
                             </div>
                             <div className="container direction-rtl">
                                 <div className="card mb-3 bg-transparent">
@@ -155,7 +224,7 @@ const Home = (props) => {
                                             </div>
 
                                             <div className="col-4">
-                                                <div className="feature-card mx-auto text-center" data-bs-toggle="modal" data-bs-target="#bottomAlignModal">
+                                                <div className="feature-card mx-auto text-center" onClick={() => showModal("view_text_modal", {title: "About Us",text:accInfo?.about_us})}>
                                                     <div className="card mx-auto bg-gray">
                                                         <img src={aboutImg} alt="" />
                                                     </div>
@@ -164,7 +233,7 @@ const Home = (props) => {
                                             </div>
 
                                             <div className="col-4">
-                                                <div className="feature-card mx-auto text-center">
+                                                <div className="feature-card mx-auto text-center" onClick={() => newtabURL(accInfo?.g_map_url)}>
                                                     <div className="card mx-auto bg-gray">
                                                         <img src={locationImg} alt="" />
                                                     </div>
@@ -190,8 +259,8 @@ const Home = (props) => {
                                     <img src={discountImg} alt="" />
                                 </div>
                                 <div className="card-content">
-                                    <h5 className="mb-3">Dine Smart with Exclusive Offers</h5>
-                                    <a className="btn btn-info rounded-pill" href="#">Get your deals</a>
+                                    <h5 className="mb-3">{accInfo?.headline1_text}</h5>
+                                    <a className="btn btn-info rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline1_button}</a>
                                 </div>
                             </div>
                         </div>
@@ -205,8 +274,8 @@ const Home = (props) => {
                                     <img src={starsImg} alt="" />
                                 </div>
                                 <div className="card-content">
-                                    <h5 className="mb-3">Share Your Voice, Shape Our Future</h5>
-                                    <a className="btn btn-warning rounded-pill" href="#">Record Audio feedback</a>
+                                    <h5 className="mb-3">{accInfo?.headline2_text}</h5>
+                                    <a className="btn btn-warning rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline2_button}</a>
                                 </div>
                             </div>
                         </div>
@@ -251,13 +320,65 @@ const Home = (props) => {
                     <div className="copyright-info">
                         <p>
                             <span id="copyrightYear"></span>
-                            &copy; Powered by <a href="#">HappyVibes</a>
+                            &copy; Powered by <a className={"link_url"} onClick={() => newtabURL("")}>HappyVibes</a>
                         </p>
                     </div>
 
                 </div>
                 {showMenu && <div className="offcanvas-backdrop fade show"></div>}
             </div>
+
+            {(() => {
+                if (showAlert && showAlert.show && showAlert.type == "success") {
+                    return (
+                        <SweetAlert
+                            success
+                            title={showAlert.message}
+                            onConfirm={() => toggleAlert({ show: false, type: 'success', message: '' })}
+                            confirmBtnCssClass={'btn_15'}
+                            onCancel={() => toggleAlert({ show: false, type: 'success', message: '' })}
+                            showConfirm={true}
+                            focusCancelBtn={false}
+                            customClass={'i_alert fs-10'}
+                            timeout={3000}
+                        />
+                    )
+                } else if (showAlert && showAlert.show && showAlert.type == "danger") {
+                    return (
+                        <SweetAlert
+                            danger
+                            title={showAlert.message}
+                            onConfirm={() => toggleAlert({ show: false, type: 'success', message: '' })}
+                            confirmBtnCssClass={'btn_15'}
+                            onCancel={() => toggleAlert({ show: false, type: 'success', message: '' })}
+                            showConfirm={true}
+                            focusCancelBtn={false}
+                            customClass={'i_alert fs-10'}
+                            timeout={3000}
+                        />
+                    )
+                }
+            })()}
+            {(() => {
+                if (modalType && modalType != "" && modalType != null) {
+
+                    if (modalType == "view_text_modal") {
+                        return (
+                            <StackModal
+                                show={openModal}
+                                modalType={modalType}
+                                hideModal={hideModal}
+                                modalData={{ ...modalData}}
+                                formSubmit={null}
+                                customClass=""
+                                cSize="sm"
+                            />
+                        );
+                    }
+                    
+                }
+
+            })()}
         </React.Fragment>
     )
 

@@ -65,7 +65,7 @@ const Asidebar = ({ layoutType }) => {
         link: `/dashboard`,
         parentId: "dashboard",
         icon: "mdi mdi-speedometer",
-        roles:[12, -971]
+        roles:[1, -97]
       },
       {
         id: "userAccount",
