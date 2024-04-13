@@ -93,32 +93,32 @@ const ResetPassword = () => {
                 <ul className={`${Style.pass_cond_list} fs-11 p-0 row m-0 mt-2`}>
                     {condObj.hasLowerChar}
                     <li className={`pl-0 col-6 text-${condObj.hasLowerChar ? "dark" : "muted"}`}>
-                        <span className={`mr-2 ${condObj.hasLowerChar ? "text-success" : ""}`}>
+                        <span className={`me-2 ${condObj.hasLowerChar ? "text-success" : ""}`}>
                             <i className={`fa fa-${condObj.hasLowerChar ? "check" : "circle"}`}></i>
                         </span>
                         One lowercase character
                     </li>
                     <li className={`pl-0 col-6 text-${condObj.hasUpperChar ? "dark" : "muted"}`}>
-                        <span className={`mr-2 ${condObj.hasUpperChar ? "text-success" : ""}`}>
+                        <span className={`me-2 ${condObj.hasUpperChar ? "text-success" : ""}`}>
                             <i className={`fa fa-${condObj.hasUpperChar ? "check" : "circle"}`}></i>
                         </span>
                         One uppercase character
                     </li>
                     <li className={`pl-0 col-6 text-${condObj.hasSpecialChars ? "dark" : "muted"}`}>
-                        <span className={`mr-2 ${condObj.hasSpecialChars ? "text-success" : ""}`}>
+                        <span className={`me-2 ${condObj.hasSpecialChars ? "text-success" : ""}`}>
                             <i className={`fa fa-${condObj.hasSpecialChars ? "check" : "circle"}`}></i>
                         </span>
                         One special character
                     </li>
                     <li className={`pl-0 col-6 text-${inpField.length >= 8 ? "dark" : "muted"}`}>
-                        <span className={`mr-2 ${inpField.length >= 8 ? "text-success" : ""}`}>
+                        <span className={`me-2 ${inpField.length >= 8 ? "text-success" : ""}`}>
                             <i className={`fa fa-${inpField.length >= 8 ? "check" : "circle"}`}></i>
                         </span>
                         8 characters minimum
 
                     </li>
                     <li className={`pl-0 col-6 text-${condObj.hasNumber ? "dark" : "muted"}`}>
-                        <span className={`mr-2 ${condObj.hasNumber ? "text-success" : ""}`}>
+                        <span className={`me-2 ${condObj.hasNumber ? "text-success" : ""}`}>
                             <i className={`fa fa-${condObj.hasNumber ? "check" : "circle"}`}></i>
                         </span>
                         One number

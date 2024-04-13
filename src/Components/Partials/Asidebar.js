@@ -65,7 +65,23 @@ const Asidebar = ({ layoutType }) => {
         link: `/dashboard`,
         parentId: "dashboard",
         icon: "mdi mdi-speedometer",
-        roles:[1, 2, 3, 4]
+        roles:[12, -971]
+      },
+      {
+        id: "userAccount",
+        label: "User Account",
+        link: "/user/accounts",
+        parentId: "userAccount",
+        icon:"mdi mdi-account-key",
+        roles:[1,-97]
+      },
+      {
+        id: "feedback",
+        label: "Feedback",
+        link: "/user/feedback",
+        parentId: "userAccount",
+        icon:"mdi mdi-account-key",
+        roles:[12, -971]
       },
       {
         id: "admin",
@@ -73,7 +89,7 @@ const Asidebar = ({ layoutType }) => {
         link: "/admin",
         parentId: "admin",
         icon:"mdi mdi-account-key",
-        roles:[4]
+        roles:[-97]
       },
       
   ];
