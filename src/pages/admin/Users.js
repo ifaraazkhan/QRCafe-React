@@ -249,8 +249,8 @@ const AdminUsers = (props) => {
         setFormSbmt(true)
         let payloadUrl = "admin/addUser"
         let method = "POST"
-        let formData = data
-        formData.project_id = projectId
+        let formData = data;
+        formData.category_id = 0;
         const res = await ApiService.fetchData(payloadUrl,method,formData)
         if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
             toggleAlert({ show: true, type: 'success', message: res.message})
@@ -271,7 +271,7 @@ const AdminUsers = (props) => {
         let payloadUrl = `admin/updateUser`
         let method = "POST"
         let formData = data
-        formData.project_id = projectId
+        formData.category_id = 0;
         const res = await ApiService.fetchData(payloadUrl,method,formData)
         if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
             toggleAlert({ show: true, type: 'success', message: res.message})

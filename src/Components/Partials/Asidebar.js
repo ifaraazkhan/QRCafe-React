@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 //import logo
-import logoDark from "../../assets/images/home/core-img/logo-dark.png";
+import logoDark from "../../assets/images/home/core-img/logo.png";
 import logoLight from "../../assets/images/home/core-img/logo.png";
-import logoSm from "../../assets/images/home/core-img/favicon.ico";
+import logoSm from "../../assets/images/home/core-img/logo.png";
 
 import { Container, Collapse, Dropdown } from "../../Helpers/UiHelper";
 import { AuthContext } from "../../ContextProvider/AuthContext";
@@ -69,19 +69,19 @@ const Asidebar = ({ layoutType }) => {
       },
       {
         id: "userAccount",
-        label: "User Account",
+        label: "User Accounts",
         link: "/user/accounts",
         parentId: "userAccount",
-        icon:"mdi mdi-account-key",
-        roles:[1,-97]
+        icon:"mdi mdi-card-account-details-outline",
+        roles:[1]
       },
       {
         id: "feedback",
         label: "Feedback",
-        link: "/user/feedback",
-        parentId: "userAccount",
-        icon:"mdi mdi-account-key",
-        roles:[12, -971]
+        link: "/user/feedbacks",
+        parentId: "userFeedbacks",
+        icon:"mdi mdi-comment-check-outline",
+        roles:[1, -97]
       },
       {
         id: "admin",
