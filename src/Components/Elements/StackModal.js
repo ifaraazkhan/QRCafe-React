@@ -498,6 +498,42 @@ const StackModal = (intialData) => {
             </>
         )
     }
+    if (modalType == 'view_text_modal') {
+        return (
+            <>
+
+                <Modal
+                    show={show}
+                    onHide={handleModalClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size={cSize}
+                    className={`custom-modal ${customClass}`}>
+                    <Modal.Header closeButton className="py-2 bg_15 d-flex align-items-center text-white">
+                        <Modal.Title className="fs-12">{modalData?.title}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className="container-fluid">
+                            <section className="view_document_section my-sm-5 my-lg-0">
+                                <div className="container">
+                                    <div className="row pb-5 justify-content-center">
+                                        <div className="col-12 col-md-12">
+                                            <div className="text_section">
+                                                {/* <h2 className="fs20">{modalData?.title}</h2> */}
+                                                <p>{modalData?.text}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        )
+    }
     if (modalType == 'create_group_modal' || modalType == "update_group_modal") {
         return (
             <>
