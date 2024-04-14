@@ -34,6 +34,8 @@ jobs:
         REACT_APP_API_KEY: ''
         REACT_APP_API_SC_CODE: '["ip200", "ip201", "dc200"]'
         REACT_APP_SUPPORT_UPLOAD_FILE_TYPE: 'doc,docx,pdf,xls,xlsx,png,gif,jpg,jpeg,jfif,svg,webp,msg,eml,zip,ppt'
+        REACT_APP_SUPPORT_IMG_FILE_TYPE: 'png,gif,jpg,jpeg'
+        REACT_APP_SUPPORT_PDF_FILE_TYPE: 'pdf'
         
 
     - name: Configure AWS Credentials
