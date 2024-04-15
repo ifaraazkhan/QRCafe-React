@@ -97,8 +97,9 @@ const Home = (props) => {
             break;
           case "view_pdf_modal":
             if(data != null){
-                let file = await getFileDetails(data.fileUrl)
-                data.file = file
+                // let file = await getFileDetails(data.fileUrl)
+                data.file = data.fileUrl
+                // data.file = "http://localhost:3002/sample_pdf.pdf"
                 setModalData({...data})
             }
             setModalType(modalName);
@@ -205,11 +206,12 @@ const Home = (props) => {
     const getFileDetails = async (fileUrl = null) => {
         if (fileUrl != null) {
             let payloadUrl = `${fileUrl}`
+            // let payloadUrl = `http://localhost:3002/sample_pdf.pdf`
             let method = "GET";
             // let response = await ApiService.fetchFile(payloadUrl, method);
             let formData = {};
             let response = await ApiService.fetchData(payloadUrl, method, formData, { isFileRequest: true })
-            let jsonResponse = response.clone()
+            // let jsonResponse = response.clone()
             let res = await response.arrayBuffer();
             if (res) {
                 let contentType = response && response.headers.get('content-type') ? response.headers.get('content-type') : 'application/pdf';
@@ -549,7 +551,7 @@ const Home = (props) => {
                                 modalData={{ ...modalData}}
                                 formSubmit={null}
                                 customClass=""
-                                cSize="sm"
+                                cSize="md"
                             />
                         );
                     }

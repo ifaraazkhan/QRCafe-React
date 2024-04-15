@@ -1,3 +1,7 @@
+import recordImg from "../../assets/images/record.png";
+import stopImg from "../../assets/images/stop.png";
+import recordingImg from "../../assets/images/recording.gif";
+
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react";
 import { Accordion, Button, Modal, OverlayTrigger, ProgressBar, Tooltip } from "react-bootstrap";
 import { useForm, useWatch } from "react-hook-form";
@@ -542,8 +546,8 @@ const StackModal = (intialData) => {
         )
     }
     if (modalType == 'view_pdf_modal') {
-        const width = 300;
-        const height = 424;
+        const width = window.innerWidth - 50;
+        const height = window.innerHeight - 50;
 
         const Page = React.forwardRef(({ pageNumber }, ref) => {
         return (
@@ -554,7 +558,6 @@ const StackModal = (intialData) => {
         });
         return (
             <>
-
                 <Modal
                     show={show}
                     onHide={handleModalClose}
@@ -566,19 +569,44 @@ const StackModal = (intialData) => {
                         <Modal.Title className="fs-12">{`Pdf Viewer`}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div className="container-fluid">
+                        <div className="">
                             <section className="view_pdf_section my-sm-5 my-lg-0">
-                                <div className="container">
-                                    <div className="row pb-5 justify-content-center">
-                                        <div className="col-12 col-md-12">
+                                <div className="">
+                                    <div className="row justify-content-center">
+                                        <div className="col-12 col-md-12 p-0">
                                             <div className="text_section">
-                                                <Document file={modalData?.file}>
+                                                {console.log(window.innerWidth < 566 )}
+                                                {window.innerWidth < 566 
+                                                    ? (
+                                                        <React.Fragment>
+                                                            <Document file={modalData?.file}>
+                                                                <HTMLFlipBook width={width} height={height}>
+                                                                    <Page pageNumber={1} />
+                                                                    <Page pageNumber={2} />
+                                                                    <Page pageNumber={3} />
+                                                                </HTMLFlipBook>
+                                                            </Document>
+                                                        </React.Fragment>
+                                                    ) : (
+                                                        <React.Fragment>
+                                                            <object data={modalData.file} className="w-100 img-fluid h-100">
+                                                                <div className="text-center">
+                                                                    <a className="btn btn-secondary waves-effect waves-light" href={modalData.file}>Open Menu</a>
+                                                                </div>
+                                                            </object>
+                                                        </React.Fragment>
+                                                    )
+                                                }
+                                                {/* <Document file={modalData?.file}>
                                                     <HTMLFlipBook width={width} height={height}>
                                                         <Page pageNumber={1} />
                                                         <Page pageNumber={2} />
                                                         <Page pageNumber={3} />
                                                     </HTMLFlipBook>
-                                                </Document>
+                                                </Document> */}
+                                                {/* <object data={modalData.file} className="w-100 img-fluid h-100">
+                                                    <a href={modalData.file}>test.pdf</a>
+                                                </object> */}
                                             </div>
                                         </div>
                                     </div>
@@ -594,9 +622,9 @@ const StackModal = (intialData) => {
     }
 
     if (modalType == 'record_audio_feedback_modal') {
+
         return (
             <>
-
                 <Modal
                     show={show}
                     onHide={handleModalClose}
@@ -623,13 +651,14 @@ const StackModal = (intialData) => {
                                                         }
                                                         {modalData?.permission &&
                                                             <React.Fragment>
-                                                                <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}><span><i className="fa fa-play"></i></span></button>
-                                                                <button id="stop" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span><i className="fa fa-stop"></i></span></button>
+                                                                {modalData?.recordingStatus == "recording" && <div className="w40 d-inline-block"><img src={recordingImg}  className="img-fluid" /></div>}
+                                                                {modalData?.recordingStatus == "inactive" && <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}><span className="w40 d-inline-block"><img src={recordImg}  className="img-fluid" /></span></button>}
+                                                                {modalData?.recordingStatus == "recording" && <button id="stop" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w40 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
                                                                 {/* <audio id="audio" controls src={modalData?.audio}></audio> */}
                                                             </React.Fragment>
                                                         }
                                                     </div>
-                                                    {modalData?.recordingStatus == "recording" && <div id={Styles.msg}>Recording...</div>}
+                                                    {/* {modalData?.recordingStatus == "recording" && <div className="w40"><img src={recordingImg}  className="img-fluid" /></div>} */}
                                                 </div>
                                             </div>
                                             <div className="form">

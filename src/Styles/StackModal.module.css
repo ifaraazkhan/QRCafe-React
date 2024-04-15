@@ -7,7 +7,7 @@
 }
 #audio_recorder_section button {
   padding: 5px 10px;
-  border: 1px solid grey;
+  border: 0;
   font-size: 18px;
   background: white;
 }
