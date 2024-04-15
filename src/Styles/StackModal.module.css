@@ -11,6 +11,9 @@
   font-size: 18px;
   background: white;
 }
+#audio_recorder_section button.bdr_btn {
+  border: 1px solid #38447a !important
+}
 
 #audio_recorder_section .audio_controls {
   display: flex;

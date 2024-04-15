@@ -147,6 +147,9 @@ pre {
   .h320 {
     height: 320px !important;
   }
+  .h720{
+    height: 720px !important;
+  }
   .min_h_80 {
     min-height: 80px !important;
   }
@@ -159,8 +162,15 @@ pre {
   .min_h_225 {
     min-height: 225px !important;
   }
+  .min_h_320 {
+    min-height: 320px !important;
+  }
   .min_h_400 {
     min-height: 400px !important;
+  }
+
+  .max_h_480 {
+    max-height: 480px !important;
   }
   .line_margin {
     margin-top: 25px !important;

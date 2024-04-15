@@ -546,16 +546,16 @@ const StackModal = (intialData) => {
         )
     }
     if (modalType == 'view_pdf_modal') {
-        const width = window.innerWidth - 50;
-        const height = window.innerHeight - 50;
+        // const width = window.innerWidth - 50;
+        // const height = window.innerHeight - 50;
 
-        const Page = React.forwardRef(({ pageNumber }, ref) => {
-        return (
-            <div ref={ref}>
-            <ReactPdfPage pageNumber={pageNumber} width={width} />
-            </div>
-        );
-        });
+        // const Page = React.forwardRef(({ pageNumber }, ref) => {
+        // return (
+        //     <div ref={ref}>
+        //     <ReactPdfPage pageNumber={pageNumber} width={width} />
+        //     </div>
+        // );
+        // });
         return (
             <>
                 <Modal
@@ -575,28 +575,17 @@ const StackModal = (intialData) => {
                                     <div className="row justify-content-center">
                                         <div className="col-12 col-md-12 p-0">
                                             <div className="text_section">
-                                                {console.log(window.innerWidth < 566 )}
-                                                {window.innerWidth < 566 
-                                                    ? (
-                                                        <React.Fragment>
-                                                            <Document file={modalData?.file}>
-                                                                <HTMLFlipBook width={width} height={height}>
-                                                                    <Page pageNumber={1} />
-                                                                    <Page pageNumber={2} />
-                                                                    <Page pageNumber={3} />
-                                                                </HTMLFlipBook>
-                                                            </Document>
-                                                        </React.Fragment>
-                                                    ) : (
-                                                        <React.Fragment>
-                                                            <object data={modalData.file} className="w-100 img-fluid h-100">
-                                                                <div className="text-center">
-                                                                    <a className="btn btn-secondary waves-effect waves-light" href={modalData.file}>Open Menu</a>
-                                                                </div>
-                                                            </object>
-                                                        </React.Fragment>
-                                                    )
-                                                }
+                                                <React.Fragment>
+                                                    <div className="pdf_section h720 min_h_320 max_h_480">
+                                                        <iframe src={`https://docs.google.com/viewer?url=${modalData.file}&embedded=true`} className="w-100 img-fluid h-100">
+                                                            <div className="text-center">
+                                                                <a className="btn btn-secondary waves-effect waves-light" href={modalData.file}>Open Menu</a>
+                                                            </div>
+                                                        </iframe>
+                                                    </div>
+
+                                                </React.Fragment>
+                                                
                                                 {/* <Document file={modalData?.file}>
                                                     <HTMLFlipBook width={width} height={height}>
                                                         <Page pageNumber={1} />
@@ -646,7 +635,7 @@ const StackModal = (intialData) => {
                                                     <div className={Styles.audio_controls}>
                                                         {!modalData?.permission &&
                                                             <React.Fragment>
-                                                                <button onClick={()=> modalData.getMicrophonePermission()}>Allow Recording</button>
+                                                                <button className={Styles.bdr_btn} onClick={()=> modalData.getMicrophonePermission()}>Allow Recording</button>
                                                             </React.Fragment>
                                                         }
                                                         {modalData?.permission &&

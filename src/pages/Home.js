@@ -92,6 +92,10 @@ const Home = (props) => {
 
           case "record_audio_feedback_modal":
             // setModalData({ })
+            let checkPermission = await navigator.permissions.query({name: 'microphone'})
+            if(checkPermission.state == "granted"){
+                setPermission(true)
+            }
             setModalType(modalName);
             setShowModal(true);
             break;
