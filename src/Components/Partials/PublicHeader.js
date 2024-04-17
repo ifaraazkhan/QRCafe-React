@@ -1,7 +1,7 @@
 import { Fragment } from "react"
 import Style from "../../Styles/PublicHeader.module.css"
 
-import logo from "../../assets/images/logo-sm-1.png"
+import logo from "../../assets/images/home/core-img/logo.png"
 
 const PublicHeader = () => {
     return (
@@ -11,7 +11,7 @@ const PublicHeader = () => {
                     <div className="row">
                         <div className="col-sm-3">
                            <div className={`${Style.logo_box}`}>
-                                <img src={logo} className="img-fluid h-100" />
+                                <img src={logo} className="img-fluid h-100" alt="logo" />
                            </div>
                         </div>
                     </div>

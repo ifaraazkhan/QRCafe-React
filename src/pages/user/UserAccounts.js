@@ -408,7 +408,7 @@ const UserAccounts = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content px-0 mt-4 pt-5">
+            <div className="page-content mt-4 pt-5">
                 <div className="card">
                     <div className="row">
                         <div className="col-12">

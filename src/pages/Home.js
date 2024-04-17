@@ -12,7 +12,7 @@ import elegantImg from "../assets/images/home/demo-img/elegant.png";
 import lightningtImg from "../assets/images/home/demo-img/lightning.png";
 
 import SweetAlert from "react-bootstrap-sweetalert";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ApiService } from "../Services/ApiService";
 import StackModal from "../Components/Elements/StackModal";
 import C_MSG from "../Helpers/MsgsList";
@@ -32,17 +32,26 @@ const Home = (props) => {
 
     const [formSubmitted, setFormSbmt] = useState(false);
     const [permission, setPermission] = useState(false);
+    const [mediaStream, setMediaStream] = useState(null);
     const [stream, setStream] = useState(null);
     const [audioChunks, setAudioChunks] = useState([]);
     const [audio, setAudio] = useState(null);
     const [audioBlob, setAudioBlob] = useState(null);
+    const [startTime, setStartTime] = useState(null);
+    const [elapsedTime, setElapsedTime] = useState(null);
     const mediaRecorder = useRef(null);
     const [recordingStatus, setRecordingStatus] = useState("inactive");
     const mimeType = "audio/mp4";
 
     const qrc = searchParams.get("qrc")
+    const navigate = useNavigate();
+    const timerSubscription = useRef()
+    const timeOutSubscription = useRef()
 
     useEffect(() => {
+        if (!qrc) {
+            navigate("/page404")
+        }
         if(accInfo && Object.keys(accInfo).length == 0){
             getAccountInfo(qrc)
         }
@@ -92,10 +101,6 @@ const Home = (props) => {
 
           case "record_audio_feedback_modal":
             // setModalData({ })
-            let checkPermission = await navigator.permissions.query({name: 'microphone'})
-            if(checkPermission.state == "granted"){
-                setPermission(true)
-            }
             setModalType(modalName);
             setShowModal(true);
             break;
@@ -116,6 +121,7 @@ const Home = (props) => {
     const hideModal = () => {
         setModalType(null);
         setShowModal(false);
+        discardMicrophonePermission()
     };
 
     const newtabURL = (url = "", data = {}, ev) => {
@@ -125,16 +131,27 @@ const Home = (props) => {
         window.open(url, '_blank', 'noreferrer')
     };
 
+    const onStartRecordAudio = async () => {
+        const result = getMicrophonePermission()
+    }
+
     const getMicrophonePermission = async () => {
         // console.log(navigator.permissions);
         if ("MediaRecorder" in window) {
             try {
-                const streamData = await navigator.mediaDevices.getUserMedia({
-                    audio: true,
-                    video: false,
-                });
-                setPermission(true);
-                setStream(streamData);
+                let micPermission = await navigator.permissions.query({name: 'microphone'})
+                if(micPermission.state == "granted" || micPermission.state == "prompt"){
+                    const streamData = await navigator.mediaDevices.getUserMedia({
+                        audio: true,
+                        video: false,
+                    });
+                    setMediaStream(streamData)
+                    setPermission(true);
+                    setStream(streamData);
+                    showModal("record_audio_feedback_modal")
+                } else if(micPermission.state == "denied"){
+                    toggleAlert({ show: true, type: 'danger', message: "Please allow your microphone permission in your browser."})
+                }
             } catch (err) {
                 toggleAlert({ show: true, type: 'danger', message: err.message})
             }
@@ -142,6 +159,32 @@ const Home = (props) => {
             toggleAlert({ show: true, type: 'danger', message: "Recording is not supported in your browser."})
         }
     };
+    const discardMicrophonePermission = async () => {
+        if ("MediaRecorder" in window) {
+            try {
+                let micPermission = await navigator.permissions.query({name: 'microphone'})
+                if(micPermission.state == "granted" || micPermission.state == "prompt"){
+                    mediaStream.getTracks().forEach(track => track.stop());
+                    
+                    setPermission(false);
+                    setRecordingStatus("inactive");
+                    setStream(null);
+                    setAudio(null);
+                    setAudioBlob(null);
+                    setAudioChunks([]);
+                    clearInterval(timerSubscription.current);
+                    clearTimeout(timeOutSubscription.current)
+                    setElapsedTime(null)
+                    setStartTime(null)
+                }
+            } catch (err) {
+                toggleAlert({ show: true, type: 'danger', message: err.message})
+            }
+        } else {
+            toggleAlert({ show: true, type: 'danger', message: "Recording is not supported in your browser."})
+        }
+    }
+
     const startRecording = async () => {
         setAudio(null);
         setAudioChunks([]);
@@ -159,6 +202,14 @@ const Home = (props) => {
            localAudioChunks.push(event.data);
         };
         setAudioChunks(localAudioChunks);
+        let stTime = new Date().getTime()
+        const interval = setInterval(() => startTimer(stTime), 1000);
+        timerSubscription.current = interval
+        const timeout = setTimeout(() => {
+            clearInterval(timerSubscription.current);
+            stopRecording()
+        }, 5000);
+        timeOutSubscription.current = timeout;
       };
 
       const stopRecording = () => {
@@ -173,6 +224,10 @@ const Home = (props) => {
            setAudio(audioUrl);
            setAudioBlob(audioBlob);
            setAudioChunks([]);
+           clearInterval(timerSubscription.current);
+           clearTimeout(timeOutSubscription.current)
+           setElapsedTime(null)
+           setStartTime(null)
         };
     };
 
@@ -199,12 +254,31 @@ const Home = (props) => {
         // const res = await ApiService.fetchData(payloadUrl,method, formData)
         if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
             toggleAlert({ show: true, type: 'success', message: res.message})
+            discardMicrophonePermission()
             // updateData('user')
         }else{
             toggleAlert({ show: true, type: 'danger', message: res.message || C_MSG.technical_err })
         }
         setFormSbmt(false)
         return res
+    }
+
+    const startTimer = (stTime = null) => {
+        const now = new Date().getTime();
+        if(stTime != null){
+            setStartTime(stTime)
+        }
+        stTime = stTime || startTime
+        const timeElapsed = now - stTime
+        const seconds = Math.floor((timeElapsed / 1000) % 60)
+        const minutes = Math.floor((timeElapsed / 1000 / 60) % 60)
+
+        let obj = {
+            min : ('00' + minutes).slice(-2),
+            sec : ('00' + seconds).slice(-2)
+        }
+
+        setElapsedTime(obj)
     }
 
     const getFileDetails = async (fileUrl = null) => {
@@ -292,7 +366,7 @@ const Home = (props) => {
                                     </a>
                                 </li>
                                 <li>
-                                    <a className="link_url" onClick={() => showModal("record_audio_feedback_modal")}><i className="bi bi-cart-check"></i> Feedback <span className="badge bg-success rounded-pill ms-2">Speak your mind</span></a>
+                                    <a className="link_url" onClick={() => onStartRecordAudio()}><i className="bi bi-cart-check"></i> Feedback <span className="badge bg-success rounded-pill ms-2">Speak your mind</span></a>
                                     {/* <ul>
                                         <li>
                                             <a href="#">Audio Feedback</a>
@@ -417,7 +491,7 @@ const Home = (props) => {
                                 </div>
                                 <div className="card-content">
                                     <h5 className="mb-3">{`Share Your Voice, Shape Our Future`}</h5>
-                                    <a className="btn btn-warning rounded-pill link_url" onClick={() => showModal("record_audio_feedback_modal")}>{`Record Audio Feedback`}</a>
+                                    <a className="btn btn-warning rounded-pill link_url" onClick={() => onStartRecordAudio()}>{`Record Audio Feedback`}</a>
                                 </div>
                             </div>
                         </div>
@@ -539,7 +613,7 @@ const Home = (props) => {
                                 show={openModal}
                                 modalType={modalType}
                                 hideModal={hideModal}
-                                modalData={{ ...modalData, permission, recordingStatus, audio, getMicrophonePermission, startRecording, stopRecording}}
+                                modalData={{ ...modalData, permission, recordingStatus, audio,timer: elapsedTime, getMicrophonePermission, startRecording, stopRecording}}
                                 formSubmit={submitFeedack}
                                 customClass=""
                                 cSize="sm"

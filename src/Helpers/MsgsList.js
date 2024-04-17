@@ -15,6 +15,7 @@ const C_MSG =  {
     user_invoices_page_title : `Invoices | ${process.env.REACT_APP_SITE_NAME} - Users Invoices`,
     user_reports_page_title : `User Report | ${process.env.REACT_APP_SITE_NAME} - Users Report`,
 
+    user_Dashboard_page_title: `User Dashboard | ${process.env.REACT_APP_SITE_NAME} - Users Dashboard`,
     field_required: "Field is Required",
     payee_name_required: "Please select payee name",
     payee_gst_required: "Please enter gst number",

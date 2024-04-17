@@ -632,17 +632,34 @@ const StackModal = (intialData) => {
                                         <div className="col-12 col-md-12">
                                             <div id={Styles.audio_recorder_section} className="text_section">
                                                 <div className={Styles.app}>
+                                                {modalData?.recordingStatus == "recording" &&
+                                                    <React.Fragment>
+                                                        <div className="timer_sec fs-20 fw-600 mb-4 d-block">
+                                                            <span className="">{modalData?.timer?.min || "00"} : {modalData?.timer?.sec || "00"}</span>
+                                                        </div>
+                                                    </React.Fragment>
+                                                }
                                                     <div className={Styles.audio_controls}>
-                                                        {!modalData?.permission &&
+                                                        {/* {!modalData?.permission &&
                                                             <React.Fragment>
                                                                 <button className={Styles.bdr_btn} onClick={()=> modalData.getMicrophonePermission()}>Allow Recording</button>
                                                             </React.Fragment>
-                                                        }
+                                                        } */} 
                                                         {modalData?.permission &&
                                                             <React.Fragment>
-                                                                {modalData?.recordingStatus == "recording" && <div className="w40 d-inline-block"><img src={recordingImg}  className="img-fluid" /></div>}
-                                                                {modalData?.recordingStatus == "inactive" && <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}><span className="w40 d-inline-block"><img src={recordImg}  className="img-fluid" /></span></button>}
-                                                                {modalData?.recordingStatus == "recording" && <button id="stop" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w40 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
+                                                                {/* {modalData?.recordingStatus == "recording" && <div className="w40 d-inline-block"><img src={recordingImg}  className="img-fluid" /></div>} */}
+                                                                
+                                                                {modalData?.recordingStatus == "recording" &&
+                                                                    <React.Fragment>
+                                                                        <div className="recorder-container">
+                                                                            <div className="outer"></div>
+                                                                            <div className="outer-2"></div>
+                                                                            <div className="icon-microphone"><img src={recordImg}  className="img-fluid" /></div>
+                                                                        </div>
+                                                                    </React.Fragment>
+                                                                }
+                                                                {modalData?.recordingStatus == "inactive" && <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}><span className="w60 d-inline-block"><img src={recordImg}  className="img-fluid" /></span></button>}
+                                                                {modalData?.recordingStatus == "recording" && <button id="stop" className="ms-3" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w60 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
                                                                 {/* <audio id="audio" controls src={modalData?.audio}></audio> */}
                                                             </React.Fragment>
                                                         }
