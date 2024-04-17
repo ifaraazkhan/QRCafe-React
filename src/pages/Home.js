@@ -168,7 +168,6 @@ const Home = (props) => {
                     
                     setPermission(false);
                     setRecordingStatus("inactive");
-                    setStream(null);
                     setAudio(null);
                     setAudioBlob(null);
                     setAudioChunks([]);
@@ -206,9 +205,9 @@ const Home = (props) => {
         const interval = setInterval(() => startTimer(stTime), 1000);
         timerSubscription.current = interval
         const timeout = setTimeout(() => {
-            clearInterval(timerSubscription.current);
             stopRecording()
-        }, 5000);
+            clearInterval(timerSubscription.current);
+        }, 120000);
         timeOutSubscription.current = timeout;
       };
 
