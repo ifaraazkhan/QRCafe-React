@@ -160,6 +160,10 @@ const Home = (props) => {
         }
     };
     const discardMicrophonePermission = async () => {
+        clearInterval(timerSubscription.current);
+        clearTimeout(timeOutSubscription.current)
+        setElapsedTime(null)
+        setStartTime(null)
         if ("MediaRecorder" in window) {
             try {
                 let micPermission = await navigator.permissions.query({name: 'microphone'})
@@ -171,10 +175,6 @@ const Home = (props) => {
                     setAudio(null);
                     setAudioBlob(null);
                     setAudioChunks([]);
-                    clearInterval(timerSubscription.current);
-                    clearTimeout(timeOutSubscription.current)
-                    setElapsedTime(null)
-                    setStartTime(null)
                 }
             } catch (err) {
                 toggleAlert({ show: true, type: 'danger', message: err.message})
@@ -182,6 +182,17 @@ const Home = (props) => {
         } else {
             toggleAlert({ show: true, type: 'danger', message: "Recording is not supported in your browser."})
         }
+    }
+
+    const onStartRecording = () => {
+        let stTime = new Date().getTime()
+        const interval = setInterval(() => startTimer(stTime), 1000);
+        timerSubscription.current = interval
+        const timeout = setTimeout(() => {
+            stopRecording()
+        }, 120000);
+        timeOutSubscription.current = timeout;
+        startRecording()
     }
 
     const startRecording = async () => {
@@ -201,17 +212,13 @@ const Home = (props) => {
            localAudioChunks.push(event.data);
         };
         setAudioChunks(localAudioChunks);
-        let stTime = new Date().getTime()
-        const interval = setInterval(() => startTimer(stTime), 1000);
-        timerSubscription.current = interval
-        const timeout = setTimeout(() => {
-            stopRecording()
-            clearInterval(timerSubscription.current);
-        }, 120000);
-        timeOutSubscription.current = timeout;
       };
 
       const stopRecording = () => {
+        clearInterval(timerSubscription.current);
+        clearTimeout(timeOutSubscription.current)
+        setElapsedTime(null)
+        setStartTime(null)
         setRecordingStatus("inactive");
         //stops the recording instance
         mediaRecorder.current.stop();
@@ -223,10 +230,6 @@ const Home = (props) => {
            setAudio(audioUrl);
            setAudioBlob(audioBlob);
            setAudioChunks([]);
-           clearInterval(timerSubscription.current);
-           clearTimeout(timeOutSubscription.current)
-           setElapsedTime(null)
-           setStartTime(null)
         };
     };
 
@@ -612,7 +615,7 @@ const Home = (props) => {
                                 show={openModal}
                                 modalType={modalType}
                                 hideModal={hideModal}
-                                modalData={{ ...modalData, permission, recordingStatus, audio,timer: elapsedTime, getMicrophonePermission, startRecording, stopRecording}}
+                                modalData={{ ...modalData, permission, recordingStatus, audio,timer: elapsedTime, getMicrophonePermission, startRecording:onStartRecording, stopRecording}}
                                 formSubmit={submitFeedack}
                                 customClass=""
                                 cSize="sm"

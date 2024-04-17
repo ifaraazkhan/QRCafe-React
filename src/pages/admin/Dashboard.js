@@ -78,7 +78,7 @@ const Dashboard = (props) => {
         <React.Fragment>
             
             <div className="page-content  mt-4 pt-5">
-                <div className="card">
+                <div className="">
                     <div className="row">
                         <div className="col-12">
                             <div className="listjs-table mt-3" id="customerList">
