@@ -990,26 +990,26 @@ const StackModal = (intialData) => {
 
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 2" className="form-control" {...register("accountForm.headline2_text", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_text ? modalData.account?.headline2_text : ""} />
+                                        <input type="text" placeholder="Headline 2" className="form-control" {...register("accountForm.headline2_text", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_text ? modalData.account?.headline2_text : ""} />
                                         {errors.accountForm?.headline2_text && errors.accountForm?.headline2_text.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 2 Button" className="form-control" {...register("accountForm.headline2_button", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_button ? modalData.account?.headline2_button : ""} />
+                                        <input type="text" placeholder="Headline 2 Button" className="form-control" {...register("accountForm.headline2_button", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_button ? modalData.account?.headline2_button : ""} />
                                         {errors.accountForm?.headline2_button && errors.accountForm?.headline2_button.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
 
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 2" className="form-control" {...register("accountForm.headline3_text", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.headline3_text ? modalData.account?.headline3_text : ""} />
+                                        <input type="text" placeholder="Headline 2" className="form-control" {...register("accountForm.headline3_text", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline3_text ? modalData.account?.headline3_text : ""} />
                                         {errors.accountForm?.headline3_text && errors.accountForm?.headline3_text.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 3 Button" className="form-control" {...register("accountForm.headline3_button", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.headline3_button ? modalData.account?.headline3_button : ""} />
+                                        <input type="text" placeholder="Headline 3 Button" className="form-control" {...register("accountForm.headline3_button", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline3_button ? modalData.account?.headline3_button : ""} />
                                         {errors.accountForm?.headline3_button && errors.accountForm?.headline3_button.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
@@ -1022,7 +1022,7 @@ const StackModal = (intialData) => {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Offer" className="form-control" {...register("accountForm.offer", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.offer ? modalData.account?.offer : ""} />
+                                        <input type="text" placeholder="Offer" className="form-control" {...register("accountForm.offer", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.offer ? modalData.account?.offer : ""} />
                                         {errors.accountForm?.offer && errors.accountForm?.offer.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
@@ -1047,13 +1047,13 @@ const StackModal = (intialData) => {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Youtube Url" className="form-control" {...register("accountForm.youtube_url", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.youtube_url ? modalData.account?.youtube_url : ""} />
+                                        <input type="text" placeholder="Youtube Url" className="form-control" {...register("accountForm.youtube_url", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.youtube_url ? modalData.account?.youtube_url : ""} />
                                         {errors.accountForm?.youtube_url && errors.accountForm?.youtube_url.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Instagram Url" className="form-control" {...register("accountForm.instagram_url", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.instagram_url ? modalData.account?.instagram_url : ""} />
+                                        <input type="text" placeholder="Instagram Url" className="form-control" {...register("accountForm.instagram_url", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.instagram_url ? modalData.account?.instagram_url : ""} />
                                         {errors.accountForm?.instagram_url && errors.accountForm?.instagram_url.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
