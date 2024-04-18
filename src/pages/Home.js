@@ -168,7 +168,7 @@ const Home = (props) => {
             try {
                 let micPermission = await navigator.permissions.query({name: 'microphone'})
                 if(micPermission.state == "granted" || micPermission.state == "prompt"){
-                    mediaStream.getTracks().forEach(track => track.stop());
+                    mediaStream && mediaStream.getTracks().forEach(track => track.stop());
                     
                     setPermission(false);
                     setRecordingStatus("inactive");
@@ -423,7 +423,7 @@ const Home = (props) => {
                 <div className="page-content-wrapper">
 
                     <div className="container">
-                        <div className="card card-bg-img bg-img bg-overlay bakery_bg_img" >
+                        <div className="card card-bg-img bg-img bg-overlay" style={{backgroundImage:accInfo?.background_img ? `url(${accInfo?.background_img})` : "radial-gradient(black, transparent)"}} >
                             <div className="card-body p-5 direction-rtl">
                                 <h2 className="text-white display-3 mb-3 text-center home_header">{accInfo?.title}</h2>
                                 <p className="text-white text-center fs-16">{accInfo?.sub_title}</p>
