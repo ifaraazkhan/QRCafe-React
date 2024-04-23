@@ -250,11 +250,12 @@ const UserFeedbacks = (props) => {
 
                                 <div className="table-responsive table-card m-0 mt-3">
                                     {filteredList && filteredList.length > 0 &&
-                                        <table className="table align-middle table-nowrap" id="customerTable">
+                                        <table className="table align-middle" id="customerTable">
                                             <thead className="table-light">
                                                 <tr>
                                                     <th className="sort link_url" onClick={() => sortData('feedback_text', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', feedbacks)}>Feedback</th>
                                                     <th className="sort link_url" >File</th>
+                                                    <th className="sort link_url" style={{"text-overflow": "ellipsis","white-space": "nowrap","width":"400px","max-width":"600px"}}>Transcription</th>
                                                     <th className="sort link_url" onClick={() => sortData('created_on', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', feedbacks)}>Created On</th>
                                                 </tr>
                                             </thead>
@@ -267,6 +268,7 @@ const UserFeedbacks = (props) => {
                                                                 {/* <td className="">{item.first_name} {item.last_name}</td> */}
                                                                 <td className="">{item.feedback_text}</td>
                                                                 <td className="">{item.audio_file_path && <audio id="audio" controls src={item.audio_file_path}></audio>}</td>
+                                                                <td className="">{item.feedback_transcription}</td>
                                                                 <td className="">{item.created_on && moment(item.created_on).format("MMM DD, YYYY")}</td>
                                                             </tr>
                                                         </React.Fragment>
