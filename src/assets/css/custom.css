@@ -147,6 +147,9 @@ pre {
   .h320 {
     height: 320px !important;
   }
+  .h720{
+    height: 720px !important;
+  }
   .min_h_80 {
     min-height: 80px !important;
   }
@@ -159,8 +162,15 @@ pre {
   .min_h_225 {
     min-height: 225px !important;
   }
+  .min_h_320 {
+    min-height: 320px !important;
+  }
   .min_h_400 {
     min-height: 400px !important;
+  }
+
+  .max_h_480 {
+    max-height: 480px !important;
   }
   .line_margin {
     margin-top: 25px !important;
@@ -774,37 +784,7 @@ pre {
   /* auto tag css end */
 
   /* custom css start */
-  .expense_table_sec .table_row .table_header{
-    border-bottom: 2px solid #afadad;
-  }
-  .expense_table_sec .table_row .table_items{
-    border-bottom: 1px solid #afadad;
-  }
-  .expense_table_sec .table_header  span{
-    font-weight: 600;
-  }
-  .expense_table_sec .table_content{
-    border-bottom: 1px solid #afadad;
-  }
-  .expense_table_sec .table_content:last-child{
-    border-bottom: 2px solid #afadad;
-  }
-  .expense_table_sec .table_row .item_data{
-    padding: 10px 5px;
-  }
-  .expense_table_sec .table_row .item_data + .item_data{
-    border-left: 1px solid #afadad;
-  }
-  #addExpenseFormSec .exp_cat_select__menu{
-    min-width: 320px;
-  }
-  #addExpenseFormSec .pay_acc_select__menu{
-    min-width: 320px;
-  }
-  #addExpenseFormSec .pay_acc_select__menu .pay_acc_select__option:hover,
-  #addExpenseFormSec .pay_acc_select__menu .pay_acc_select__option--is-focused{
-    color: #fff !important;
-  }
+  
   /* custom css end */
 
   @media screen and (min-width:768px) {

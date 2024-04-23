@@ -1,3 +1,7 @@
+import recordImg from "../../assets/images/record.png";
+import stopImg from "../../assets/images/stop.png";
+import recordingImg from "../../assets/images/recording.gif";
+
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react";
 import { Accordion, Button, Modal, OverlayTrigger, ProgressBar, Tooltip } from "react-bootstrap";
 import { useForm, useWatch } from "react-hook-form";
@@ -10,8 +14,11 @@ import C_MSG from "../../Helpers/MsgsList";
 import { AuthContext } from "../../ContextProvider/AuthContext";
 import Loader from "../Partials/Loader";
 import { getFileName } from "../../Helpers/Helper";
+import Styles from "../../Styles/StackModal.module.css"
+import HTMLFlipBook from 'react-pageflip';
+import { pdfjs, Document, Page as ReactPdfPage } from "react-pdf";
 
-
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const StackModal = (intialData) => {
     const { modalType, formSubmit, show, hideModal, modalData, cSize = "xl", customClass = "", formType = "",mClass } = intialData
@@ -66,17 +73,9 @@ const StackModal = (intialData) => {
         if (modalType == "create_user_modal") {
             setShowLoader(false)
             setusrRoles([])
-            register("userForm.roles", { required: true })
         }
         if (modalType == "update_user_modal") {
             setShowLoader(false)
-            register("userForm.roles", { required: true })
-            if(modalData && modalData.user && modalData.user.roles && modalData.user.roles.length > 0){
-                let selRolesArr = modalData.user.roles.map((item,index) => ({value: item.user_id,label:`${item.first_name} ${item.last_name}`}))
-                setGrpUsers(selRolesArr)
-                setValue("userForm.roles",selRolesArr)
-            }
-            
         }
 
         if (modalType == "create_account_modal") {
@@ -368,13 +367,13 @@ const StackModal = (intialData) => {
             if (data && data.userForm && Object.keys(data.userForm).length > 0) {
                 let form = data.userForm
                 let formData = {
+                    username: form.username,   
                     first_name: form.first_name,   
                     last_name: form.last_name,   
                     email: form.email,
                     password: form.password,     
                     phone: form.phone,     
-                    address: form.address,     
-                    roles: form.roles.map(item => item.value),
+                    address: form.address,
                     account_type_id: 1
                 }
                 setFormSbmt(true)
@@ -391,13 +390,13 @@ const StackModal = (intialData) => {
                 let form = data.userForm
                 let formData = {
                     user_id: modalData && modalData?.user?.user_id ? modalData?.user?.user_id : "",
+                    username: form.username,
                     first_name: form.first_name,   
                     last_name: form.last_name,   
                     email: form.email,
                     password: form.password,     
                     phone: form.phone,     
-                    address: form.address,     
-                    roles: form.roles.map(item => item.value),
+                    address: form.address,
                     account_type_id: 1,
                      
                 }
@@ -431,6 +430,18 @@ const StackModal = (intialData) => {
                 formData.category_id = Number(formData.category_id)
                 formData.account_id = Number(modalData?.account.account_id)
                 
+                setFormSbmt(true)
+                let res = await formSubmit(formData)
+                if (res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)) {
+                    setFormSbmt(false)
+                    handleModalClose()
+                }
+                setFormSbmt(false)
+            }
+        }
+        if (modalType == 'record_audio_feedback_modal') {
+            if (data && data.feedbackForm && Object.keys(data.feedbackForm).length > 0) {
+                let formData = data.feedbackForm
                 setFormSbmt(true)
                 let res = await formSubmit(formData)
                 if (res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)) {
@@ -521,6 +532,170 @@ const StackModal = (intialData) => {
                                             <div className="text_section">
                                                 {/* <h2 className="fs20">{modalData?.title}</h2> */}
                                                 <p>{modalData?.text}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        )
+    }
+    if (modalType == 'view_pdf_modal') {
+        // const width = window.innerWidth - 50;
+        // const height = window.innerHeight - 50;
+
+        // const Page = React.forwardRef(({ pageNumber }, ref) => {
+        // return (
+        //     <div ref={ref}>
+        //     <ReactPdfPage pageNumber={pageNumber} width={width} />
+        //     </div>
+        // );
+        // });
+        return (
+            <>
+                <Modal
+                    show={show}
+                    onHide={handleModalClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size={cSize}
+                    className={`custom-modal ${customClass}`}>
+                    <Modal.Header closeButton className="py-2 bg_15 d-flex align-items-center text-white">
+                        <Modal.Title className="fs-12">{`Pdf Viewer`}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className="">
+                            <section className="view_pdf_section my-sm-5 my-lg-0">
+                                <div className="">
+                                    <div className="row justify-content-center">
+                                        <div className="col-12 col-md-12 p-0">
+                                            <div className="text_section">
+                                                <React.Fragment>
+                                                    <div className="pdf_section h720 min_h_320 max_h_480">
+                                                        <iframe src={`https://docs.google.com/viewer?url=${modalData.file}&embedded=true`} className="w-100 img-fluid h-100">
+                                                            <div className="text-center">
+                                                                <a className="btn btn-secondary waves-effect waves-light" href={modalData.file}>Open Menu</a>
+                                                            </div>
+                                                        </iframe>
+                                                    </div>
+
+                                                </React.Fragment>
+                                                
+                                                {/* <Document file={modalData?.file}>
+                                                    <HTMLFlipBook width={width} height={height}>
+                                                        <Page pageNumber={1} />
+                                                        <Page pageNumber={2} />
+                                                        <Page pageNumber={3} />
+                                                    </HTMLFlipBook>
+                                                </Document> */}
+                                                {/* <object data={modalData.file} className="w-100 img-fluid h-100">
+                                                    <a href={modalData.file}>test.pdf</a>
+                                                </object> */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        )
+    }
+
+    if (modalType == 'record_audio_feedback_modal') {
+
+        return (
+            <>
+                <Modal
+                    show={show}
+                    onHide={handleModalClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size={cSize}
+                    className={`custom-modal ${customClass}`}>
+                    <Modal.Header closeButton className="py-2 bg_15 d-flex align-items-center text-white">
+                        <Modal.Title className="fs-12">{`Record Audio Feedback`}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className="container-fluid">
+                            <section className="view_document_section my-sm-5 my-lg-0">
+                                <div className="container">
+                                    <div className="row justify-content-center">
+                                        <div className="col-12 col-md-12">
+                                            <div id={Styles.audio_recorder_section} className="text_section">
+                                                <div className={Styles.app}>
+                                                {modalData?.recordingStatus == "recording" &&
+                                                    <React.Fragment>
+                                                        <div className="timer_sec fs-20 fw-600 mb-4 d-block">
+                                                            <span className="">{modalData?.timer?.min || "00"} : {modalData?.timer?.sec || "00"}</span>
+                                                        </div>
+                                                    </React.Fragment>
+                                                }
+                                                    <div className={Styles.audio_controls}>
+                                                        {/* {!modalData?.permission &&
+                                                            <React.Fragment>
+                                                                <button className={Styles.bdr_btn} onClick={()=> modalData.getMicrophonePermission()}>Allow Recording</button>
+                                                            </React.Fragment>
+                                                        } */} 
+                                                        {modalData?.permission &&
+                                                            <React.Fragment>
+                                                                {/* {modalData?.recordingStatus == "recording" && <div className="w40 d-inline-block"><img src={recordingImg}  className="img-fluid" /></div>} */}
+                                                                
+                                                                {modalData?.recordingStatus == "recording" &&
+                                                                    <React.Fragment>
+                                                                        <div className="recorder-container">
+                                                                            <div className="outer"></div>
+                                                                            <div className="outer-2"></div>
+                                                                            <div className="icon-microphone"><img src={recordImg}  className="img-fluid" /></div>
+                                                                        </div>
+                                                                    </React.Fragment>
+                                                                }
+                                                                {modalData?.recordingStatus == "inactive" && <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}><span className="w60 d-inline-block"><img src={recordImg}  className="img-fluid" /></span></button>}
+                                                                {modalData?.recordingStatus == "recording" && <button id="stop" className="ms-3" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w60 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
+                                                                {/* <audio id="audio" controls src={modalData?.audio}></audio> */}
+                                                            </React.Fragment>
+                                                        }
+                                                    </div>
+                                                    {/* {modalData?.recordingStatus == "recording" && <div className="w40"><img src={recordingImg}  className="img-fluid" /></div>} */}
+                                                </div>
+                                            </div>
+                                            <div className="form">
+                                                {modalData?.permission && modalData?.audio &&
+
+                                                    <React.Fragment>
+                                                        <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                                                            <div className="row align-items-start m-0 text-start">
+                                                                <div className="col-sm-12 mb-3">
+                                                                    <label htmlFor="customername-field" className="form-label">Audio</label>
+                                                                    <audio className="d-block" id="audio" controls src={modalData?.audio}></audio>
+                                                                </div>
+                                                                <div className="col-sm-12 mb-3">
+                                                                    <label htmlFor="customername-field" className="form-label">Comment</label>
+                                                                    <textarea rows={5} className="form-control" placeholder="Feedback" {...register("feedbackForm.feedback_text", { required: true })}></textarea>
+                                                                    {errors && errors.categoryForm && errors.categoryForm?.feedback_text && errors.categoryForm.feedback_text?.type == "required" && <div className="field_err text-danger">{C_MSG.field_required}</div>}
+                                                                </div>
+                                                            </div>
+                                                            <hr />
+                                                            <div className="d-flex align-items-center justify-content-end px-3">
+                                                                <div className="">
+                                                                    <button className="btn btn-outline-secondary waves-effect waves-light" type="button" disabled={formSubmitted} onClick={() => handleModalClose()}>Close</button>
+                                                                </div>
+                                                                <div className="ms-3">
+                                                                    <button className="btn btn-secondary waves-effect waves-light" type="submit" disabled={formSubmitted}>Submit</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </React.Fragment>
+
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -815,26 +990,26 @@ const StackModal = (intialData) => {
 
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 2" className="form-control" {...register("accountForm.headline2_text", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_text ? modalData.account?.headline2_text : ""} />
+                                        <input type="text" placeholder="Headline 2" className="form-control" {...register("accountForm.headline2_text", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_text ? modalData.account?.headline2_text : ""} />
                                         {errors.accountForm?.headline2_text && errors.accountForm?.headline2_text.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 2 Button" className="form-control" {...register("accountForm.headline2_button", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_button ? modalData.account?.headline2_button : ""} />
+                                        <input type="text" placeholder="Headline 2 Button" className="form-control" {...register("accountForm.headline2_button", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_button ? modalData.account?.headline2_button : ""} />
                                         {errors.accountForm?.headline2_button && errors.accountForm?.headline2_button.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
 
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 2" className="form-control" {...register("accountForm.headline3_text", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.headline3_text ? modalData.account?.headline3_text : ""} />
+                                        <input type="text" placeholder="Headline 2" className="form-control" {...register("accountForm.headline3_text", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline3_text ? modalData.account?.headline3_text : ""} />
                                         {errors.accountForm?.headline3_text && errors.accountForm?.headline3_text.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 3 Button" className="form-control" {...register("accountForm.headline3_button", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.headline3_button ? modalData.account?.headline3_button : ""} />
+                                        <input type="text" placeholder="Headline 3 Button" className="form-control" {...register("accountForm.headline3_button", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline3_button ? modalData.account?.headline3_button : ""} />
                                         {errors.accountForm?.headline3_button && errors.accountForm?.headline3_button.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
@@ -847,7 +1022,7 @@ const StackModal = (intialData) => {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Offer" className="form-control" {...register("accountForm.offer", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.offer ? modalData.account?.offer : ""} />
+                                        <input type="text" placeholder="Offer" className="form-control" {...register("accountForm.offer", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.offer ? modalData.account?.offer : ""} />
                                         {errors.accountForm?.offer && errors.accountForm?.offer.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
@@ -872,13 +1047,13 @@ const StackModal = (intialData) => {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Youtube Url" className="form-control" {...register("accountForm.youtube_url", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.youtube_url ? modalData.account?.youtube_url : ""} />
+                                        <input type="text" placeholder="Youtube Url" className="form-control" {...register("accountForm.youtube_url", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.youtube_url ? modalData.account?.youtube_url : ""} />
                                         {errors.accountForm?.youtube_url && errors.accountForm?.youtube_url.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Instagram Url" className="form-control" {...register("accountForm.instagram_url", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.instagram_url ? modalData.account?.instagram_url : ""} />
+                                        <input type="text" placeholder="Instagram Url" className="form-control" {...register("accountForm.instagram_url", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.instagram_url ? modalData.account?.instagram_url : ""} />
                                         {errors.accountForm?.instagram_url && errors.accountForm?.instagram_url.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>

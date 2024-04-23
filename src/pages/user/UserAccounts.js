@@ -73,11 +73,13 @@ const UserAccounts = (props) => {
             //   tmpPnPArr = getFilteredGrps(tmpPnPArr, checkFilters, {}) || [];
             // }
         for (let item of tmpArr) {
-          let group_name = item?.group_name ? item?.group_name.toLowerCase() : "";
-          let fullname = item?.fullname ? item?.fullname.toLowerCase() : "";
+          let title = item?.title ? item?.title.toLowerCase() : "";
+          let username = item?.username ? item?.username.toLowerCase() : "";
+          let uniqId = item?.qr_value ? item?.qr_value.toLowerCase() : "";
           if (
-            group_name.indexOf(keyword.toLowerCase()) != -1 ||
-            fullname.indexOf(keyword.toLowerCase()) != -1 
+            title.indexOf(keyword.toLowerCase()) != -1 ||
+            username.indexOf(keyword.toLowerCase()) != -1 ||
+            uniqId.indexOf(keyword.toLowerCase()) != -1
           ) {
             items.push(item);
           }
@@ -379,7 +381,6 @@ const UserAccounts = (props) => {
         if(data == null){
             return false
         }
-        console.log(data);
         setFormSbmt(true)
         let result = false
         const {uploadfiles = [],type=""} = data
@@ -407,102 +408,97 @@ const UserAccounts = (props) => {
 
     return (
         <React.Fragment>
-            <div className="card">
-                <div className="row">
-                    <div className="col-12">
-                        <div className="listjs-table mt-3" id="customerList">
-                            <div className="row m-0">
-                                <div className="col-sm">
-                                    <div className="d-flex justify-content-sm-end">
-                                        <div className="search-box ms-2">
-                                            <input type="text" className="form-control search" placeholder="Search..." ref={keywordRef} onChangeCapture={() => searchByKeyword(null, [...accounts])} />
-                                            <i className="ri-search-line search-icon"></i>
+            <div className="page-content mt-4 pt-5">
+                <div className="card">
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="listjs-table mt-3" id="customerList">
+                                <div className="row m-0">
+                                    <div className="col-sm">
+                                        <div className="d-flex justify-content-sm-end">
+                                            <div className="search-box ms-2">
+                                                <input type="text" className="form-control search" placeholder="Search..." ref={keywordRef} onChangeCapture={() => searchByKeyword(null, [...accounts])} />
+                                                <i className="ri-search-line search-icon"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-sm-auto">
-                                    <div>
-                                        <button type="button" className="btn btn-success add-btn" onClick={() => showModal("create_account_modal")}><i className="ri-add-line align-bottom me-1"></i> Add</button>
-                                        {/* <button className="btn btn-soft-danger ms-3" onClick={() => onDelaccounts(selectedAccs)} disabled={formSubmitted || selectedAccs.length == 0}><i className="ri-delete-bin-2-line"></i></button> */}
-                                    </div>
-                                </div>
 
-                            </div>
+                                <div className="table-responsive table-card m-0 mt-3">
+                                    {filteredList && filteredList.length > 0 &&
+                                        <table className="table align-middle table-nowrap" id="customerTable">
+                                            <thead className="table-light">
+                                                <tr>
+                                                    {/* <th>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" id="checkAll" name={"allSelect"} checked={selectedAccs.length == accounts.length} onChange={(e) => handleChange(e)} />
+                                                        </div>
+                                                    </th> */}
+                                                    {/* <th className="sort link_url" onClick={() => sortData('first_name', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>FullName</th> */}
+                                                    <th className="sort link_url" onClick={() => sortData('title', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Title</th>
+                                                    <th className="sort link_url" onClick={() => sortData('Username', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Username</th>
+                                                    <th className="sort link_url" onClick={() => sortData('phone', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Unique Id</th>
+                                                    <th className="sort link_url" onClick={() => sortData('email', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Qr Code</th>
+                                                    <th className="">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="list form-check-all">
+                                                {React.Children.toArray(filteredList.map((item, index) => {
+                                                    return (
+                                                        <React.Fragment>
+                                                            <tr>
 
-                            <div className="table-responsive table-card m-0 mt-3">
-                                {filteredList && filteredList.length > 0 &&
-                                    <table className="table align-middle table-nowrap" id="customerTable">
-                                        <thead className="table-light">
-                                            <tr>
-                                                {/* <th>
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" id="checkAll" name={"allSelect"} checked={selectedAccs.length == accounts.length} onChange={(e) => handleChange(e)} />
-                                                    </div>
-                                                </th> */}
-                                                {/* <th className="sort link_url" onClick={() => sortData('first_name', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>FullName</th> */}
-                                                <th className="sort link_url" onClick={() => sortData('title', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Title</th>
-                                                <th className="sort link_url" onClick={() => sortData('Username', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Username</th>
-                                                <th className="sort link_url" onClick={() => sortData('phone', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Unique Id</th>
-                                                <th className="sort link_url" onClick={() => sortData('email', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Qr Code</th>
-                                                <th className="">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="list form-check-all">
-                                            {React.Children.toArray(filteredList.map((item, index) => {
-                                                return (
-                                                    <React.Fragment>
-                                                        <tr>
-
-                                                            {/* <td className="">{item.first_name} {item.last_name}</td> */}
-                                                            <td className="">{item.title}</td>
-                                                            <td className="">{item.username}</td>
-                                                            <td className="">{item.qr_value}</td>
-                                                            <td className=""><span className="link_url" onClick={() => showModal("view_documents", item)}><i className="fa fa-file"></i></span></td>
-                                                            <td>
-                                                                <div className="d-flex gap-2">
-                                                                    <div className="edit">
-                                                                        <button className="btn btn-sm btn-success edit-item-btn" onClick={() => getAccountInfo(item.account_id)}>Edit</button>
+                                                                {/* <td className="">{item.first_name} {item.last_name}</td> */}
+                                                                <td className="">{item.title}</td>
+                                                                <td className="">{item.username}</td>
+                                                                <td className="">{item.qr_value}</td>
+                                                                <td className=""><span className="link_url" onClick={() => showModal("view_documents", item)}><i className="fa fa-file"></i></span></td>
+                                                                <td>
+                                                                    <div className="d-flex gap-2">
+                                                                        <div className="edit">
+                                                                            <button className="btn btn-sm btn-success edit-item-btn" onClick={() => getAccountInfo(item.account_id)}>Edit</button>
+                                                                        </div>
+                                                                        {/* <div className="remove">
+                                                                            <button className="btn btn-sm btn-danger remove-item-btn" onClick={() => onDelaccounts([item.account_id])}>Remove</button>
+                                                                        </div> */}
                                                                     </div>
-                                                                    {/* <div className="remove">
-                                                                        <button className="btn btn-sm btn-danger remove-item-btn" onClick={() => onDelaccounts([item.account_id])}>Remove</button>
-                                                                    </div> */}
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </React.Fragment>
-                                                )
-                                            }))}
-                                        </tbody>
-                                    </table>
-                                }
+                                                                </td>
+                                                            </tr>
+                                                        </React.Fragment>
+                                                    )
+                                                }))}
+                                            </tbody>
+                                        </table>
+                                    }
 
-                                {filteredList && filteredList.length > 0 &&
-                                    <div className="pagination_sec px-3 mt-3 Page navigation example btm_pagination d-flex justify-content-between align-items-center mt-20 pb-20">
-                                        <StackPagination
-                                            layout={2}
-                                            totalItems={Number(paginate?.totalItems)}
-                                            totalPages={Number(paginate?.totalPages)}
-                                            currentPage={Number(paginate?.currentPage)}
-                                            showAllPages={paginate?.showAllPages}
-                                            showPrevNextBtn={paginate?.showPrevNextBtn}
-                                            disablePages={paginate?.disablePages}
-                                            limit={Number(paginate?.itemsLimit)}
-                                            onChangeLimit={onChangeLimit}
-                                            onClickFn={onClickPaginationItem}
-                                            onPageChange={onPageChangeFunc}
-                                            prevRange={prevRange}
-                                        />
-                                    </div>
-                                }
-
-                                {filteredList && filteredList.length == 0 &&
-                                    <div className="noresult">
-                                        <div className="text-center">
-                                            <h5 className="mt-2">Sorry! No Result Found</h5>
+                                    {filteredList && filteredList.length > 0 &&
+                                        <div className="pagination_sec px-3 mt-3 Page navigation example btm_pagination d-flex justify-content-between align-items-center mt-20 pb-20">
+                                            <StackPagination
+                                                layout={2}
+                                                totalItems={Number(paginate?.totalItems)}
+                                                totalPages={Number(paginate?.totalPages)}
+                                                currentPage={Number(paginate?.currentPage)}
+                                                showAllPages={paginate?.showAllPages}
+                                                showPrevNextBtn={paginate?.showPrevNextBtn}
+                                                disablePages={paginate?.disablePages}
+                                                limit={Number(paginate?.itemsLimit)}
+                                                onChangeLimit={onChangeLimit}
+                                                onClickFn={onClickPaginationItem}
+                                                onPageChange={onPageChangeFunc}
+                                                prevRange={prevRange}
+                                            />
                                         </div>
-                                    </div>
-                                }
+                                    }
 
+                                    {filteredList && filteredList.length == 0 &&
+                                        <div className="noresult">
+                                            <div className="text-center">
+                                                <h5 className="mt-2">Sorry! No Result Found</h5>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
                             </div>
                         </div>
                     </div>

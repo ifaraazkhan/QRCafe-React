@@ -7,7 +7,7 @@ import AuthFooter from '../../Components/Partials/AuthFooter';
 import { setDocumentTitle } from '../../Helpers/Helper';
 import { useForm } from 'react-hook-form';
 
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
+import avatar1 from "../../assets/images/users/user-dummy-img.jpg";
 import C_MSG from '../../Helpers/MsgsList';
 
 const LockScreen = () => {

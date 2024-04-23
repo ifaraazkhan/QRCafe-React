@@ -1,0 +1,49 @@
+name: Deploy to AWS S3
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Use Node.js 14.7
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14.7'
+
+    - name: Install dependencies and build
+      run: |
+        npm install
+        CI=false npm run build
+      env:
+        PORT: 3002
+        HTTPS: false
+        REACT_APP_SITE_NAME: 'HappyVibes'
+        REACT_APP_ENCRYPT_IV: 'e48aff62dfd827bb79eed287ae2a5a93'
+        REACT_APP_ENCRYPT_KEY: 'ipassenckey@admin1234ipassenckey@admin1234ipassenckey@admin1234'
+        REACT_APP_DOMAIN: 'http://localhost:3002/'
+        REACT_APP_API_URL: 'https://szmm3y3kgd.us-east-1.awsapprunner.com/'
+        REACT_APP_ALLOWED_ORIGIN: 'http://localhost:4000/'
+        REACT_APP_API_KEY: ''
+        REACT_APP_API_SC_CODE: '["ip200", "ip201", "dc200"]'
+        REACT_APP_SUPPORT_UPLOAD_FILE_TYPE: 'doc,docx,pdf,xls,xlsx,png,gif,jpg,jpeg,jfif,svg,webp,msg,eml,zip,ppt'
+        REACT_APP_SUPPORT_IMG_FILE_TYPE: 'png,gif,jpg,jpeg'
+        REACT_APP_SUPPORT_PDF_FILE_TYPE: 'pdf'
+        
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1
+
+    - name: Deploy static site to S3 bucket
+      run: aws s3 sync ./build/ s3://happyvibes-web-react --delete

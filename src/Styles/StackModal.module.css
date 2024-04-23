@@ -1,0 +1,38 @@
+#audio_recorder_section #msg {
+  color: red;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: Verdana;
+  display: block;
+}
+#audio_recorder_section button {
+  padding: 5px 10px;
+  border: 0;
+  font-size: 18px;
+  background: white;
+}
+#audio_recorder_section button.bdr_btn {
+  border: 1px solid #38447a !important
+}
+
+#audio_recorder_section .audio_controls {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  justify-content: center;
+}
+#audio_recorder_section .audio_controls button {
+  margin: 0px 5px;
+}
+
+#audio_recorder_section select {
+  height: 25px;
+  margin: 0px 5px;
+}
+#audio_recorder_section a {
+  margin-left: 20px;
+}
+#audio_recorder_section .app {
+  text-align: center;
+  padding-top: 20px;
+}

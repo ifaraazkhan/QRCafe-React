@@ -39,14 +39,16 @@ const RoutesList = () => {
                             }))}
                         </Route>
 
-                        <Route path="/home" element={<PublicLayout><Home /></PublicLayout>}></Route>
-                        
                         <Route path="/" element={<PublicRouterOutlet layout={PublicLayout} />}>
                             {publicRoutes && React.Children.toArray(publicRoutes.map((item) => {
                                 return <Route path={item.path} element={item.component} />
                             }))}
-                            <Route path="*" element={<PublicLayout><Page404 /></PublicLayout>}></Route>
                         </Route>
+
+                        <Route path="/home" element={<PublicLayout><Home /></PublicLayout>}></Route>
+                        <Route path="/page404" element={<PublicLayout><Page404 /></PublicLayout>}></Route>
+                        <Route path="*" element={<PublicLayout><Page404 /></PublicLayout>}></Route>
+                        
                         
                     </Routes>
                 </Suspense>

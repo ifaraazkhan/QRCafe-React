@@ -1,6 +1,6 @@
 import Footer from "../../Components/Partials/PublicFooter"
 import PublicHeader from "../../Components/Partials/PublicHeader"
-import logo from "../../assets/images/logo-light.png";
+import logo from "../../assets/images/error400-cover.png";
 const Page404 = (props) => {
   return (
     <>
