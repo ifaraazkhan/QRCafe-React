@@ -494,7 +494,7 @@ const AdminUsers = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData }}
                                 formSubmit={addUser}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
                             />
                         );
@@ -507,7 +507,7 @@ const AdminUsers = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData}}
                                 formSubmit={updateUser}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
                             />
                         );

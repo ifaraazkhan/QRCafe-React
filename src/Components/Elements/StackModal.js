@@ -37,6 +37,7 @@ const StackModal = (intialData) => {
     const [uploadfiles, setUploadFiles] = useState(null)
     const [accBgImg, setAccBgImg] = useState(null)
     const [accFiles, setAccFiles] = useState(null)
+    const [feedbackFiles, setFeedbackFiles] = useState(null)
     const [msgError, setMsgErr] = useState(null)
     const [uploadErr, setUploadErr] = useState('')
     const [fileUrls, setFileUrls] = useState([]);
@@ -154,10 +155,10 @@ const StackModal = (intialData) => {
         }
         let files = event.target.files
         let filesArray = Array.from(files) || [];
-        const setFileState = type == "acc_bg_img" ? setAccBgImg : (type == "acc_files" ? setAccFiles : setUploadFiles)
-        const uploadFn = type == "acc_bg_img" ? onUploadDocuments : (type == "acc_files" ? onUploadDocuments : onUploadDocuments)
-        const uploadtype = type == "acc_bg_img" ? "background" : (type == "acc_files" ? "menu" : "files")
-        const formField = type == "acc_bg_img" ? "accountForm.bg_image_id" : (type == "acc_files" ? "accountForm.file_id" : "")
+        const setFileState = type == "acc_bg_img" ? setAccBgImg : (type == "acc_files" ? setAccFiles : (type == "feedback_file" ? setFeedbackFiles : setUploadFiles))
+        const uploadFn = type == "acc_bg_img" ? onUploadDocuments : (type == "acc_files" ? onUploadDocuments : (type == "feedback_file" ? onUploadDocuments : onUploadDocuments))
+        const uploadtype = type == "acc_bg_img" ? "background" : (type == "acc_files" ? "menu" : (type == "feedback_file" ? "feedback_file" : "files"))
+        const formField = type == "acc_bg_img" ? "accountForm.bg_image_id" : (type == "acc_files" ? "accountForm.file_id" : (type == "feedback_file" ? "feedbackForm.file_id" : ""))
         if (checkFileType) {
             if (checkFileTypeValidation(filesArray, uploadtype)) {
                 const uploadRes = await uploadFn(filesArray, uploadtype)
@@ -181,7 +182,7 @@ const StackModal = (intialData) => {
         if (!checkFileType) {
             return true;
         }
-        let validExt = Object.assign([], type == "background" ? validImgFileTypes : (type == "menu" ? validPdfFileTypes : validFileTypes))
+        let validExt = Object.assign([], type == "background" ? validImgFileTypes : (type == "menu" ? validPdfFileTypes : (type == "feedback_file" ? validFileTypes : validFileTypes)))
         for (let i = 0; i < filesArray.length; i++) {
             let fileName = filesArray[i]["name"];
             let ext = fileName.split('.').pop();
@@ -228,8 +229,8 @@ const StackModal = (intialData) => {
         if (fileIndex == null) {
             return false
         }
-        const setFileState = type == "acc_bg_img" ? setAccBgImg : (type == "acc_files" ? setAccFiles : setUploadFiles)
-        const fileState = type == "acc_bg_img" ? accBgImg : (type == "acc_files" ? accFiles : uploadfiles)
+        const setFileState = type == "acc_bg_img" ? setAccBgImg : (type == "acc_files" ? setAccFiles : (type == "feedback_file" ? setFeedbackFiles : setUploadFiles))
+        const fileState = type == "acc_bg_img" ? accBgImg : (type == "acc_files" ? accFiles : (type == "feedback_file" ? feedbackFiles : uploadfiles))
         let files = fileState;
         files.splice(fileIndex, 1)
         setFileState(oldVal => {
@@ -251,7 +252,8 @@ const StackModal = (intialData) => {
         if (files.length > 0) {
             let result = false
             let obj = { uploadfiles:files, type }
-            let res = await modalData.uploadAccDocs(obj)
+            const apiFn = type == "acc_bg_img" ? modalData.uploadAccDocs : (type == "acc_files" ? modalData.uploadAccDocs : (type == "feedback_file" ? modalData.uploadDocs : modalData.uploadAccDocs))
+            let res = await apiFn(obj)
             if (res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)) {
                 // setValue("expenseForm.image_ids",res.image_ids)
                 result = res.image_ids.length ? res.image_ids[0] : false
@@ -474,7 +476,8 @@ const StackModal = (intialData) => {
                     size={cSize}
                     className={`custom-modal ${customClass}`}>
                     <Modal.Header closeButton className="py-2 bg_15 d-flex align-items-center text-white">
-                        <Modal.Title className="fs-12">Image Viewer</Modal.Title>
+                        {/* <Modal.Title className="fs-12">Image Viewer</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="container-fluid">
@@ -521,7 +524,8 @@ const StackModal = (intialData) => {
                     size={cSize}
                     className={`custom-modal ${customClass}`}>
                     <Modal.Header closeButton className="py-2 bg_15 d-flex align-items-center text-white">
-                        <Modal.Title className="fs-12">{modalData?.title}</Modal.Title>
+                        {/* <Modal.Title className="fs-12">{modalData?.title}</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="container-fluid">
@@ -566,7 +570,8 @@ const StackModal = (intialData) => {
                     size={cSize}
                     className={`custom-modal ${customClass}`}>
                     <Modal.Header closeButton className="py-2 bg_15 d-flex align-items-center text-white">
-                        <Modal.Title className="fs-12">{`Pdf Viewer`}</Modal.Title>
+                        {/* <Modal.Title className="fs-12">{`Pdf Viewer`}</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="">
@@ -622,7 +627,8 @@ const StackModal = (intialData) => {
                     size={cSize}
                     className={`custom-modal ${customClass}`}>
                     <Modal.Header closeButton className="py-2 bg_15 d-flex align-items-center text-white">
-                        <Modal.Title className="fs-12">{`Record Audio Feedback`}</Modal.Title>
+                        {/* <Modal.Title className="fs-12">{`Record Audio Feedback`}</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="container-fluid">
@@ -640,11 +646,6 @@ const StackModal = (intialData) => {
                                                     </React.Fragment>
                                                 }
                                                     <div className={Styles.audio_controls}>
-                                                        {/* {!modalData?.permission &&
-                                                            <React.Fragment>
-                                                                <button className={Styles.bdr_btn} onClick={()=> modalData.getMicrophonePermission()}>Allow Recording</button>
-                                                            </React.Fragment>
-                                                        } */} 
                                                         {modalData?.permission &&
                                                             <React.Fragment>
                                                                 {/* {modalData?.recordingStatus == "recording" && <div className="w40 d-inline-block"><img src={recordingImg}  className="img-fluid" /></div>} */}
@@ -676,6 +677,63 @@ const StackModal = (intialData) => {
                                                                 <div className="col-sm-12 mb-3">
                                                                     <label htmlFor="customername-field" className="form-label">Audio</label>
                                                                     <audio className="d-block" id="audio" controls src={modalData?.audio}></audio>
+                                                                </div>
+                                                                <div className="col-sm-12">
+                                                                    <div className="form-group">
+                                                                        <label><i className="fa fa-attachment"></i><span>Image</span></label>
+                                                                        <div className="container-fluid h-100 col-sm-12 ml-0 px-0">
+                                                                            <div id="form_file_upload_modal" className="h-100 position-relative">
+                                                                                {showLoader && showLoader.type == "feedback_file" && <Loader heightClass="h-100" showLoader={showLoader.status}></Loader>}
+                                                                                {(() => {
+                                                                                    if (feedbackFiles == null || feedbackFiles.length < 1) {
+                                                                                        return (
+                                                                                            <div className="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column h-100">
+                                                                                                <input
+                                                                                                    className="fileUploadInp"
+                                                                                                    type="file"
+                                                                                                    name="file"
+                                                                                                    accept=".doc,.docx,.pdf,.xls,.xlsx,image/png,image/jpeg,image/gif,image/svg+xml,image/webp,.msg,.eml,.zip,.ppt"
+                                                                                                    onChange={(e) => onFileChange(e, "feedback_file")}
+                                                                                                    id="file"
+                                                                                                    data-multiple-caption="{count} files selected"
+                                                                                                    multiple={false}
+                                                                                                />
+                                                                                                <i className="fa fa-upload" aria-hidden="true"></i>
+                                                                                                <label htmlFor="file"><strong>Choose a file</strong><span className="fileDropBox"> or drag it here</span>.</label>
+                                                                                                <label htmlFor="file"><strong>({C_MSG.supported_file_format})</strong></label>
+                                                                                                {msgError && msgError.type == "feedback_file" && <p className="text-danger p-2">{msgError.message}</p>}
+                                                                                            </div>
+                                                                                        )
+
+                                                                                    } else {
+                                                                                        return (
+                                                                                            <div className="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column h-100">
+                                                                                                <div className="uploadsList my-2 text-center">
+                                                                                                    {feedbackFiles && feedbackFiles.length > 0 && feedbackFiles.map((file, fIndex) => {
+                                                                                                        return (
+                                                                                                            <div key={fIndex} className="file_card position-relative">
+                                                                                                                {getFileName(file)}
+                                                                                                                <span className="close_btn link_url position-absolute" onClick={() => removeUploadFile(fIndex, "feedback_file")}><i className="fa fa-times"></i></span>
+                                                                                                            </div>
+                                                                                                        )
+                                                                                                    })}
+                                                                                                </div>
+                                                                                                <div className="taskDetails_btn_block px-3">
+                                                                                                    <div className="card_button_block ">
+                                                                                                        {/* <Button className="btn_2 btn_wide " variant="outline-dark" onClick={() => onUploadDocuments()}>Upload</Button> */}
+                                                                                                        {fileUploadSuccess && fileUploadSuccess.status == true && fileUploadSuccess.type == "feedback_file" && <span className="text-success">{C_MSG.file_upload_success}</span>}
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                            </div>
+                                                                                        )
+
+                                                                                    }
+                                                                                })()}
+                                                                            </div>
+                                                                            {errors.feedbackForm?.feedback_file && errors.feedbackForm?.file.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                                 <div className="col-sm-12 mb-3">
                                                                     <label htmlFor="customername-field" className="form-label">Comment</label>
@@ -721,7 +779,8 @@ const StackModal = (intialData) => {
                     className={`custom-modal ${customClass}`}>
 
                     <Modal.Header closeButton className="bg-light p-3 ">
-                        <Modal.Title className="fs-12">{modalType == "update_group_modal" ? "Update" : "New"} Group</Modal.Title>
+                        {/* <Modal.Title className="fs-12">{modalType == "update_group_modal" ? "Update" : "New"} Group</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="px-0 text_color_2 fs-12">
                         <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -788,7 +847,8 @@ const StackModal = (intialData) => {
                     className={`custom-modal ${customClass}`}>
 
                     <Modal.Header closeButton className="bg-light p-3 ">
-                        <Modal.Title className="fs-12">{modalType == "update_category_modal" ? "Update" : "New"} Category</Modal.Title>
+                        {/* <Modal.Title className="fs-12">{modalType == "update_category_modal" ? "Update" : "New"} Category</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="px-0 text_color_2 fs-12">
                         <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -838,7 +898,8 @@ const StackModal = (intialData) => {
                     className={`custom-modal ${customClass}`}>
 
                     <Modal.Header closeButton className="bg-light p-3">
-                        <Modal.Title className="fs-12">{modalType == "update_user_modal" ? "Update User Info" : "Add a User"}</Modal.Title>
+                        {/* <Modal.Title className="fs-12">{modalType == "update_user_modal" ? "Update User Info" : "Add a User"}</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="px-0 text_color_2 fs-12">
                         <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -927,7 +988,8 @@ const StackModal = (intialData) => {
                     className={`custom-modal ${customClass}`}>
 
                     <Modal.Header closeButton className="bg-light p-3">
-                        <Modal.Title className="fs-12">{modalType == "update_account_modal" ? "Update Account Info" : "Add Account"}</Modal.Title>
+                        {/* <Modal.Title className="fs-12">{modalType == "update_account_modal" ? "Update Account Info" : "Add Account"}</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="px-0 text_color_2 fs-12">
                         <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">

@@ -566,34 +566,8 @@ const UserAccounts = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData, viewFile, fileType }}
                                 formSubmit={null}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
-                            />
-                        );
-                    }
-                    if (modalType == "create_account_modal") {
-                        return (
-                            <StackModal
-                                show={openModal}
-                                modalType={modalType}
-                                hideModal={hideModal}
-                                modalData={{ ...modalData, uploadAccDocs, users, cats }}
-                                formSubmit={addAccount}
-                                customClass=""
-                                cSize="md"
-                            />
-                        );
-                    }
-                    if (modalType == "update_account_modal") {
-                        return (
-                            <StackModal
-                                show={openModal}
-                                modalType={modalType}
-                                hideModal={hideModal}
-                                modalData={{ ...modalData, uploadAccDocs, users, cats }}
-                                formSubmit={updateAccount}
-                                customClass=""
-                                cSize="md"
                             />
                         );
                     }

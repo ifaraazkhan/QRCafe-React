@@ -462,7 +462,7 @@ const Categories = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData }}
                                 formSubmit={addCategory}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
                             />
                         );
@@ -475,7 +475,7 @@ const Categories = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData}}
                                 formSubmit={updateCategory}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
                             />
                         );

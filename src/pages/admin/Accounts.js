@@ -569,7 +569,7 @@ const Accounts = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData, viewFile, fileType }}
                                 formSubmit={null}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
                             />
                         );
@@ -582,7 +582,7 @@ const Accounts = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData, uploadAccDocs, users, cats }}
                                 formSubmit={addAccount}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="md"
                             />
                         );
@@ -595,7 +595,7 @@ const Accounts = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData, uploadAccDocs, users, cats }}
                                 formSubmit={updateAccount}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="md"
                             />
                         );

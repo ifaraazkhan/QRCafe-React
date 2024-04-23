@@ -550,7 +550,7 @@ const Roles = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData }}
                                 formSubmit={addRole}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
                             />
                         );
@@ -563,7 +563,7 @@ const Roles = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData}}
                                 formSubmit={updateRole}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
                             />
                         );
