@@ -309,6 +309,36 @@ const Home = (props) => {
         }
     }
 
+    const uploadDocs = async (data = null) => {
+        if(data == null){
+            return false
+        }
+        console.log(data);
+        setFormSbmt(true)
+        let result = false
+        const {uploadfiles = [],type=""} = data
+        if(uploadfiles.length > 0){
+            let payloadUrl = `admin/uploadImages/file`
+            let method = "POST"
+            let formData = new FormData();
+            for (var i = 0; i < uploadfiles.length; i++) {
+                // formData.append(`file[${i}]`, uploadfiles[i])
+                formData.append(`files`, uploadfiles[i])
+            }
+            // formData.append(`images`, Array.from(uploadfiles))
+            // let formData = {'images[]':uploadfiles}
+            const res = await ApiService.fetchData(payloadUrl,method,formData,{formType:"form",fileUpload:true})
+            if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
+                result = res
+            }else{
+                
+            }
+            setFormSbmt(false)
+            return result
+        }
+        
+    }
+
     return(
         <React.Fragment>
             {/* <div id="preloader">
@@ -604,7 +634,7 @@ const Home = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData}}
                                 formSubmit={null}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
                             />
                         );
@@ -615,9 +645,9 @@ const Home = (props) => {
                                 show={openModal}
                                 modalType={modalType}
                                 hideModal={hideModal}
-                                modalData={{ ...modalData, permission, recordingStatus, audio,timer: elapsedTime, getMicrophonePermission, startRecording:onStartRecording, stopRecording}}
+                                modalData={{ ...modalData, permission, recordingStatus, audio,timer: elapsedTime, getMicrophonePermission, startRecording:onStartRecording, stopRecording, uploadDocs}}
                                 formSubmit={submitFeedack}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="sm"
                             />
                         );
@@ -630,7 +660,7 @@ const Home = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData}}
                                 formSubmit={null}
-                                customClass=""
+                                customClass="bottom"
                                 cSize="md"
                             />
                         );

@@ -540,7 +540,10 @@ pre {
   /* bootstrap modal from right css start */
   .form-group{ margin-bottom: 10px;}
   .modal.left .modal-dialog,
-	.modal.right .modal-dialog {
+	.modal.right .modal-dialog,
+	.modal.bottom .modal-dialog {
+    display: flex;
+    align-items: center;
 		position: fixed;
 		margin: auto;
 		height: 100%;
@@ -551,13 +554,22 @@ pre {
 	}
 
 	.modal.left .modal-content,
-	.modal.right .modal-content {
+	.modal.right .modal-content,
+	.modal.bottom .modal-content {
 		height: 100%;
 		overflow-y: auto;
 	}
+
+  .modal.bottom .modal-content {
+    height: auto !important;
+    overflow-y: auto !important;
+    max-height: 480px !important;
+    max-height: 100vh !important;
+  }
 	
 	.modal.left .modal-body,
-	.modal.right .modal-body {
+	.modal.right .modal-body,
+	.modal.bottom .modal-body {
 		padding: 15px 15px 80px;
 	}
 
@@ -585,6 +597,22 @@ pre {
 	.modal.right.fade.show .modal-dialog ,
 	.modal.right.fade.in .modal-dialog {
 		right: 0;
+	}
+
+  .modal.bottom.fade .modal-dialog {
+		bottom: -320px;
+    left: 50%;
+    transform: translateX(-50%);
+		-webkit-transition: opacity 0.3s linear, bottom 0.3s ease-out;
+		   -moz-transition: opacity 0.3s linear, bottom 0.3s ease-out;
+		     -o-transition: opacity 0.3s linear, bottom 0.3s ease-out;
+		        transition: opacity 0.3s linear, bottom 0.3s ease-out;
+	}
+	
+	.modal.bottom.fade.show .modal-dialog ,
+	.modal.bottom.fade.in .modal-dialog {
+		bottom: 50%;
+    transform: translateY(50%) translateX(-50%);
 	}
 
 
