@@ -250,6 +250,7 @@ const Home = (props) => {
         formData.append(`qrc`, qrc)
         formData.append(`member_id`, 0)
         formData.append(`feedback_text`, data.feedback_text)
+        formData.append(`file_id`, data.file_id)
         formData.append(`audioFile`, audioBlob)
             
         const res = await ApiService.fetchData(payloadUrl,method,formData,{formType:"form",fileUpload:true})
@@ -515,7 +516,7 @@ const Home = (props) => {
                     </div>
                     <div className="pt-3"></div>
 
-                    <div className="container">
+                    {/* <div className="container">
                         <div className="card card-round">
                             <div className="card-body d-flex align-items-center direction-rtl">
                                 <div className="card-img-wrap">
@@ -527,7 +528,7 @@ const Home = (props) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="pt-3"></div>
 
@@ -539,7 +540,7 @@ const Home = (props) => {
                                 </div>
                                 <div className="card-content">
                                     <h5 className="mb-3">{accInfo?.headline2_text}</h5>
-                                    <a className="btn btn-warning rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline2_button}</a>
+                                    <a className="btn btn-warning rounded-pill link_url" onClick={() => onStartRecordAudio()}>{accInfo?.headline2_button}</a>
                                 </div>
                             </div>
                         </div>

@@ -538,6 +538,11 @@ pre {
 
 
   /* bootstrap modal from right css start */
+
+  .modal-dialog:not(.modal-dialog-scrollable) .modal-header .btn-close{
+    margin-top: 5px;
+  }
+
   .form-group{ margin-bottom: 10px;}
   .modal.left .modal-dialog,
 	.modal.right .modal-dialog,
@@ -613,6 +618,7 @@ pre {
 	.modal.bottom.fade.in .modal-dialog {
 		bottom: 50%;
     transform: translateY(50%) translateX(-50%);
+    width: inherit;
 	}
 
 
