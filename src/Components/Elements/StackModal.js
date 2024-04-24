@@ -162,6 +162,7 @@ const StackModal = (intialData) => {
         if (checkFileType) {
             if (checkFileTypeValidation(filesArray, uploadtype)) {
                 const uploadRes = await uploadFn(filesArray, uploadtype)
+                console.log(uploadRes);
                 if(uploadRes){
                     setFileState(filesArray)
                     if(formField){
@@ -659,7 +660,12 @@ const StackModal = (intialData) => {
                                                                         </div>
                                                                     </React.Fragment>
                                                                 }
-                                                                {modalData?.recordingStatus == "inactive" && <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}><span className="w60 d-inline-block"><img src={recordImg}  className="img-fluid" /></span></button>}
+                                                                {modalData?.recordingStatus == "inactive" && 
+                                                                    <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}>
+                                                                        <span className="w85 d-inline-block"><img src={recordImg}  className="img-fluid" /></span>
+                                                                        <span className="d-block fs-20 fw-400 mt-2">Tap to Speak</span>
+                                                                    </button>
+                                                                }
                                                                 {modalData?.recordingStatus == "recording" && <button id="stop" className="ms-3" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w60 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
                                                                 {/* <audio id="audio" controls src={modalData?.audio}></audio> */}
                                                             </React.Fragment>

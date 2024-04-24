@@ -20,6 +20,11 @@ const UserFeedbacks = (props) => {
     const [feedbacks, setFeedbacks] = useState([]);
     const [filteredList, setFilteredList] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
+    const [modalType, setModalType] = useState(null)
+    const [modalData, setModalData] = useState({});
+    const [openModal, setShowModal] = useState(false);
+    const [viewFile, setViewFile] = useState(false);
+    const [fileType, setFileType] = useState(false);
 
     /* pagination states start */
     let paginateObj = {totalItems: 0, totalPages: 10, currentPage: 1, showAllPages: false, showPrevNextBtn: true, disablePages: [], itemsLimit: 10};
@@ -201,11 +206,18 @@ const UserFeedbacks = (props) => {
         const res = await ApiService.fetchData(payloadUrl,method)
         if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
             let data = Object.values(res.results)
-            setFeedbacks(oldVal => ([...data]))
-            // setFilteredList(oldVal => ([...data]))
-            getFilteredList(paginate,[...data])
+            if(data.length > 0){
+                setFeedbacks(oldVal => ([...data]))
+                getFilteredList(paginate,[...data])
+            }else{
+                setFeedbacks([])
+                setFilteredList([])
+            }
+            
         }else{
             toggleAlert({ show: true, type: 'danger', message: res.message })
+            setFeedbacks([])
+            setFilteredList([])
         }
     }
 
@@ -214,6 +226,35 @@ const UserFeedbacks = (props) => {
     const toggleAlert = (val) => {
         setShowAlert(val)
     }
+
+    const showModal = async (modalName = null, data = null) => {
+        if (modalName == null) {
+          return false;
+        }
+        setModalData({})
+        switch (modalName) {
+          case "view_documents":
+            if(data != null){
+                const {file_path = null} = data;
+                if(file_path){
+                    let fullPath = `${file_path}`
+                    let filename = getFileName(file_path)
+                    let fileExt = filename.split(".")[1]
+                    setViewFile(fullPath)
+                    setFileType(fileExt)
+                    setModalType(modalName);
+                    setShowModal(true);
+                }
+            }
+            break;
+          
+        }
+    };
+
+    const hideModal = () => {
+        setModalType(null);
+        setShowModal(false);
+    };
 
    
     
@@ -254,7 +295,8 @@ const UserFeedbacks = (props) => {
                                             <thead className="table-light">
                                                 <tr>
                                                     <th className="sort link_url" onClick={() => sortData('feedback_text', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', feedbacks)}>Feedback</th>
-                                                    <th className="sort link_url" >File</th>
+                                                    <th className="sort link_url" >Audio</th>
+                                                    <th className="sort link_url" >Other File</th>
                                                     <th className="sort link_url" onClick={() => sortData('created_on', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', feedbacks)}>Created On</th>
                                                 </tr>
                                             </thead>
@@ -267,6 +309,7 @@ const UserFeedbacks = (props) => {
                                                                 {/* <td className="">{item.first_name} {item.last_name}</td> */}
                                                                 <td className="">{item.feedback_text}</td>
                                                                 <td className="">{item.audio_file_path && <audio id="audio" controls src={item.audio_file_path}></audio>}</td>
+                                                                <td className="">{item.file_path && <span className="link_url" onClick={() => showModal("view_documents", item)}><i className="fa fa-file"></i></span>}</td>
                                                                 <td className="">{item.created_on && moment(item.created_on).format("MMM DD, YYYY")}</td>
                                                             </tr>
                                                         </React.Fragment>
@@ -339,6 +382,26 @@ const UserFeedbacks = (props) => {
                         />
                     )
                 }
+            })()}
+
+            {(() => {
+                if (modalType && modalType != "" && modalType != null) {
+
+                    if (modalType == "view_documents") {
+                        return (
+                            <StackModal
+                                show={openModal}
+                                modalType={modalType}
+                                hideModal={hideModal}
+                                modalData={{ ...modalData, viewFile, fileType }}
+                                formSubmit={null}
+                                customClass="bottom"
+                                cSize="sm"
+                            />
+                        );
+                    }
+                }
+
             })()}
 
             
