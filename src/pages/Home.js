@@ -514,7 +514,7 @@ const Home = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="pt-3"></div>
+                    {/* <div className="pt-3"></div> */}
 
                     {/* <div className="container">
                         <div className="card card-round">
@@ -545,6 +545,26 @@ const Home = (props) => {
                             </div>
                         </div>
                     </div>
+
+                    {accInfo?.headline3_text && accInfo?.headline3_button &&
+                        <React.Fragment>
+                            <div className="pt-3"></div>
+
+                            <div className="container">
+                                <div className="card card-round">
+                                    <div className="card-body d-flex align-items-center direction-rtl">
+                                        <div className="card-img-wrap">
+                                            <img src={starsImg} alt="" />
+                                        </div>
+                                        <div className="card-content">
+                                            <h5 className="mb-3">{accInfo?.headline3_text}</h5>
+                                            <a className="btn btn-warning rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline3_button}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </React.Fragment>
+                    }
                     <div className="pt-3"></div>
 
                     <div className="container direction-rtl">
