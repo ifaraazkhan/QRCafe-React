@@ -10,6 +10,7 @@ const MainLayout = lazy(() => import("../Components/Layouts/MainLayout"))
 const PublicLayout = lazy(() => import("../Components/Layouts/PublicLayout"))
 const Page404 = lazy(() => import("../pages/Error/Page404"))
 const Home = lazy(() => import("../pages/Home"))
+const Service = lazy(() => import("../pages/Service"))
 
 const RoutesList = () => {
     return (
@@ -46,6 +47,7 @@ const RoutesList = () => {
                         </Route>
 
                         <Route path="/home" element={<PublicLayout><Home /></PublicLayout>}></Route>
+                        <Route path="/service" element={<PublicLayout><Service /></PublicLayout>}></Route>
                         <Route path="/page404" element={<PublicLayout><Page404 /></PublicLayout>}></Route>
                         <Route path="*" element={<PublicLayout><Page404 /></PublicLayout>}></Route>
                         
