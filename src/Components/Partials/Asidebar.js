@@ -84,6 +84,14 @@ const Asidebar = ({ layoutType }) => {
         roles:[1, -97]
       },
       {
+        id: "service",
+        label: "Service Reuests",
+        link: "/user/service-requests",
+        parentId: "userFeedbacks",
+        icon:"mdi mdi-face-agent",
+        roles:[1, -97]
+      },
+      {
         id: "admin",
         label: "Admin",
         link: "/admin",

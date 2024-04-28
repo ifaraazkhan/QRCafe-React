@@ -1,26 +1,22 @@
 import React, { useEffect, useRef, useState } from "react"
 
-import demoUser from "../assets/images/users/user-dummy-img.jpg"
 
 import logoImg from "../assets/images/home/core-img/logo.png";
 
 import SweetAlert from "react-bootstrap-sweetalert";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ApiService } from "../Services/ApiService";
 import StackModal from "../Components/Elements/StackModal";
 import C_MSG from "../Helpers/MsgsList";
-import { encryptData, getFileName } from "../Helpers/Helper";
-import moment from "moment";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { encryptData } from "../Helpers/Helper";
 
-const Service = (props) => {
+const ServiceRequestStatus = (props) => {
 
     const [showMenu, setShowMenu] = useState(false)
     const [darkTheme, setDarkTheme] = useState(true)
 
-    const [searchParams, setSearchParams] = useSearchParams();
     const [accInfo, setAccInfo] = useState({});
-    const [requestsInfo, setRequestsInfo] = useState([]);
+    const [requestInfo, setRequestInfo] = useState({});
     const [modalType, setModalType] = useState(null)
     const [modalData, setModalData] = useState({});
     const [openModal, setShowModal] = useState(false);
@@ -35,14 +31,12 @@ const Service = (props) => {
     const [audioBlob, setAudioBlob] = useState(null);
     const [startTime, setStartTime] = useState(null);
     const [elapsedTime, setElapsedTime] = useState(null);
-    const [view, setView] = useState(1);
-    const [viewFile, setViewFile] = useState(false);
-    const [fileType, setFileType] = useState(false);
     const mediaRecorder = useRef(null);
     const [recordingStatus, setRecordingStatus] = useState("inactive");
     const mimeType = "audio/mp4";
 
-    const qrc = searchParams.get("qrc")
+    // const qrc = searchParams.get("qrc")
+    const { token: qrc = null } = useParams();
     const navigate = useNavigate();
     const timerSubscription = useRef()
     const timeOutSubscription = useRef()
@@ -52,6 +46,9 @@ const Service = (props) => {
             navigate("/page404")
         }
         if(accInfo && Object.keys(accInfo).length == 0){
+            getAccountInfo(qrc)
+        }
+        if(requestInfo && Object.keys(requestInfo).length == 0){
             getAccountInfo(qrc)
         }
         
@@ -90,48 +87,28 @@ const Service = (props) => {
         }
         setModalData({})
         switch (modalName) {
-            case "view_text_modal":
-                if(data != null){
-                setModalData(data)
-                }
-                setModalType(modalName);
-                setShowModal(true);
+          case "view_text_modal":
+            if(data != null){
+               setModalData(data)
+            }
+            setModalType(modalName);
+            setShowModal(true);
             break;
-            case "record_audio_feedback_modal":
-                // setModalData({ })
-                setModalType(modalName);
-                setShowModal(true);
+
+          case "record_audio_feedback_modal":
+            // setModalData({ })
+            setModalType(modalName);
+            setShowModal(true);
             break;
-            case "reply_service_request_modal":
-                if(data != null){
-                    setModalData(data)
-                }
-                setModalType(modalName);
-                setShowModal(true);
-            break;
-            case "view_pdf_modal":
-                if(data != null){
-                    // let file = await getFileDetails(data.fileUrl)
-                    data.file = data.fileUrl
-                    // data.file = "http://localhost:3002/sample_pdf.pdf"
-                    setModalData({...data})
-                }
-                setModalType(modalName);
-                setShowModal(true);
-            break;
-            case "view_documents":
-                if(data != null){
-                    const {file_path = null} = data;
-                    if(file_path){
-                        let fullPath = `${file_path}`
-                        let filename = getFileName(file_path)
-                        let fileExt = filename.split(".")[1]
-                        setViewFile(fullPath)
-                        setFileType(fileExt)
-                        setModalType(modalName);
-                        setShowModal(true);
-                    }
-                }
+          case "view_pdf_modal":
+            if(data != null){
+                // let file = await getFileDetails(data.fileUrl)
+                data.file = data.fileUrl
+                // data.file = "http://localhost:3002/sample_pdf.pdf"
+                setModalData({...data})
+            }
+            setModalType(modalName);
+            setShowModal(true);
             break;
         }
         
@@ -150,11 +127,11 @@ const Service = (props) => {
         window.open(url, '_blank', 'noreferrer')
     };
 
-    const onStartRecordAudio = async (type= "feedback",feedbackId) => {
-        const result = getMicrophonePermission(type, feedbackId)
+    const onStartRecordAudio = async () => {
+        const result = getMicrophonePermission()
     }
 
-    const getMicrophonePermission = async (type = "feedback", feedbackId) => {
+    const getMicrophonePermission = async () => {
         // console.log(navigator.permissions);
         if ("MediaRecorder" in window) {
             try {
@@ -167,7 +144,7 @@ const Service = (props) => {
                     setMediaStream(streamData)
                     setPermission(true);
                     setStream(streamData);
-                    showModal(type == "feedback" ? "record_audio_feedback_modal" : "reply_service_request_modal",{feedbackId})
+                    showModal("record_audio_feedback_modal")
                 } else if(micPermission.state == "denied"){
                     toggleAlert({ show: true, type: 'danger', message: "Please allow your microphone permission in your browser."})
                 }
@@ -252,7 +229,7 @@ const Service = (props) => {
         };
     };
 
-    const submitServiceRequest = async (data = null) => {
+    const submitFeedack = async (data = null) => {
         if(data == null ){
             return false
         }
@@ -264,7 +241,7 @@ const Service = (props) => {
         formData.append(`qrc`, qrc)
         formData.append(`member_id`, 0)
         formData.append(`feedback_text`, data.feedback_text)
-        formData.append(`file_id`, data.file_id || 0)
+        formData.append(`file_id`, data.file_id)
         formData.append(`audioFile`, audioBlob)
             
         const res = await ApiService.fetchData(payloadUrl,method,formData,{formType:"form",fileUpload:true})
@@ -354,84 +331,6 @@ const Service = (props) => {
         
     }
 
-    const onGetServiceRequest = async (uniqId = null) => {
-        if(uniqId == null){
-            return false
-        }
-        let payloadUrl = `public/getservice_request/${uniqId}`
-        let method = "GET"
-        const res = await ApiService.fetchData(payloadUrl,method)
-        if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
-            let items = res.results
-            for (let item of items) {
-                let replies = await onGetServiceReply(item.feedback_id)
-                item.replies = replies
-            }
-            setRequestsInfo(oldVal => ([...items]))
-            setView(2)
-        }else{
-            toggleAlert({ show: true, type: 'danger', message: res.message })
-        }
-    }
-
-    const onGetServiceReply = async (uniqId = null) => {
-        if(uniqId == null){
-            return false
-        }
-        let payloadUrl = `public/getservice_reply/${uniqId}`
-        let method = "GET"
-        let results = []
-        const res = await ApiService.fetchData(payloadUrl,method)
-        if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
-            if(res.results && res.results.length > 0){
-                results = res.results
-            }
-        }
-        return results
-    }
-
-    const submitReplyServiceRequest = async (data = null) => {
-        const {feedbackId = null} = modalData
-        if(data == null, feedbackId == null ){
-            return false
-        }
-        setFormSbmt(true)
-        let payloadUrl = `public/submitServiceRequest`
-        let method = "POST";
-
-        let formData = new FormData();
-        formData.append(`qrc`, qrc)
-        formData.append(`member_id`, 0)
-        formData.append(`feedback_text`, data.feedback_text)
-        formData.append(`file_id`, data.file_id || 0)
-        formData.append(`audioFile`, audioBlob)
-        formData.append(`p_feedback_id`, feedbackId)
-        formData.append(`is_reply`, true)
-            
-        const res = await ApiService.fetchData(payloadUrl,method,formData,{formType:"form",fileUpload:true})
-        // const res = await ApiService.fetchData(payloadUrl,method, formData)
-        if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
-            toggleAlert({ show: true, type: 'success', message: res.message})
-            discardMicrophonePermission()
-            onGetServiceRequest(qrc)
-            // updateData('user')
-        }else{
-            toggleAlert({ show: true, type: 'danger', message: res.message || C_MSG.technical_err })
-        }
-        setFormSbmt(false)
-        return res
-    }
-
-    const changeView = (view = null) => {
-        if( view == null){
-            return false
-        }
-        if(view ==  1){
-            setRequestsInfo([])
-        }
-        setView(view)
-    }
-
     return(
         <React.Fragment>
             {/* <div id="preloader">
@@ -492,21 +391,7 @@ const Service = (props) => {
                                 </li>
                                 <li>
                                     <a className="link_url" onClick={() => onStartRecordAudio()}><i className="bi bi-cart-check"></i> Feedback <span className="badge bg-success rounded-pill ms-2">Speak your mind</span></a>
-                                    {/* <ul>
-                                        <li>
-                                            <a href="#">Audio Feedback</a>
-                                        </li>
-                                        <li>
-                                            <a href=""> Write your Review</a>
-                                        </li>
-                                        <li>
-                                            <a href="">Feedback Surbey</a>
-                                        </li>
-                                        <li>
-                                            <a href="">Give Rating</a>
-                                        </li>
-
-                                    </ul> */}
+                                    
                                 </li>
                                 <li>
                                     <a className={"link_url"} onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}><i className="bi bi-gear"></i> Promotions and Offers </a>
@@ -556,148 +441,13 @@ const Service = (props) => {
 
                     <div className="pt-3"></div>
 
+                    <div className="container">
+                        <div className="card">
 
-                    {view  == 1 &&
-                        <React.Fragment>
-                            <div className="container">
-                                <div className="card">
-                                    <div className="card-body d-flex align-items-center direction-rtl">
-                                        <div className="card-content w-100 text-center ">
-                                            <h5 className="mb-3">{accInfo?.headline1_text}</h5>
-                                            <button type="button" className="btn btn-danger w-md waves-effect waves-light h50" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline1_button}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-
-                            <div className="pt-3"></div>
-
-                            <div className="container">
-                                <div className="card">
-                                    <div className="card-body d-flex align-items-center direction-rtl">
-                                        <div className="card-content w-100 text-center ">
-                                            <h5 className="mb-3">{accInfo?.headline2_text}</h5>
-                                            <button type="button" className="btn btn-warning w-md waves-effect waves-light h50" onClick={() => onStartRecordAudio()}>{accInfo?.headline2_button}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {accInfo?.headline3_text && accInfo?.headline3_button &&
-                                <React.Fragment>
-                                    <div className="pt-3"></div>
-
-                                    <div className="container">
-                                        <div className="card">
-                                            <div className="card-body d-flex align-items-center direction-rtl">
-                                                <div className="card-content w-100 text-center ">
-                                                    <h5 className="mb-3">{accInfo?.headline3_text}</h5>
-                                                    <button type="button" className="btn btn-danger w-md waves-effect waves-light h50" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline3_button}</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </React.Fragment>
-                            }
-                            <div className="pt-3"></div>
-
-                            <div className="container direction-rtl">
-                                <div className="card">
-                                    <div className="card-body">
-                                        <div className="row min_h_100 align-items-center">
-                                            <div className="col">
-                                                <div className="feature-card mx-auto text-center">
-                                                    <button className="btn btn-info w-md waves-effect waves-light h50" onClick={() => onGetServiceRequest(qrc)}> Check Service Request Status</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </React.Fragment>
-                    }
-
-                    {view  == 2 &&
-                        <React.Fragment>
-                            <div className="container">
-                                <div className="card">
-                                    <div className="card-body p-4">
-                                        {/* <h5 className="card-title mb-4">Status</h5> */}
-                                        <div className="d-flex justify-content-between align-items-center mb-4">
-                                            <div><h5 className="">Service Request Status</h5></div>
-                                            <div className="">
-                                                <a onClick={() => changeView(1)} className="btn btn-warning link_url"><i className="fa fa-long-arrow-left"></i> Go Back</a>
-                                            </div>
-                                        </div>
-
-                                        <div data-simplebar className="px-3 mx-n3 min_h_320">
-                                            {requestsInfo && requestsInfo.length > 0 && React.Children.toArray(requestsInfo.map((info, nIndex) => {
-                                                return (
-                                                    <React.Fragment>
-                                                        <div className="d-flex mb-4">
-                                                            <div className="flex-shrink-0">
-                                                                <img src={demoUser} alt="" className="avatar-xs rounded-circle" />
-                                                            </div>
-                                                            <div className="flex-grow-1 ms-3">
-                                                                <h5 className="fs-15 text-info">Ticket Number - {info?.ticket_no} <small className="text-muted">{info?.created_on ? moment(info?.created_on).format("MMM DD, YYYY") : ""}</small></h5>
-                                                                <div className="d-flex align-items-center mb-3">
-                                                                    <p className="mb-0">{info.audio_file_path && <audio id="audio" controls src={info.audio_file_path}></audio>}</p>
-                                                                    <p className="ms-3 mb-0 fs-20">
-                                                                        {info.file_path && 
-                                                                            <span className="link_url" onClick={() => showModal("view_documents", info)}>
-                                                                                <OverlayTrigger overlay={<Tooltip id={`tooltip-top`}>View File</Tooltip>} placement={"top"}>
-                                                                                    <i className="fa fa-file"></i>
-                                                                                </OverlayTrigger>
-                                                                            </span>
-                                                                        }
-                                                                    </p>
-                                                                </div>
-                                                                <p className="text-muted">{info?.feedback_text}</p>
-                                                                <a onClick={() => onStartRecordAudio("reply",info.feedback_id)} className="badge text-muted bg-light link_url"><i className="mdi mdi-reply"></i> Reply</a>
-                                                                {info?.replies && info?.replies.length > 0 && React.Children.toArray(info?.replies.map((reply, rIndex) => {
-                                                                    return (
-                                                                        <React.Fragment>
-                                                                            <div className="d-flex mt-4">
-                                                                                <div className="flex-shrink-0">
-                                                                                    <img src={demoUser} alt="" className="avatar-xs rounded-circle" />
-                                                                                </div>
-                                                                                <div className="flex-grow-1 ms-3">
-                                                                                    <h5 className="fs-15">anonymous User <small className="text-muted">{reply?.created_on ? moment(reply?.created_on).format("MMM DD, YYYY") : ""}</small></h5>
-                                                                                    <div className="d-flex align-items-center mb-3">
-                                                                                        <p className="mb-0">{reply.audio_file_path && <audio id="audio" controls src={reply.audio_file_path}></audio>}</p>
-                                                                                        <p className="ms-3 mb-0 fs-20">
-                                                                                            {reply.file_path && 
-                                                                                                <span className="link_url" onClick={() => showModal("view_documents", reply)}>
-                                                                                                    <OverlayTrigger overlay={<Tooltip id={`tooltip-top`}>View File</Tooltip>} placement={"top"}>
-                                                                                                        <i className="fa fa-file"></i>
-                                                                                                    </OverlayTrigger>
-                                                                                                </span>
-                                                                                            }
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    <p className="text-muted">{reply?.feedback_text}</p>
-                                                                                    <a onClick={() => onStartRecordAudio("reply", info.feedback_id)} className="badge text-muted bg-light link_url"><i className="mdi mdi-reply"></i> Reply</a>
-                                                                                </div>
-                                                                            </div>
-                                                                        </React.Fragment>
-                                                                    )
-                                                                }))}
-                                                            </div>
-                                                        </div>
-                                                    </React.Fragment>
-                                                )
-                                            }))}
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </React.Fragment>
-                    }
-
-
-                    <div className="pt-3"></div> 
+                        </div>
+                    </div>
+                    
+                    <div className="pt-3"></div>
                     <div className="copyright-info">
                         <p>
                             <span id="copyrightYear"></span>
@@ -763,20 +513,7 @@ const Service = (props) => {
                                 modalType={modalType}
                                 hideModal={hideModal}
                                 modalData={{ ...modalData, permission, recordingStatus, audio,timer: elapsedTime, getMicrophonePermission, startRecording:onStartRecording, stopRecording, uploadDocs}}
-                                formSubmit={submitServiceRequest}
-                                customClass="bottom"
-                                cSize="sm"
-                            />
-                        );
-                    }
-                    if (modalType == "reply_service_request_modal") {
-                        return (
-                            <StackModal
-                                show={openModal}
-                                modalType={modalType}
-                                hideModal={hideModal}
-                                modalData={{ ...modalData, permission, recordingStatus, audio,timer: elapsedTime, getMicrophonePermission, startRecording:onStartRecording, stopRecording, uploadDocs}}
-                                formSubmit={submitReplyServiceRequest}
+                                formSubmit={submitFeedack}
                                 customClass="bottom"
                                 cSize="sm"
                             />
@@ -795,20 +532,6 @@ const Service = (props) => {
                             />
                         );
                     }
-
-                    if (modalType == "view_documents") {
-                        return (
-                            <StackModal
-                                show={openModal}
-                                modalType={modalType}
-                                hideModal={hideModal}
-                                modalData={{ ...modalData, viewFile, fileType }}
-                                formSubmit={null}
-                                customClass="bottom"
-                                cSize="sm"
-                            />
-                        );
-                    }
                     
                 }
 
@@ -818,4 +541,4 @@ const Service = (props) => {
 
 }
 
-export default Service
+export default ServiceRequestStatus

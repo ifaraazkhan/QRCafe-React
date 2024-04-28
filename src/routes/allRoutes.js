@@ -14,6 +14,7 @@ const Home = lazy(() => import("../pages/Home"))
 const Dashboard = lazy(() => import("../pages/admin/Dashboard"))
 const UserAccounts = lazy(() => import("../pages/user/UserAccounts"))
 const UserFeedbacks = lazy(() => import("../pages/user/UserFeedbacks"))
+const UserServiceRequests = lazy(() => import("../pages/user/UserServiceRequests"))
 const AdminSetttings = lazy(() => import("../pages/admin/Settings"))
 
 
@@ -49,6 +50,7 @@ const dashboardRoutes = [
 ]
 
 const userRoutes = [
+    {path:"/user/service-requests", component: <UserServiceRequests />},
     {path:"/user/feedbacks", component: <UserFeedbacks />},
     {path:"/user/accounts", component: <UserAccounts />},
     {path:"/user", component: <Navigate to={"/user/accounts"} />},
