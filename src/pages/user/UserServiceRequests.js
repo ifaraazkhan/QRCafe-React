@@ -11,7 +11,7 @@ import StackPagination from "../../Components/Elements/StackPagination";
 import { configs } from "../../config";
 import moment from "moment";
 
-const UserFeedbacks = (props) => {
+const UserServiceRequests = (props) => {
     const { user: authUser = null, projectId = null, isSuperAdmin = false } = useContext(AuthContext)
     const user = authUser?.user || {}
     const userId = user.user_id || null
@@ -411,4 +411,4 @@ const UserFeedbacks = (props) => {
 
 }
 
-export default UserFeedbacks
+export default UserServiceRequests

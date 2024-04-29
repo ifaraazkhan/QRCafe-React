@@ -2,29 +2,21 @@ import React, { useEffect, useRef, useState } from "react"
 
 
 import logoImg from "../assets/images/home/core-img/logo.png";
-import foodMenuImg from "../assets/images/home/demo-img/foodmenu.png";
-import aboutImg from "../assets/images/home/demo-img/about.png";
-import locationImg from "../assets/images/home/demo-img/location.png";
-import discountImg from "../assets/images/home/demo-img/discount.png";
-import starsImg from "../assets/images/home/demo-img/stars.png";
-import starImg from "../assets/images/home/demo-img/star.png";
-import elegantImg from "../assets/images/home/demo-img/elegant.png";
-import lightningtImg from "../assets/images/home/demo-img/lightning.png";
 
 import SweetAlert from "react-bootstrap-sweetalert";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ApiService } from "../Services/ApiService";
 import StackModal from "../Components/Elements/StackModal";
 import C_MSG from "../Helpers/MsgsList";
 import { encryptData } from "../Helpers/Helper";
 
-const Home = (props) => {
+const ServiceRequestStatus = (props) => {
 
     const [showMenu, setShowMenu] = useState(false)
     const [darkTheme, setDarkTheme] = useState(true)
 
-    const [searchParams, setSearchParams] = useSearchParams();
     const [accInfo, setAccInfo] = useState({});
+    const [requestInfo, setRequestInfo] = useState({});
     const [modalType, setModalType] = useState(null)
     const [modalData, setModalData] = useState({});
     const [openModal, setShowModal] = useState(false);
@@ -43,7 +35,8 @@ const Home = (props) => {
     const [recordingStatus, setRecordingStatus] = useState("inactive");
     const mimeType = "audio/mp4";
 
-    const qrc = searchParams.get("qrc")
+    // const qrc = searchParams.get("qrc")
+    const { token: qrc = null } = useParams();
     const navigate = useNavigate();
     const timerSubscription = useRef()
     const timeOutSubscription = useRef()
@@ -53,6 +46,9 @@ const Home = (props) => {
             navigate("/page404")
         }
         if(accInfo && Object.keys(accInfo).length == 0){
+            getAccountInfo(qrc)
+        }
+        if(requestInfo && Object.keys(requestInfo).length == 0){
             getAccountInfo(qrc)
         }
         
@@ -212,9 +208,9 @@ const Home = (props) => {
            localAudioChunks.push(event.data);
         };
         setAudioChunks(localAudioChunks);
-      };
+    };
 
-      const stopRecording = () => {
+    const stopRecording = () => {
         clearInterval(timerSubscription.current);
         clearTimeout(timeOutSubscription.current)
         setElapsedTime(null)
@@ -238,13 +234,8 @@ const Home = (props) => {
             return false
         }
         setFormSbmt(true)
-        let payloadUrl = `public/submitFeedback`
-        let method = "POST"
-        // let formData = data
-        // formData.qrc = qrc;
-        // formData.member_id = 0;
-        // formData.audioFile = audioBlob;
-        // console.log(formData);
+        let payloadUrl = `public/submitServiceRequest`
+        let method = "POST";
 
         let formData = new FormData();
         formData.append(`qrc`, qrc)
@@ -400,21 +391,7 @@ const Home = (props) => {
                                 </li>
                                 <li>
                                     <a className="link_url" onClick={() => onStartRecordAudio()}><i className="bi bi-cart-check"></i> Feedback <span className="badge bg-success rounded-pill ms-2">Speak your mind</span></a>
-                                    {/* <ul>
-                                        <li>
-                                            <a href="#">Audio Feedback</a>
-                                        </li>
-                                        <li>
-                                            <a href=""> Write your Review</a>
-                                        </li>
-                                        <li>
-                                            <a href="">Feedback Surbey</a>
-                                        </li>
-                                        <li>
-                                            <a href="">Give Rating</a>
-                                        </li>
-
-                                    </ul> */}
+                                    
                                 </li>
                                 <li>
                                     <a className={"link_url"} onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}><i className="bi bi-gear"></i> Promotions and Offers </a>
@@ -454,153 +431,22 @@ const Home = (props) => {
                 <div className="page-content-wrapper">
 
                     <div className="container">
-                        <div className="card card-bg-img bg-img bg-overlay" style={{backgroundImage:accInfo?.background_img ? `url(${accInfo?.background_img})` : "radial-gradient(black, transparent)"}} >
-                            <div className="card-body p-5 direction-rtl">
-                                <h2 className="text-white display-3 mb-3 text-center home_header">{accInfo?.title}</h2>
-                                <p className="text-white text-center fs-16">{accInfo?.sub_title}</p>
-                            </div>
-                            <div className="container direction-rtl">
-                                <div className="card mb-3 bg-transparent">
-                                    <div className="card-body">
-                                        <div className="row g-3">
-                                            <div className="col-4">
-                                                <div className="feature-card mx-auto text-center link_url"  onClick={() => showModal("view_pdf_modal",{fileUrl: accInfo.menu_path})}>
-                                                    <div className="card mx-auto bg-gray">
-                                                        <img src={foodMenuImg} alt="" />
-                                                    </div>
-                                                    <p className="mb-0">Food Menu</p>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-4">
-                                                <div className="feature-card mx-auto text-center link_url" onClick={() => showModal("view_text_modal", {title: "About Us",text:accInfo?.about_us})}>
-                                                    <div className="card mx-auto bg-gray">
-                                                        <img src={aboutImg} alt="" />
-                                                    </div>
-                                                    <p className="mb-0">About us</p>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-4">
-                                                <div className="feature-card mx-auto text-center link_url" onClick={() => newtabURL(accInfo?.g_map_url)}>
-                                                    <div className="card mx-auto bg-gray">
-                                                        <img src={locationImg} alt="" />
-                                                    </div>
-                                                    <p className="mb-0">Direction</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div className="pt-3"></div>
-
-
-
-                    <div className="container">
-                        <div className="card card-round">
-                            <div className="card-body d-flex align-items-center direction-rtl">
-                                <div className="card-img-wrap">
-                                    <img src={discountImg} alt="" />
-                                </div>
-                                <div className="card-content">
-                                    <h5 className="mb-3">{accInfo?.headline1_text}</h5>
-                                    <a className="btn btn-info rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline1_button}</a>
-                                </div>
+                        <div className="card card-bg-img bg-img positio-relative min_h_320 banner_box" style={{backgroundImage:accInfo?.background_img ? `url(${accInfo?.background_img})` : "radial-gradient(black, transparent)"}} >
+                            <div className="direction-rtl position-absolute w-100 banner_text_box">
+                                <h2 className="text-white display-3 mb-3 text-center home_header fs-30 fw-600">{accInfo?.title}</h2>
+                                <p className="text-white text-center fs-18">{accInfo?.sub_title}</p>
                             </div>
                         </div>
                     </div>
-                    {/* <div className="pt-3"></div> */}
-
-                    {/* <div className="container">
-                        <div className="card card-round">
-                            <div className="card-body d-flex align-items-center direction-rtl">
-                                <div className="card-img-wrap">
-                                    <img src={starsImg} alt="" />
-                                </div>
-                                <div className="card-content">
-                                    <h5 className="mb-3">{`Share Your Voice, Shape Our Future`}</h5>
-                                    <a className="btn btn-warning rounded-pill link_url" onClick={() => onStartRecordAudio()}>{`Record Audio Feedback`}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
 
                     <div className="pt-3"></div>
 
                     <div className="container">
-                        <div className="card card-round">
-                            <div className="card-body d-flex align-items-center direction-rtl">
-                                <div className="card-img-wrap">
-                                    <img src={starsImg} alt="" />
-                                </div>
-                                <div className="card-content">
-                                    <h5 className="mb-3">{accInfo?.headline2_text}</h5>
-                                    <a className="btn btn-warning rounded-pill link_url" onClick={() => onStartRecordAudio()}>{accInfo?.headline2_button}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {accInfo?.headline3_text && accInfo?.headline3_button &&
-                        <React.Fragment>
-                            <div className="pt-3"></div>
-
-                            <div className="container">
-                                <div className="card card-round">
-                                    <div className="card-body d-flex align-items-center direction-rtl">
-                                        <div className="card-img-wrap">
-                                            <img src={starsImg} alt="" />
-                                        </div>
-                                        <div className="card-content">
-                                            <h5 className="mb-3">{accInfo?.headline3_text}</h5>
-                                            <a className="btn btn-warning rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline3_button}</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </React.Fragment>
-                    }
-                    <div className="pt-3"></div>
-
-                    <div className="container direction-rtl">
                         <div className="card">
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-4">
-                                        <div className="feature-card mx-auto text-center">
-                                            <div className="card mx-auto bg-gray">
-                                                <img src={starImg} alt="" />
-                                            </div>
-                                            <p className="mb-0">Best Rated</p>
-                                        </div>
-                                    </div>
 
-                                    <div className="col-4">
-                                        <div className="feature-card mx-auto text-center">
-                                            <div className="card mx-auto bg-gray">
-                                                <img src={elegantImg} alt="" />
-                                            </div>
-                                            <p className="mb-0">Elegant</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-4">
-                                        <div className="feature-card mx-auto text-center">
-                                            <div className="card mx-auto bg-gray">
-                                                <img src={lightningtImg} alt="" />
-                                            </div>
-                                            <p className="mb-0">Trendsetter</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
+                    
                     <div className="pt-3"></div>
                     <div className="copyright-info">
                         <p>
@@ -695,4 +541,4 @@ const Home = (props) => {
 
 }
 
-export default Home
+export default ServiceRequestStatus
