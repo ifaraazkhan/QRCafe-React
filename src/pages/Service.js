@@ -1,8 +1,15 @@
 import React, { useEffect, useRef, useState } from "react"
 
 import demoUser from "../assets/images/users/user-dummy-img.jpg"
-
 import logoImg from "../assets/images/home/core-img/logo.png";
+import foodMenuImg from "../assets/images/home/demo-img/foodmenu.png";
+import aboutImg from "../assets/images/home/demo-img/about.png";
+import locationImg from "../assets/images/home/demo-img/location.png";
+import discountImg from "../assets/images/home/demo-img/discount.png";
+import starsImg from "../assets/images/home/demo-img/stars.png";
+import starImg from "../assets/images/home/demo-img/star.png";
+import elegantImg from "../assets/images/home/demo-img/elegant.png";
+import lightningtImg from "../assets/images/home/demo-img/lightning.png";
 
 import SweetAlert from "react-bootstrap-sweetalert";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -328,7 +335,6 @@ const Service = (props) => {
         if(data == null){
             return false
         }
-        console.log(data);
         setFormSbmt(true)
         let result = false
         const {uploadfiles = [],type=""} = data
@@ -560,11 +566,14 @@ const Service = (props) => {
                     {view  == 1 &&
                         <React.Fragment>
                             <div className="container">
-                                <div className="card">
+                                <div className="card card-round">
                                     <div className="card-body d-flex align-items-center direction-rtl">
-                                        <div className="card-content w-100 text-center ">
+                                    <div className="card-img-wrap">
+                                            <img src={discountImg} alt="" />
+                                        </div>
+                                        <div className="card-content">
                                             <h5 className="mb-3">{accInfo?.headline1_text}</h5>
-                                            <button type="button" className="btn btn-danger w-md waves-effect waves-light h50" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline1_button}</button>
+                                            <button type="button" className="btn btn-danger w-md waves-effect waves-light rounded-pill" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline1_button}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -574,11 +583,14 @@ const Service = (props) => {
                             <div className="pt-3"></div>
 
                             <div className="container">
-                                <div className="card">
+                                <div className="card card-round">
                                     <div className="card-body d-flex align-items-center direction-rtl">
-                                        <div className="card-content w-100 text-center ">
+                                        <div className="card-img-wrap">
+                                            <img src={starsImg} alt="" />
+                                        </div>
+                                        <div className="card-content">
                                             <h5 className="mb-3">{accInfo?.headline2_text}</h5>
-                                            <button type="button" className="btn btn-warning w-md waves-effect waves-light h50" onClick={() => onStartRecordAudio()}>{accInfo?.headline2_button}</button>
+                                            <button type="button" className="btn btn-warning w-md waves-effect waves-light rounded-pill" onClick={() => onStartRecordAudio()}>{accInfo?.headline2_button}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -589,11 +601,14 @@ const Service = (props) => {
                                     <div className="pt-3"></div>
 
                                     <div className="container">
-                                        <div className="card">
+                                        <div className="card card-round">
                                             <div className="card-body d-flex align-items-center direction-rtl">
-                                                <div className="card-content w-100 text-center ">
+                                                <div className="card-img-wrap">
+                                                    <img src={starsImg} alt="" />
+                                                </div>
+                                                <div className="card-content">
                                                     <h5 className="mb-3">{accInfo?.headline3_text}</h5>
-                                                    <button type="button" className="btn btn-danger w-md waves-effect waves-light h50" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline3_button}</button>
+                                                    <button type="button" className="btn btn-danger w-md waves-effect waves-light rounded-pill" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline3_button}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -603,12 +618,12 @@ const Service = (props) => {
                             <div className="pt-3"></div>
 
                             <div className="container direction-rtl">
-                                <div className="card">
+                                <div className="card card-round">
                                     <div className="card-body">
                                         <div className="row min_h_100 align-items-center">
                                             <div className="col">
                                                 <div className="feature-card mx-auto text-center">
-                                                    <button className="btn btn-info w-md waves-effect waves-light h50" onClick={() => onGetServiceRequest(qrc)}> Check Service Request Status</button>
+                                                    <button className="btn btn-info w-md waves-effect waves-light rounded-pill" onClick={() => onGetServiceRequest(qrc)}> Check Service Request Status</button>
                                                 </div>
                                             </div>
                                         </div>

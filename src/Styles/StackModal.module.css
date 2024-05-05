@@ -36,3 +36,10 @@
   text-align: center;
   padding-top: 20px;
 }
+
+.chat_block ul{
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  height: 420px;
+}

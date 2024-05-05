@@ -184,9 +184,15 @@ pre {
   .min_h_320 {
     min-height: 320px !important;
   }
+  .min_h_420 {
+    min-height: 420px !important;
+  }
   
   .overflow_unset {
     overflow: unset !important;
+  }
+  .overflow_y_auto {
+    overflow-y: auto !important;
   }
   .text_color_1 {
     color: #ffffff !important;
