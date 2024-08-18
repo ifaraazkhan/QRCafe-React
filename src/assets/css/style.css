@@ -68,8 +68,8 @@
   font-family: "Poppins", sans-serif !important;
 }
 #home_section .home_header{
-  font-family: "Poppins", sans-serif !important;
-  font-weight: 300;
+  font-family:cursive !important;
+  font-weight: bolder;
 }
 /* :: Preloader */
 #home_section #preloader {
@@ -1109,7 +1109,7 @@ caption,
 
 #home_section p {
   font-size: 14px;
-  color: #8480ae;
+  color: #fff;
 }
 
 #home_section a,
@@ -1425,7 +1425,7 @@ caption,
   position: absolute;
   content: "";
   background-color: #061238;
-  opacity: 0.75;
+  opacity: 0.55;
   top: 0;
   left: 0;
   height: 100%;

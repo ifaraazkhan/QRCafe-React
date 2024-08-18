@@ -457,7 +457,7 @@ const Home = (props) => {
                         <div className="card card-bg-img bg-img bg-overlay" style={{backgroundImage:accInfo?.background_img ? `url(${accInfo?.background_img})` : "radial-gradient(black, transparent)"}} >
                             <div className="card-body p-5 direction-rtl">
                                 <h2 className="text-white display-3 mb-3 text-center home_header">{accInfo?.title}</h2>
-                                <p className="text-white text-center fs-16">{accInfo?.sub_title}</p>
+                                <p className="text-white text-center fs-20">{accInfo?.sub_title}</p>
                             </div>
                             <div className="container direction-rtl">
                                 <div className="card mb-3 bg-transparent">

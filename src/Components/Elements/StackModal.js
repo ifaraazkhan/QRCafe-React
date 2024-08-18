@@ -675,7 +675,7 @@ const StackModal = (intialData) => {
                                                                 {modalData?.recordingStatus == "inactive" && 
                                                                     <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}>
                                                                         <span className="w85 d-inline-block"><img src={recordImg}  className="img-fluid" /></span>
-                                                                        <span className="d-block fs-20 fw-400 mt-2">Tap to Speak</span>
+                                                                        <span className="d-block fs-20 fw-400 mt-2">Re-Record your Audio Feedback</span>
                                                                     </button>
                                                                 }
                                                                 {modalData?.recordingStatus == "recording" && <button id="stop" className="ms-3" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w60 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
@@ -685,6 +685,7 @@ const StackModal = (intialData) => {
                                                     </div>
                                                     {/* {modalData?.recordingStatus == "recording" && <div className="w40"><img src={recordingImg}  className="img-fluid" /></div>} */}
                                                 </div>
+                                                <hr/>
                                             </div>
                                             <div className="form">
                                                 {modalData?.permission && modalData?.audio &&
@@ -693,12 +694,13 @@ const StackModal = (intialData) => {
                                                         <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                                                             <div className="row align-items-start m-0 text-start">
                                                                 <div className="col-sm-12 mb-3">
-                                                                    <label htmlFor="customername-field" className="form-label">Audio</label>
+                                                                    
+                                                                    <label htmlFor="customername-field" className="form-label fs-16">Your recorded feedback</label>
                                                                     <audio className="d-block" id="audio" controls src={modalData?.audio}></audio>
                                                                 </div>
                                                                 <div className="col-sm-12">
                                                                     <div className="form-group">
-                                                                        <label><i className="fa fa-attachment"></i><span>Image</span></label>
+                                                                        <label className="fs-16"><i className="fa fa-attachment"></i><span>Add an image (optional)</span></label>
                                                                         <div className="container-fluid h-100 col-sm-12 ml-0 px-0">
                                                                             <div id="form_file_upload_modal" className="h-100 position-relative">
                                                                                 {showLoader && showLoader.type == "feedback_file" && <Loader heightClass="h-100" showLoader={showLoader.status}></Loader>}
@@ -716,9 +718,9 @@ const StackModal = (intialData) => {
                                                                                                     data-multiple-caption="{count} files selected"
                                                                                                     multiple={false}
                                                                                                 />
-                                                                                                <i className="fa fa-upload" aria-hidden="true"></i>
-                                                                                                <label htmlFor="file"><strong>Choose a file</strong><span className="fileDropBox"> or drag it here</span>.</label>
-                                                                                                <label htmlFor="file"><strong>({C_MSG.supported_file_format})</strong></label>
+                                                                                                <i className="fa fa-camera" aria-hidden="true"></i>
+                                                                                                <label htmlFor="file"><strong>Choose a file</strong><span className="fileDropBox"> or use camera </span>.</label>
+                                                                                                <label htmlFor="file"><strong></strong></label>
                                                                                                 {msgError && msgError.type == "feedback_file" && <p className="text-danger p-2">{msgError.message}</p>}
                                                                                             </div>
                                                                                         )
@@ -754,8 +756,8 @@ const StackModal = (intialData) => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-sm-12 mb-3">
-                                                                    <label htmlFor="customername-field" className="form-label">Comment</label>
-                                                                    <textarea rows={5} className="form-control" placeholder="Feedback" {...register("feedbackForm.feedback_text", { required: true })}></textarea>
+                                                                    <label htmlFor="customername-field" className="form-label fs-16">Any additional thoughts? (optional)</label>
+                                                                    <textarea rows={5} className="form-control" placeholder="put your thoughts here.." {...register("feedbackForm.feedback_text", { required: true })}></textarea>
                                                                     {errors && errors.categoryForm && errors.categoryForm?.feedback_text && errors.categoryForm.feedback_text?.type == "required" && <div className="field_err text-danger">{C_MSG.field_required}</div>}
                                                                 </div>
                                                             </div>
@@ -765,7 +767,7 @@ const StackModal = (intialData) => {
                                                                     <button className="btn btn-outline-secondary waves-effect waves-light" type="button" disabled={formSubmitted} onClick={() => handleModalClose()}>Close</button>
                                                                 </div>
                                                                 <div className="ms-3">
-                                                                    <button className="btn btn-secondary waves-effect waves-light" type="submit" disabled={formSubmitted}>Submit</button>
+                                                                    <button className="btn btn-secondary waves-effect waves-light fs-18" type="submit" disabled={formSubmitted}>Send feedback</button>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -1328,7 +1330,7 @@ const StackModal = (intialData) => {
                                                                 {modalData?.recordingStatus == "inactive" && 
                                                                     <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}>
                                                                         <span className="w85 d-inline-block"><img src={recordImg}  className="img-fluid" /></span>
-                                                                        <span className="d-block fs-20 fw-400 mt-2">Tap to Speak</span>
+                                                                        <span className="d-block fs-20 fw-400 mt-2">Record your Audio Feedback</span>
                                                                     </button>
                                                                 }
                                                                 {modalData?.recordingStatus == "recording" && <button id="stop" className="ms-3" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w60 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
