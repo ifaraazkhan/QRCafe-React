@@ -380,26 +380,26 @@ const Home = (props) => {
                             <div className="sidenav-profile bg-gradient">
                                 <div className="sidenav-style1"></div>
                                 <div className="user-info">
-                                    <h6 className="user-name mb-0">{accInfo?.title}</h6>
-                                    <span>{accInfo?.sub_title}</span>
+                                    <h2 className="user-name mb-0">{accInfo?.title}</h2>
+                                    <span className="fs-16">{accInfo?.sub_title}</span>
                                 </div>
                             </div>
 
                             <ul className="sidenav-nav ps-0">
                                 <li>
-                                    <a className="link_url" onClick={() => showModal("view_pdf_modal",{fileUrl: accInfo.menu_path})}><i className="bi bi-house-door"></i> Food Menu</a>
+                                    <a className="link_url" onClick={() => showModal("view_pdf_modal",{fileUrl: accInfo.menu_path})}><i className="bi bi-card-list"></i> Food Menu</a>
                                 </li>
                                 <li>
-                                    <a className={"link_url"} onClick={() => showModal("view_text_modal", {title: "About Us",text:accInfo?.about_us})}><i className="bi bi-folder2-open"></i> About us
+                                    <a className={"link_url"} onClick={() => showModal("view_text_modal", {title: "About Us",text:accInfo?.about_us})}><i className="bi bi-info-square"></i> About us
                                     </a>
                                 </li>
                                 <li>
-                                    <a className={"link_url"} onClick={() => newtabURL(accInfo?.g_map_url)}><i className="bi bi-collection"></i> Direction
+                                    <a className={"link_url"} onClick={() => newtabURL(accInfo?.g_map_url)}><i className="bi bi-compass"></i> Direction
 
                                     </a>
                                 </li>
                                 <li>
-                                    <a className="link_url" onClick={() => onStartRecordAudio()}><i className="bi bi-cart-check"></i> Feedback <span className="badge bg-success rounded-pill ms-2">Speak your mind</span></a>
+                                    <a className="link_url" onClick={() => onStartRecordAudio()}><i className="bi bi-volume-up"></i> Feedback <span className="badge bg-success rounded-pill ms-2">Speak your mind</span></a>
                                     {/* <ul>
                                         <li>
                                             <a href="#">Audio Feedback</a>
@@ -417,7 +417,7 @@ const Home = (props) => {
                                     </ul> */}
                                 </li>
                                 <li>
-                                    <a className={"link_url"} onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}><i className="bi bi-gear"></i> Promotions and Offers </a>
+                                    <a className={"link_url"} onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}><i className="bi bi-percent"></i> Promotions and Offers </a>
                                 </li>
                                 {/* <li>
                                     <div className="night-mode-nav">
@@ -442,10 +442,12 @@ const Home = (props) => {
                             </div>
 
                             <div className="copyright-info">
-                                <p>
+                            <img src={logoImg} />
+                                <p className="fs-14">
                                     <span id="copyrightYear"></span>
-                                    &copy; Powered by <a className={"link_url"} onClick={() => newtabURL("")}>HappyVibes</a>
+                                    &copy; Powered by <a className={"link_url fs-20"} onClick={() => newtabURL("")}>HappyVibes</a>
                                 </p>
+                                
                             </div>
                         </div>
                     </div>
@@ -463,6 +465,7 @@ const Home = (props) => {
                                 <div className="card mb-3 bg-transparent">
                                     <div className="card-body">
                                         <div className="row g-3">
+                                        <div className="col-4"></div>
                                             <div className="col-4">
                                                 <div className="feature-card mx-auto text-center link_url"  onClick={() => showModal("view_pdf_modal",{fileUrl: accInfo.menu_path})}>
                                                     <div className="card mx-auto bg-gray">
@@ -472,23 +475,23 @@ const Home = (props) => {
                                                 </div>
                                             </div>
 
-                                            <div className="col-4">
+                                            {/* <div className="col-4">
                                                 <div className="feature-card mx-auto text-center link_url" onClick={() => showModal("view_text_modal", {title: "About Us",text:accInfo?.about_us})}>
                                                     <div className="card mx-auto bg-gray">
                                                         <img src={aboutImg} alt="" />
                                                     </div>
                                                     <p className="mb-0">About us</p>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
-                                            <div className="col-4">
+                                            {/* <div className="col-4">
                                                 <div className="feature-card mx-auto text-center link_url" onClick={() => newtabURL(accInfo?.g_map_url)}>
                                                     <div className="card mx-auto bg-gray">
                                                         <img src={locationImg} alt="" />
                                                     </div>
                                                     <p className="mb-0">Direction</p>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>

@@ -61,7 +61,7 @@ const Asidebar = ({ layoutType }) => {
       },
       {
         id: "dashboard",
-        label: "Dashborad",
+        label: "Dashboard",
         link: `/dashboard`,
         parentId: "dashboard",
         icon: "mdi mdi-speedometer",

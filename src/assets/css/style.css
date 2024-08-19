@@ -1425,7 +1425,7 @@ caption,
   position: absolute;
   content: "";
   background-color: #061238;
-  opacity: 0.55;
+  opacity: 0.35;
   top: 0;
   left: 0;
   height: 100%;
@@ -1920,7 +1920,7 @@ caption,
   display: block;
 }
 #home_section .header-content .logo-wrapper a img {
-  max-height: 26px;
+  max-height: 50px;
   width: auto;
 }
 #home_section .header-content .navbar--toggler {
@@ -2302,7 +2302,7 @@ caption,
   padding-bottom: 0.625rem;
   padding-right: 1.25rem;
   padding-left: 1.25rem;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
 }
 #home_section .sidenav-nav li a i {
@@ -2388,6 +2388,7 @@ caption,
       -ms-flex-pack: center;
           justify-content: center;
   border-top: 1px solid #ebebeb;
+  font-size: 24px;
 }
 #home_section .social-info-wrap a {
   position: relative;
