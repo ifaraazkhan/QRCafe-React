@@ -1,6 +1,6 @@
 import recordImg from "../../assets/images/record.png";
 import stopImg from "../../assets/images/stop.png";
-import recordingImg from "../../assets/images/recording.gif";
+import demoUser from "../../assets/images/users/user-dummy-img.jpg"
 
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react";
 import { Accordion, Button, Modal, OverlayTrigger, ProgressBar, Tooltip } from "react-bootstrap";
@@ -52,6 +52,7 @@ const StackModal = (intialData) => {
 
 
     const form = watch()
+    const chatScroller = useRef();
     
 
     useEffect(() => {
@@ -97,6 +98,11 @@ const StackModal = (intialData) => {
         }
         
     }, []);
+
+
+    const scrollToBottom = (el) => {
+        el.scrollTop = el.scrollHeight;
+    }
 
     const handleModalClose = (data = null) => {
         hideModal(data)
@@ -462,6 +468,19 @@ const StackModal = (intialData) => {
                 if (res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)) {
                     setFormSbmt(false)
                     handleModalClose()
+                }
+                setFormSbmt(false)
+            }
+        }
+        if (modalType == 'admin_service_chat_modal') {
+            if (data && data.feedbackForm && Object.keys(data.feedbackForm).length > 0) {
+                let formData = data.feedbackForm
+                setFormSbmt(true)
+                let res = await formSubmit(formData)
+                if (res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)) {
+                    setFormSbmt(false)
+                    // handleModalClose()
+                    modalData.changeView(1)
                 }
                 setFormSbmt(false)
             }
@@ -1468,6 +1487,209 @@ const StackModal = (intialData) => {
                                     </div>
                                 </div>
                             </section>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        )
+    }
+    if (modalType == 'admin_service_chat_modal') {
+
+        return (
+            <>
+                <Modal
+                    show={show}
+                    onHide={handleModalClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size={cSize}
+                    className={`custom-modal ${customClass}`}>
+                    <Modal.Header closeButton className="py-2 bg_15 d-flex align-items-center text-white">
+                        {/* <Modal.Title className="fs-12">{`Record Audio Feedback`}</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="pb-0">
+                        <div className="container-fluid">
+                            {modalData?.view == 1 &&
+                                <React.Fragment>
+                                    <div id="users-chat" className={`${Styles.chat_block} min_h_420`}>
+                                    <div className="chat-conversation p-3 min_h_225" id="chat-conversation" data-simplebar>
+                                        <ul className="list-unstyled chat-conversation-list chat-sm min_h_420 overflow_y_auto" id="users-conversation" ref={chatScroller}>
+                                            {modalData.replies && modalData.replies.length > 0 && React.Children.toArray(modalData.replies.map((reply, rIndex) => {
+                                                return (
+                                                    <React.Fragment>
+                                                        <li className={`chat-list ${ reply.member_id == 99  ? "right" : "left"}`}>
+                                                            <div className="conversation-list align-items-start">
+                                                                <div className="chat-avatar mt-2">
+                                                                    <img src={demoUser} alt="" />
+                                                                </div>
+                                                                <div className="user-chat-content">
+                                                                    <div className="ctext-wrap">
+                                                                        <div className="ctext-wrap-content">
+                                                                            <div className="d-flex align-items-center justify-content-between">
+                                                                            <p className="mb-0">{reply.audio_file_path && <audio id="audio" controls src={reply.audio_file_path}></audio>}</p>
+                                                                            <p className="mb-0">{reply.file_path && <a className="link_url" target="_blank" href={reply.file_path}><i className="fa fa-2x fa-paperclip"></i></a>}</p>
+                                                                            </div>
+                                                                            <p className="mb-0 ctext-content">{reply.feedback_text}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="conversation-name"><small className="text-muted time">{moment(reply.created_on).format("MMM DD, YYYY")}</small> <span className="text-success check-message-icon"><i className="ri-check-double-line align-bottom"></i></span></div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </React.Fragment>
+                                                )
+                                            }))}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="border-top border-top-dashed">
+                                    <div class="row g-2 mx-3 mt-2 mb-3">
+                                        <div class="col">
+                                            <button type="submit" class="btn btn-info w-100" onClick={() => modalData.changeView(2)}>Send Reply &nbsp;<i class="mdi mdi-send"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </React.Fragment>
+                            }
+                            {modalData?.view == 2 &&
+                                <React.Fragment>
+                                    <section className="view_document_section my-sm-5 my-lg-0">
+                                        <div className="container">
+                                            <div className="row justify-content-center">
+                                                <div className="col-12 col-md-12">
+                                                    <div id={Styles.audio_recorder_section} className="text_section">
+                                                        <div className={Styles.app}>
+                                                        {modalData?.recordingStatus == "recording" &&
+                                                            <React.Fragment>
+                                                                <div className="timer_sec fs-20 fw-600 mb-4 d-block">
+                                                                    <span className="">{modalData?.timer?.min || "00"} : {modalData?.timer?.sec || "00"}</span>
+                                                                </div>
+                                                            </React.Fragment>
+                                                        }
+                                                            <div className={`${Styles.audio_controls} pb-5`}>
+                                                                {modalData?.permission &&
+                                                                    <React.Fragment>
+                                                                        {/* {modalData?.recordingStatus == "recording" && <div className="w40 d-inline-block"><img src={recordingImg}  className="img-fluid" /></div>} */}
+                                                                        
+                                                                        {modalData?.recordingStatus == "recording" &&
+                                                                            <React.Fragment>
+                                                                                <div className="recorder-container">
+                                                                                    <div className="outer"></div>
+                                                                                    <div className="outer-2"></div>
+                                                                                    <div className="icon-microphone"><img src={recordImg}  className="img-fluid" /></div>
+                                                                                </div>
+                                                                            </React.Fragment>
+                                                                        }
+                                                                        {modalData?.recordingStatus == "inactive" && 
+                                                                            <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}>
+                                                                                <span className="w85 d-inline-block"><img src={recordImg}  className="img-fluid" /></span>
+                                                                                <span className="d-block fs-20 fw-400 mt-2">Tap to Speak</span>
+                                                                            </button>
+                                                                        }
+                                                                        {modalData?.recordingStatus == "recording" && <button id="stop" className="ms-3" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w60 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
+                                                                        {/* <audio id="audio" controls src={modalData?.audio}></audio> */}
+                                                                    </React.Fragment>
+                                                                }
+                                                            </div>
+                                                            {/* {modalData?.recordingStatus == "recording" && <div className="w40"><img src={recordingImg}  className="img-fluid" /></div>} */}
+                                                        </div>
+                                                    </div>
+                                                    <div className="form">
+                                                        {modalData?.permission && modalData?.audio &&
+
+                                                            <React.Fragment>
+                                                                <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                                                                    <div className="row align-items-start m-0 text-start">
+                                                                        <div className="col-sm-12 mb-3">
+                                                                            <label htmlFor="customername-field" className="form-label">Audio</label>
+                                                                            <audio className="d-block" id="audio" controls src={modalData?.audio}></audio>
+                                                                        </div>
+                                                                        <div className="col-sm-12">
+                                                                            <div className="form-group">
+                                                                                <label><i className="fa fa-attachment"></i><span>Image</span></label>
+                                                                                <div className="container-fluid h-100 col-sm-12 ml-0 px-0">
+                                                                                    <div id="form_file_upload_modal" className="h-100 position-relative">
+                                                                                        {showLoader && showLoader.type == "feedback_file" && <Loader heightClass="h-100" showLoader={showLoader.status}></Loader>}
+                                                                                        {(() => {
+                                                                                            if (feedbackFiles == null || feedbackFiles.length < 1) {
+                                                                                                return (
+                                                                                                    <div className="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column h-100">
+                                                                                                        <input
+                                                                                                            className="fileUploadInp"
+                                                                                                            type="file"
+                                                                                                            name="file"
+                                                                                                            accept=".doc,.docx,.pdf,.xls,.xlsx,image/png,image/jpeg,image/gif,image/svg+xml,image/webp,.msg,.eml,.zip,.ppt"
+                                                                                                            onChange={(e) => onFileChange(e, "feedback_file")}
+                                                                                                            id="file"
+                                                                                                            data-multiple-caption="{count} files selected"
+                                                                                                            multiple={false}
+                                                                                                        />
+                                                                                                        <i className="fa fa-upload" aria-hidden="true"></i>
+                                                                                                        <label htmlFor="file"><strong>Choose a file</strong><span className="fileDropBox"> or drag it here</span>.</label>
+                                                                                                        <label htmlFor="file"><strong>({C_MSG.supported_file_format})</strong></label>
+                                                                                                        {msgError && msgError.type == "feedback_file" && <p className="text-danger p-2">{msgError.message}</p>}
+                                                                                                    </div>
+                                                                                                )
+
+                                                                                            } else {
+                                                                                                return (
+                                                                                                    <div className="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column h-100">
+                                                                                                        <div className="uploadsList my-2 text-center">
+                                                                                                            {feedbackFiles && feedbackFiles.length > 0 && feedbackFiles.map((file, fIndex) => {
+                                                                                                                return (
+                                                                                                                    <div key={fIndex} className="file_card position-relative">
+                                                                                                                        {getFileName(file)}
+                                                                                                                        <span className="close_btn link_url position-absolute" onClick={() => removeUploadFile(fIndex, "feedback_file")}><i className="fa fa-times"></i></span>
+                                                                                                                    </div>
+                                                                                                                )
+                                                                                                            })}
+                                                                                                        </div>
+                                                                                                        <div className="taskDetails_btn_block px-3">
+                                                                                                            <div className="card_button_block ">
+                                                                                                                {/* <Button className="btn_2 btn_wide " variant="outline-dark" onClick={() => onUploadDocuments()}>Upload</Button> */}
+                                                                                                                {fileUploadSuccess && fileUploadSuccess.status == true && fileUploadSuccess.type == "feedback_file" && <span className="text-success">{C_MSG.file_upload_success}</span>}
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                    </div>
+                                                                                                )
+
+                                                                                            }
+                                                                                        })()}
+                                                                                    </div>
+                                                                                    {errors.feedbackForm?.feedback_file && errors.feedbackForm?.file.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="col-sm-12 mb-3">
+                                                                            <label htmlFor="customername-field" className="form-label">Comment</label>
+                                                                            <textarea rows={5} className="form-control" placeholder="Feedback" {...register("feedbackForm.feedback_text", { required: true })}></textarea>
+                                                                            {errors && errors.categoryForm && errors.categoryForm?.feedback_text && errors.categoryForm.feedback_text?.type == "required" && <div className="field_err text-danger">{C_MSG.field_required}</div>}
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr />
+                                                                    <div className="d-flex align-items-center justify-content-end px-3">
+                                                                        <div className="">
+                                                                            <button className="btn btn-outline-secondary waves-effect waves-light" type="button" disabled={formSubmitted} onClick={() => modalData.changeView(1)}>Back</button>
+                                                                        </div>
+                                                                        <div className="ms-3">
+                                                                            <button className="btn btn-secondary waves-effect waves-light" type="submit" disabled={formSubmitted}>Submit</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </React.Fragment>
+
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </React.Fragment>
+                            }
                         </div>
                     </Modal.Body>
                     <Modal.Footer>

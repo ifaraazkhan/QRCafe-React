@@ -34,5 +34,16 @@
 }
 #audio_recorder_section .app {
   text-align: center;
+<<<<<<< HEAD
   padding-top: 2px;
+=======
+  padding-top: 20px;
+}
+
+.chat_block ul{
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  height: 420px;
+>>>>>>> 57f86b518ca3050bdc8189ec9905662477e32549
 }

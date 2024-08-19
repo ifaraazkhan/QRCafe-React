@@ -64,7 +64,7 @@
 "Poppins", sans-serif;
 ----------------------- */;
 
-#home_section *{
+#home_section *:not(.fa){
   font-family: "Poppins", sans-serif !important;
 }
 #home_section .home_header{

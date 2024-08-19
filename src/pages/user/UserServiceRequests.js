@@ -25,6 +25,24 @@ const UserServiceRequests = (props) => {
     const [openModal, setShowModal] = useState(false);
     const [viewFile, setViewFile] = useState(false);
     const [fileType, setFileType] = useState(false);
+    const [replies, setReplies] = useState([]);
+    const [view, setView] = useState(1);
+    const [qrc, setQrc] = useState(null);
+    const [formSubmitted, setFormSbmt] = useState(false);
+
+    const [permission, setPermission] = useState(false);
+    const [mediaStream, setMediaStream] = useState(null);
+    const [stream, setStream] = useState(null);
+    const [audioChunks, setAudioChunks] = useState([]);
+    const [audio, setAudio] = useState(null);
+    const [audioBlob, setAudioBlob] = useState(null);
+    const [startTime, setStartTime] = useState(null);
+    const [elapsedTime, setElapsedTime] = useState(null);
+    const mediaRecorder = useRef(null);
+    const [recordingStatus, setRecordingStatus] = useState("inactive");
+    const mimeType = "audio/mp4";
+    const timerSubscription = useRef()
+    const timeOutSubscription = useRef()
 
     /* pagination states start */
     let paginateObj = {totalItems: 0, totalPages: 10, currentPage: 1, showAllPages: false, showPrevNextBtn: true, disablePages: [], itemsLimit: 10};
@@ -200,7 +218,8 @@ const UserServiceRequests = (props) => {
     }
 
     const getFeedbacks = async (accountId) => {
-        let payloadUrl = `admin/feedbackbyAccountId/${accountId}`
+        // let payloadUrl = `admin/feedbackbyAccountId/${accountId}`
+        let payloadUrl = `admin/requestbyAccountId/${accountId}`
         let method = "GET"
         
         const res = await ApiService.fetchData(payloadUrl,method)
@@ -233,19 +252,31 @@ const UserServiceRequests = (props) => {
         }
         setModalData({})
         switch (modalName) {
-          case "view_documents":
-            if(data != null){
-                const {file_path = null} = data;
-                if(file_path){
-                    let fullPath = `${file_path}`
-                    let filename = getFileName(file_path)
-                    let fileExt = filename.split(".")[1]
-                    setViewFile(fullPath)
-                    setFileType(fileExt)
+            case "view_documents":
+                if(data != null){
+                    const {file_path = null} = data;
+                    if(file_path){
+                        let fullPath = `${file_path}`
+                        let filename = getFileName(file_path)
+                        let fileExt = filename.split(".")[1]
+                        setViewFile(fullPath)
+                        setFileType(fileExt)
+                        setModalType(modalName);
+                        setShowModal(true);
+                    }
+                }
+            break;
+            case "admin_service_chat_modal":
+                setReplies([])
+                changeView(1)
+                if(data != null){
+                    setModalData(oldVal => ({...data}))
+                    setQrc(data.qrc || null)
+                    console.log(data);
+                    onGetServiceReply(data.feedback_id);
                     setModalType(modalName);
                     setShowModal(true);
                 }
-            }
             break;
         }
     };
@@ -254,6 +285,220 @@ const UserServiceRequests = (props) => {
         setModalType(null);
         setShowModal(false);
     };
+
+
+
+    const onStartRecordAudio = async (type= "feedback",feedbackId) => {
+        const result = getMicrophonePermission(type, feedbackId)
+    }
+
+    const getMicrophonePermission = async (type = "feedback", feedbackId) => {
+        // console.log(navigator.permissions);
+        if ("MediaRecorder" in window) {
+            try {
+                let micPermission = await navigator.permissions.query({name: 'microphone'})
+                if(micPermission.state == "granted" || micPermission.state == "prompt"){
+                    const streamData = await navigator.mediaDevices.getUserMedia({
+                        audio: true,
+                        video: false,
+                    });
+                    setMediaStream(streamData)
+                    setPermission(true);
+                    setStream(streamData);
+                } else if(micPermission.state == "denied"){
+                    toggleAlert({ show: true, type: 'danger', message: "Please allow your microphone permission in your browser."})
+                }
+            } catch (err) {
+                toggleAlert({ show: true, type: 'danger', message: err.message})
+            }
+        } else {
+            toggleAlert({ show: true, type: 'danger', message: "Recording is not supported in your browser."})
+        }
+    };
+    const discardMicrophonePermission = async () => {
+        clearInterval(timerSubscription.current);
+        clearTimeout(timeOutSubscription.current)
+        setElapsedTime(null)
+        setStartTime(null)
+        if ("MediaRecorder" in window) {
+            try {
+                let micPermission = await navigator.permissions.query({name: 'microphone'})
+                if(micPermission.state == "granted" || micPermission.state == "prompt"){
+                    mediaStream && mediaStream.getTracks().forEach(track => track.stop());
+                    
+                    setPermission(false);
+                    setRecordingStatus("inactive");
+                    setAudio(null);
+                    setAudioBlob(null);
+                    setAudioChunks([]);
+                }
+            } catch (err) {
+                toggleAlert({ show: true, type: 'danger', message: err.message})
+            }
+        } else {
+            toggleAlert({ show: true, type: 'danger', message: "Recording is not supported in your browser."})
+        }
+    }
+
+    const startTimer = (stTime = null) => {
+        const now = new Date().getTime();
+        if(stTime != null){
+            setStartTime(stTime)
+        }
+        stTime = stTime || startTime
+        const timeElapsed = now - stTime
+        const seconds = Math.floor((timeElapsed / 1000) % 60)
+        const minutes = Math.floor((timeElapsed / 1000 / 60) % 60)
+
+        let obj = {
+            min : ('00' + minutes).slice(-2),
+            sec : ('00' + seconds).slice(-2)
+        }
+
+        setElapsedTime(obj)
+    }
+
+    const onStartRecording = () => {
+        let stTime = new Date().getTime()
+        const interval = setInterval(() => startTimer(stTime), 1000);
+        timerSubscription.current = interval
+        const timeout = setTimeout(() => {
+            stopRecording()
+        }, 120000);
+        timeOutSubscription.current = timeout;
+        startRecording()
+    }
+
+    const startRecording = async () => {
+        setAudio(null);
+        setAudioChunks([]);
+        setRecordingStatus("recording");
+        //create new Media recorder instance using the stream
+        const media = new MediaRecorder(stream, { type: mimeType });
+        //set the MediaRecorder instance to the mediaRecorder ref
+        mediaRecorder.current = media;
+        //invokes the start method to start the recording process
+        mediaRecorder.current.start();
+        let localAudioChunks = [];
+        mediaRecorder.current.ondataavailable = (event) => {
+           if (typeof event.data === "undefined") return;
+           if (event.data.size === 0) return;
+           localAudioChunks.push(event.data);
+        };
+        setAudioChunks(localAudioChunks);
+    };
+
+    const stopRecording = () => {
+        clearInterval(timerSubscription.current);
+        clearTimeout(timeOutSubscription.current)
+        setElapsedTime(null)
+        setStartTime(null)
+        setRecordingStatus("inactive");
+        //stops the recording instance
+        mediaRecorder.current.stop();
+        mediaRecorder.current.onstop = () => {
+          //creates a blob file from the audiochunks data
+           const audioBlob = new Blob(audioChunks, { type: mimeType });
+          //creates a playable URL from the blob file.
+           const audioUrl = URL.createObjectURL(audioBlob);
+           setAudio(audioUrl);
+           setAudioBlob(audioBlob);
+           setAudioChunks([]);
+        };
+    };
+
+    const uploadDocs = async (data = null) => {
+        if(data == null){
+            return false
+        }
+        setFormSbmt(true)
+        let result = false
+        const {uploadfiles = [],type=""} = data
+        if(uploadfiles.length > 0){
+            let payloadUrl = `admin/uploadImages/file`
+            let method = "POST"
+            let formData = new FormData();
+            for (var i = 0; i < uploadfiles.length; i++) {
+                // formData.append(`file[${i}]`, uploadfiles[i])
+                formData.append(`files`, uploadfiles[i])
+            }
+            // formData.append(`images`, Array.from(uploadfiles))
+            // let formData = {'images[]':uploadfiles}
+            const res = await ApiService.fetchData(payloadUrl,method,formData,{formType:"form",fileUpload:true})
+            if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
+                result = res
+            }else{
+                
+            }
+            setFormSbmt(false)
+            return result
+        }
+        
+    }
+
+    const onGetServiceReply = async (uniqId = null) => {
+        console.log(uniqId);
+        if(uniqId == null){
+            return false
+        }
+        
+        let payloadUrl = `admin/replybyId/${uniqId}`
+        let method = "GET"
+        let results = []
+        const res = await ApiService.fetchData(payloadUrl,method)
+        if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
+            if(res.results && res.results.length > 0){
+                // results = res.results.reverse()
+                results = res.results
+                setReplies(oldVal => ([...results]))
+            }
+        }
+        return results
+    }
+
+    const submitReplyServiceRequest = async (data = null) => {
+        const {feedback_id:feedbackId = null} = modalData
+        if(data == null, feedbackId == null ){
+            return false
+        }
+        setFormSbmt(true)
+        let payloadUrl = `public/submitServiceRequest`
+        let method = "POST";
+
+        let formData = new FormData();
+        formData.append(`qrc`, qrc)
+        formData.append(`member_id`, 99)
+        formData.append(`feedback_text`, data.feedback_text)
+        formData.append(`file_id`, data.file_id || 0)
+        formData.append(`audioFile`, audioBlob)
+        formData.append(`p_feedback_id`, feedbackId)
+        formData.append(`is_reply`, true)
+            
+        const res = await ApiService.fetchData(payloadUrl,method,formData,{formType:"form",fileUpload:true})
+        // const res = await ApiService.fetchData(payloadUrl,method, formData)
+        if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
+            toggleAlert({ show: true, type: 'success', message: res.message})
+            discardMicrophonePermission()
+            onGetServiceReply(feedbackId)
+            // updateData('user')
+        }else{
+            toggleAlert({ show: true, type: 'danger', message: res.message || C_MSG.technical_err })
+        }
+        setFormSbmt(false)
+        return res
+    }
+
+    const changeView = (view = null) => {
+        if( view == null){
+            return false
+        }
+        if(view == 2){
+            onStartRecordAudio("reply",modalData.feedback_id)
+        } else if(view == 1){
+            discardMicrophonePermission()
+        }
+        setView(view)
+    }
 
    
     
@@ -293,11 +538,13 @@ const UserServiceRequests = (props) => {
                                         <table className="table align-middle" id="customerTable">
                                             <thead className="table-light">
                                                 <tr>
-                                                    <th className="sort link_url" onClick={() => sortData('feedback_text', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', feedbacks)}>Feedback</th>
-                                                    <th className="sort link_url" >Audio</th>
-                                                    <th className="sort link_url" >Other File</th>
-                                                    <th className="sort link_url" style={{"text-overflow": "ellipsis","white-space": "nowrap","width":"400px","max-width":"600px"}}>Transcription</th>
-                                                    <th className="sort link_url" onClick={() => sortData('created_on', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', feedbacks)}>Created On</th>
+                                                    <th className="sort link_url min_w_150" onClick={() => sortData('ticket_no', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', feedbacks)}>Ticket No.</th>
+                                                    <th className="sort link_url min_w_150" onClick={() => sortData('feedback_text', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', feedbacks)}>Feedback</th>
+                                                    <th className="sort link_url min_w_150" >Audio</th>
+                                                    <th className="sort link_url min_w_150" >Other File</th>
+                                                    <th className="sort link_url min_w_320" style={{"text-overflow": "ellipsis","white-space": "nowrap","width":"400px","max-width":"600px"}}>Transcription</th>
+                                                    <th className="sort link_url min_w_150" onClick={() => sortData('created_on', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', feedbacks)}>Created On</th>
+                                                    <th className="min_w_150">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="list form-check-all">
@@ -307,11 +554,13 @@ const UserServiceRequests = (props) => {
                                                             <tr>
 
                                                                 {/* <td className="">{item.first_name} {item.last_name}</td> */}
+                                                                <td className="">{item.ticket_no}</td>
                                                                 <td className="">{item.feedback_text}</td>
                                                                 <td className="">{item.audio_file_path && <audio id="audio" controls src={item.audio_file_path}></audio>}</td>
                                                                 <td className="">{item.file_path && <span className="link_url" onClick={() => showModal("view_documents", item)}><i className="fa fa-file"></i></span>}</td>
                                                                 <td className="">{item.feedback_transcription}</td>
                                                                 <td className="">{item.created_on && moment(item.created_on).format("MMM DD, YYYY")}</td>
+                                                                <td className=""><span className="badge bg-primary link_url" onClick={() => showModal("admin_service_chat_modal", {...item})}><i className="mdi mdi-reply"> Reply</i></span></td>
                                                             </tr>
                                                         </React.Fragment>
                                                     )
@@ -396,6 +645,19 @@ const UserServiceRequests = (props) => {
                                 hideModal={hideModal}
                                 modalData={{ ...modalData, viewFile, fileType }}
                                 formSubmit={null}
+                                customClass="bottom"
+                                cSize="sm"
+                            />
+                        );
+                    }
+                    if (modalType == "admin_service_chat_modal") {
+                        return (
+                            <StackModal
+                                show={openModal}
+                                modalType={modalType}
+                                hideModal={hideModal}
+                                modalData={{ ...modalData, replies, view, permission, recordingStatus, audio,timer: elapsedTime, getMicrophonePermission, startRecording:onStartRecording, stopRecording, uploadDocs, changeView }}
+                                formSubmit={submitReplyServiceRequest}
                                 customClass="bottom"
                                 cSize="sm"
                             />
