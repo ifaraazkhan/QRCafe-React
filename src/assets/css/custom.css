@@ -626,7 +626,7 @@ pre {
   #form_file_upload_modal .file_upload_block {
     border: none;
     outline: 2px dashed #717a86;
-    min-height: 250px;
+   
     height: auto;
   }
   #form_file_upload_modal .file_upload_block_fw {

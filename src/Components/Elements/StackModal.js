@@ -675,7 +675,9 @@ const StackModal = (intialData) => {
                                                                 {modalData?.recordingStatus == "inactive" && 
                                                                     <button id="record" onClick={() => modalData?.startRecording() } disabled={modalData?.recordingStatus == "recording" ? true : false}>
                                                                         <span className="w85 d-inline-block"><img src={recordImg}  className="img-fluid" /></span>
-                                                                        <span className="d-block fs-20 fw-400 mt-2">Re-Record your Audio Feedback</span>
+                                                                        {/* <span className="d-block fs-20 fw-400 mt-2">Record your Audio Feedback</span> */}
+                                                                        {(modalData?.permission && modalData?.audio)?<span className="d-block fs-20 fw-400 mt-2">Re-Record your Audio Feedback</span>
+                                                                        : <span className="d-block fs-20 fw-400 mt-2">Record your Audio Feedback</span>}
                                                                     </button>
                                                                 }
                                                                 {modalData?.recordingStatus == "recording" && <button id="stop" className="ms-3" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w60 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
@@ -685,12 +687,13 @@ const StackModal = (intialData) => {
                                                     </div>
                                                     {/* {modalData?.recordingStatus == "recording" && <div className="w40"><img src={recordingImg}  className="img-fluid" /></div>} */}
                                                 </div>
-                                                <hr/>
+                                               
                                             </div>
                                             <div className="form">
                                                 {modalData?.permission && modalData?.audio &&
 
                                                     <React.Fragment>
+                                                         <hr/>
                                                         <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                                                             <div className="row align-items-start m-0 text-start">
                                                                 <div className="col-sm-12 mb-3">
@@ -698,6 +701,39 @@ const StackModal = (intialData) => {
                                                                     <label htmlFor="customername-field" className="form-label fs-16">Your recorded feedback</label>
                                                                     <audio className="d-block" id="audio" controls src={modalData?.audio}></audio>
                                                                 </div>
+                                                                {/* New fields for FullName, Mobile, and Email */}
+          <div className="col-sm-6 mb-3">
+            <label htmlFor="fullname-field" className="form-label fs-16">Full Name (optional)</label>
+            <input
+              type="text"
+              className="form-control"
+              id="fullname-field"
+              placeholder="Enter your full name"
+              {...register("feedbackForm.fullName")}
+            />
+          </div>
+          
+          <div className="col-sm-6 mb-3">
+            <label htmlFor="mobile-field" className="form-label fs-16">Mobile (optional)</label>
+            <input
+              type="tel"
+              className="form-control"
+              id="mobile-field"
+              placeholder="Enter your mobile number"
+              {...register("feedbackForm.mobile")}
+            />
+          </div>
+          
+          <div className="col-sm-12 mb-3">
+            <label htmlFor="email-field" className="form-label fs-16">Email (optional)</label>
+            <input
+              type="email"
+              className="form-control"
+              id="email-field"
+              placeholder="Enter your email address"
+              {...register("feedbackForm.email")}
+            />
+          </div>
                                                                 <div className="col-sm-12">
                                                                     <div className="form-group">
                                                                         <label className="fs-16"><i className="fa fa-attachment"></i><span>Add an image (optional)</span></label>
@@ -727,7 +763,7 @@ const StackModal = (intialData) => {
 
                                                                                     } else {
                                                                                         return (
-                                                                                            <div className="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column h-100">
+                                                                                            <div className="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column h-50">
                                                                                                 <div className="uploadsList my-2 text-center">
                                                                                                     {feedbackFiles && feedbackFiles.length > 0 && feedbackFiles.map((file, fIndex) => {
                                                                                                         return (
@@ -751,14 +787,14 @@ const StackModal = (intialData) => {
                                                                                     }
                                                                                 })()}
                                                                             </div>
-                                                                            {errors.feedbackForm?.feedback_file && errors.feedbackForm?.file.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
+                                                                            {/* {errors.feedbackForm?.feedback_file && errors.feedbackForm?.file.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>} */}
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-sm-12 mb-3">
                                                                     <label htmlFor="customername-field" className="form-label fs-16">Any additional thoughts? (optional)</label>
-                                                                    <textarea rows={5} className="form-control" placeholder="put your thoughts here.." {...register("feedbackForm.feedback_text", { required: true })}></textarea>
-                                                                    {errors && errors.categoryForm && errors.categoryForm?.feedback_text && errors.categoryForm.feedback_text?.type == "required" && <div className="field_err text-danger">{C_MSG.field_required}</div>}
+                                                                    <textarea rows={5} className="form-control" placeholder="put your thoughts here.." {...register("feedbackForm.feedback_text")}></textarea>
+                                                                    {/* {errors && errors.categoryForm && errors.categoryForm?.feedback_text && errors.categoryForm.feedback_text?.type == "required" && <div className="field_err text-danger">{C_MSG.field_required}</div>} */}
                                                                 </div>
                                                             </div>
                                                             <hr />
@@ -767,7 +803,7 @@ const StackModal = (intialData) => {
                                                                     <button className="btn btn-outline-secondary waves-effect waves-light" type="button" disabled={formSubmitted} onClick={() => handleModalClose()}>Close</button>
                                                                 </div>
                                                                 <div className="ms-3">
-                                                                    <button className="btn btn-secondary waves-effect waves-light fs-18" type="submit" disabled={formSubmitted}>Send feedback</button>
+                                                                    <button className="btn btn-primary waves-effect waves-light fs-18" type="submit" disabled={formSubmitted}>Send feedback</button>
                                                                 </div>
                                                             </div>
                                                         </form>

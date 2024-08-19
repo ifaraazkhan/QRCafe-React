@@ -234,6 +234,10 @@ const Home = (props) => {
     };
 
     const submitFeedack = async (data = null) => {
+        console.log(data);
+        console.log(data.fullName);
+        
+        
         if(data == null ){
             return false
         }
@@ -252,6 +256,10 @@ const Home = (props) => {
         formData.append(`feedback_text`, data.feedback_text)
         formData.append(`file_id`, data.file_id)
         formData.append(`audioFile`, audioBlob)
+        formData.append('fullName', data.fullName)
+        formData.append('mobile', data.mobile)
+        formData.append('email', data.email)
+  
             
         const res = await ApiService.fetchData(payloadUrl,method,formData,{formType:"form",fileUpload:true})
         // const res = await ApiService.fetchData(payloadUrl,method, formData)
