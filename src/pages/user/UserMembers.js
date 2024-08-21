@@ -10,7 +10,7 @@ import StackModal from "../../Components/Elements/StackModal";
 import StackPagination from "../../Components/Elements/StackPagination";
 import { configs } from "../../config";
 
-const UserAccounts = (props) => {
+const UserMembers = (props) => {
     const { user: authUser = null, projectId = null } = useContext(AuthContext)
     const user = authUser?.user || {}
     const userId = user.user_id || null
@@ -45,9 +45,9 @@ const UserAccounts = (props) => {
 
     useEffect(() => {
         // if(projectId != null && accounts && accounts.length == 0){
-            getAccounts()
-            getUsers()
-            getCategories()
+            getMembers()
+           // getUsers()
+           // getCategories()
         // }
     }, [])
 
@@ -183,9 +183,9 @@ const UserAccounts = (props) => {
     /* pagination sorting, searching function end */
 
 
-    const getAccounts = async () => {
+    const getMembers = async () => {
         setFormSbmt(true)
-        let payloadUrl = `user/getAccountbyUserID/${user.user_id}`
+        let payloadUrl = `user/getMembersbyuserID/${user.user_id}`
         let method = "GET"
         
         const res = await ApiService.fetchData(payloadUrl,method)
@@ -238,6 +238,8 @@ const UserAccounts = (props) => {
         if (modalName == null) {
           return false;
         }
+        console.log("modalName",modalName);
+        
         setModalData({})
         switch (modalName) {
           case "view_documents":
@@ -265,7 +267,26 @@ const UserAccounts = (props) => {
             setModalType(modalName);
             setShowModal(true);
             break;
+
+        case "update_bill_credit":
+            if(data != null){
+                setModalData(data)
+            }
+            console.log("data",data);
+            
+            setModalType(modalName);
+            setShowModal(true);
+            break;
+        
+        case "show_visit_modal":
+            if(data != null){
+                setModalData(data)
+            }
+            setModalType(modalName);
+            setShowModal(true);
+            break;
         }
+        
     };
 
     const hideModal = () => {
@@ -285,7 +306,7 @@ const UserAccounts = (props) => {
         const res = await ApiService.fetchData(payloadUrl,method,formData)
         if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
             toggleAlert({ show: true, type: 'success', message: res.message})
-            getAccounts()
+            getMembers()
             // updateData('user')
         }else{
             toggleAlert({ show: true, type: 'danger', message: res.message })
@@ -293,19 +314,29 @@ const UserAccounts = (props) => {
         setFormSbmt(false)
         return res
     }
-    const getAccountInfo = async (accountId = null) => {
-        if(accountId == null){
+    const updateBillCredits = async (accountId,userID,memberID) => {
+        
+        if(accountId == null || userID == null || memberID == null){
+            return false
+        }
+        let data = {accountId,userID,memberID};
+        showModal("update_bill_credit", { data: data });
+        return true;
+    }
+
+    const getVisitsInfo = async (accountId,userID,memberID) => {
+        if(accountId == null || userID == null || memberID == null){
             return false
         }
         setFormSbmt(true)
-        let payloadUrl = `admin/getAccountbyId/${accountId}`
+        let payloadUrl = `user/getMemberVisit/${memberID}/${accountId}/${userID}`
         let method = "GET"
         const res = await ApiService.fetchData(payloadUrl,method)
         if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
-            let account = res.results[0];
+            let account = res.results;
             console.log("account --",account);
             
-            showModal("update_account_modal", { account: account })
+            showModal("show_visit_modal", { account: account })
             // updateData('user')
         }else{
             toggleAlert({ show: true, type: 'danger', message: res.message })
@@ -325,7 +356,27 @@ const UserAccounts = (props) => {
         const res = await ApiService.fetchData(payloadUrl,method,formData)
         if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
             toggleAlert({ show: true, type: 'success', message: res.message})
-            getAccounts()
+            getMembers()
+            // updateData('user')
+        }else{
+            toggleAlert({ show: true, type: 'danger', message: res.message || C_MSG.technical_err })
+        }
+        setFormSbmt(false)
+        return res
+    }
+
+    const updateCredits = async (data = null) => {
+        if(data == null){
+            return false
+        }
+        setFormSbmt(true)
+        let payloadUrl = `user/updateMemberCredits`
+        let method = "POST"
+        let formData = data
+        const res = await ApiService.fetchData(payloadUrl,method,formData)
+        if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
+            toggleAlert({ show: true, type: 'success', message: res.message})
+           getMembers();
             // updateData('user')
         }else{
             toggleAlert({ show: true, type: 'danger', message: res.message || C_MSG.technical_err })
@@ -354,7 +405,7 @@ const UserAccounts = (props) => {
         // const res = await ApiService.fetchData(payloadUrl,method)
         if( res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)){
             toggleAlert({ show: true, type: 'success', message: res.message})
-            getAccounts()
+            getMembers()
             // updateData('user')
         }else{
             toggleAlert({ show: true, type: 'danger', message: res.message || C_MSG.technical_err })
@@ -437,10 +488,11 @@ const UserAccounts = (props) => {
                                                         </div>
                                                     </th> */}
                                                     {/* <th className="sort link_url" onClick={() => sortData('first_name', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>FullName</th> */}
-                                                    <th className="sort link_url" onClick={() => sortData('title', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Title</th>
-                                                    <th className="sort link_url" onClick={() => sortData('Username', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Username</th>
-                                                    <th className="sort link_url" onClick={() => sortData('phone', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Unique Id</th>
-                                                    <th className="sort link_url" onClick={() => sortData('email', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Qr Code</th>
+                                                    <th className="sort link_url" onClick={() => sortData('fullname', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>FullName</th>
+                                                    <th className="sort link_url" onClick={() => sortData('mobile', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Mobile</th>
+                                                    <th className="sort link_url" onClick={() => sortData('email', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Email</th>
+                                                    <th className="sort link_url" onClick={() => sortData('total_visits', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Total Visit</th>
+                                                    <th className="sort link_url" onClick={() => sortData('total_credits', activeSortOrder == 'ASC' ? 'DESC' : 'ASC', accounts)}>Reward Points</th>
                                                     <th className="">Action</th>
                                                 </tr>
                                             </thead>
@@ -451,14 +503,17 @@ const UserAccounts = (props) => {
                                                             <tr>
 
                                                                 {/* <td className="">{item.first_name} {item.last_name}</td> */}
-                                                                <td className="">{item.title}</td>
-                                                                <td className="">{item.username}</td>
-                                                                <td className="">{item.qr_value}</td>
-                                                                <td className=""><span className="link_url" onClick={() => showModal("view_documents", item)}><i className="fa fa-file"></i></span></td>
+                                                                <td className="">{item.fullname}</td>
+                                                                <td className="">{item.mobile}</td>
+                                                                <td className="">{item.email}</td>
+                                                                <td className="">{item.total_visits}</td>
+                                                                <td className="">{item.total_credits}</td>
                                                                 <td>
                                                                     <div className="d-flex gap-2">
                                                                         <div className="edit">
-                                                                            <button className="btn btn-sm btn-success edit-item-btn" onClick={() => getAccountInfo(item.account_id)}>Edit</button>
+                                                                            <button className="btn btn-sm btn-danger" style={{marginRight:"4px"}} onClick={() => getVisitsInfo(item.account_id,user.user_id,item.member_id)}>View details</button>
+                                                                            <button className="btn btn-sm btn-success edit-item-btn" onClick={() => updateBillCredits(item.account_id,user.user_id,item.member_id)}>Add Credits</button>
+                                                                           
                                                                         </div>
                                                                         {/* <div className="remove">
                                                                             <button className="btn btn-sm btn-danger remove-item-btn" onClick={() => onDelaccounts([item.account_id])}>Remove</button>
@@ -586,6 +641,32 @@ const UserAccounts = (props) => {
                             />
                         );
                     }
+                    if (modalType == "update_bill_credit") {
+                        return (
+                            <StackModal
+                                show={openModal}
+                                modalType={modalType}
+                                hideModal={hideModal}
+                                modalData={{ ...modalData, uploadAccDocs, users, cats }}
+                                formSubmit={updateCredits}
+                                customClass="bottom"
+                                cSize="md"
+                            />
+                        );
+                    }
+                    if (modalType == "show_visit_modal") {
+                        return (
+                            <StackModal
+                                show={openModal}
+                                modalType={modalType}
+                                hideModal={hideModal}
+                                modalData={{ ...modalData, uploadAccDocs, users, cats }}
+                                formSubmit={updateAccount}
+                                customClass="bottom"
+                                cSize="md"
+                            />
+                        );
+                    }
                 }
 
             })()}
@@ -594,4 +675,4 @@ const UserAccounts = (props) => {
 
 }
 
-export default UserAccounts
+export default UserMembers

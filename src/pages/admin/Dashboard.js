@@ -103,17 +103,17 @@ const Dashboard = (props) => {
                 </div>
                 <div className="row">
                     <div className="col-xl-3 col-md-6">
-                        <div className="card card-animate">
+                        <div className="card card-animate bg-warning">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
                                     <div className="flex-grow-1 overflow-hidden">
-                                        <p className="text-uppercase fw-medium text-muted text-truncate mb-0">Total Views</p>
+                                        <p className="text-uppercase fw-medium text-dark text-truncate mb-0">Total Views</p>
                                     </div>
                                     
                                 </div>
                                 <div className="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 className="fs-22 fw-semibold ff-secondary mb-4"><span className="counter-value" >{dashboardData?.view_counter}</span></h4>
+                                        <h4 className="fs-22 text-dark fw-bold ff-secondary mb-4"><span className="counter-value" >{dashboardData?.view_counter}</span></h4>
                                         
                                     </div>
                                 </div>
@@ -121,23 +121,42 @@ const Dashboard = (props) => {
                         </div>
                     </div>
                     <div className="col-xl-3 col-md-6">
-                        <div className="card card-animate">
+                        <div className="card card-animate bg-danger">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
                                     <div className="flex-grow-1 overflow-hidden">
-                                        <p className="text-uppercase fw-medium text-muted text-truncate mb-0">Total Feedbacks Received </p>
+                                        <p className="text-uppercase fw-medium text-dark text-truncate mb-0">Total Feedbacks Received </p>
                                     </div>
                                     
                                 </div>
                                 <div className="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 className="fs-22 fw-semibold ff-secondary mb-4"><span className="counter-value" >{dashboardData?.feedback_count}</span></h4>
+                                        <h4 className="fs-22 text-dark fw-bold ff-secondary mb-4"><span className="counter-value" >{dashboardData?.feedback_count}</span></h4>
                                         
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div className="col-xl-3 col-md-6">
+                        <div className="card card-animate bg-primary text-white">
+                            <div className="card-body">
+                                <div className="d-flex align-items-center">
+                                    <div className="flex-grow-1 overflow-hidden">
+                                        <p className="text-uppercase fw-medium text-dark text-truncate mb-0">Total Members </p>
+                                    </div>
+                                    
+                                </div>
+                                <div className="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 className="fs-22 text-dark fw-bold ff-secondary mb-4"><span className="counter-value" >{dashboardData?.member_count}</span></h4>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
 

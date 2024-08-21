@@ -96,6 +96,12 @@ const StackModal = (intialData) => {
             // register("accountForm.bg_image_id", { required: false, })
             // register("accountForm.file_id", { required: false,  })
         }
+        if (modalType == "show_visit_modal") {
+            setShowLoader(false)
+        }
+        if (modalType == "update_bill_credit") {
+            setShowLoader(false)
+        }
         
     }, []);
 
@@ -298,10 +304,6 @@ const StackModal = (intialData) => {
         }
     }
 
-    
-
-    
-
     const onSubmit = async (data = {},type = "submit") => {
         let stat = { status: false, err: false, data: {} }
         setFormRes(stat)
@@ -481,6 +483,23 @@ const StackModal = (intialData) => {
                     setFormSbmt(false)
                     // handleModalClose()
                     modalData.changeView(1)
+                }
+                setFormSbmt(false)
+            }
+        }
+        if (modalType == 'update_bill_credit') {
+            if (data && data.accountForm && Object.keys(data.accountForm).length > 0) {
+                let formData = data.accountForm
+                formData.bill_number = (formData.bill_number)
+                formData.bill_amount = Number(formData.bill_amount)
+                formData.member_id = modalData.data.memberID
+                formData.user_id = modalData.data.userID
+                formData.account_id = modalData.data.accountId
+                setFormSbmt(true)
+                let res = await formSubmit(formData)
+                if (res && process.env.REACT_APP_API_SC_CODE.includes(res.status_code)) {
+                    setFormSbmt(false)
+                    handleModalClose()
                 }
                 setFormSbmt(false)
             }
@@ -1071,7 +1090,7 @@ const StackModal = (intialData) => {
                             <div className="row align-items-start m-0">
                                 <div className="col-sm-12">
                                     <div className="form-group">
-                                        <select className="form-control fw-600" {...register("accountForm.user_id", { required: true })} defaultValue={modalData && modalData.account?.user_id ? modalData.account?.user_id : ""}>
+                                        <select disabled className="form-control fw-600" {...register("accountForm.user_id", { required: true })} defaultValue={modalData && modalData.account?.user_id ? modalData.account?.user_id : ""}>
                                             <option value={''}>Select User</option>
                                             {modalData?.users && modalData?.users.length > 0 && React.Children.toArray(modalData?.users.map((item, uKey) => {
                                                 return <option value={item.user_id}>{item.username} ({item.email})</option>
@@ -1133,7 +1152,7 @@ const StackModal = (intialData) => {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 2 Button" className="form-control" {...register("accountForm.headline2_button", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_button ? modalData.account?.headline2_button : ""} />
+                                        <input type="text" placeholder="Headline 2 Button" value="Provide Your Feedback" disabled className="form-control" {...register("accountForm.headline2_button", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_button ? modalData.account?.headline2_button : ""} />
                                         {errors.accountForm?.headline2_button && errors.accountForm?.headline2_button.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
@@ -1694,6 +1713,125 @@ const StackModal = (intialData) => {
                     </Modal.Body>
                     <Modal.Footer>
                     </Modal.Footer>
+                </Modal>
+            </>
+        )
+    }
+
+    if (modalType == 'update_bill_credit') {
+        return (
+            <>
+                <Modal
+                    show={show}
+                    onHide={handleModalClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size={cSize}
+                    className={`custom-modal ${customClass}`}>
+
+                    <Modal.Header closeButton className="bg-light p-3">
+                        {/* <Modal.Title className="fs-12">{modalType == "update_account_modal" ? "Update Account Info" : "Add Account"}</Modal.Title> */}
+                        <Modal.Title className="fs-12"></Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="px-0 text_color_2 fs-12">
+                        <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                            <div className="row align-items-start m-0">
+                                <div className="col-sm-6">
+                                    <div className="form-group">
+                                        <label>Enter Bill Number</label>
+                                        <input type="text" placeholder="Bill Number" className="form-control" {...register("accountForm.bill_number", { required: false })} autoComplete="off" />
+                                        {errors.accountForm?.bill_number && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
+                                    </div>
+                                </div>
+                                <div className="col-sm-6">
+                                    <div className="form-group">
+                                        <label>Enter Bill Amount</label>
+                                        <input type="text" placeholder="Bill Amount" className="form-control" {...register("accountForm.bill_amount", { required: true })} autoComplete="off" />
+                                        {errors.accountForm?.bill_amount && errors.accountForm?.bill_amount.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div className="d-flex align-items-center justify-content-end px-3">
+                                <div className="">
+                                    <button className="btn btn-outline-dark btn_2" type="button" disabled={formSubmitted} onClick={() => handleModalClose()}>Close</button>
+                                </div>
+                                <div className="ms-3">
+                                    <button className="btn btn-success" type="submit" disabled={formSubmitted}>Add Credits</button>
+                                </div>
+                            </div>
+
+                            <div className="col-sm-12">
+                                {(() => {
+                                    if (formRes.err && formRes.data.err) {
+                                        return (
+                                            <span className="form_err text-danger d-block">{formRes.data.err}</span>
+                                        )
+                                    }
+                                })()}
+                            </div>
+                        </form>
+                    </Modal.Body>
+                </Modal>
+            </>
+        )
+    }
+
+    if (modalType == 'show_visit_modal') {
+        return (
+            <>
+                <Modal
+                    show={show}
+                    onHide={handleModalClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size={cSize}
+                    className={`custom-modal ${customClass}`}>
+
+                    <Modal.Header closeButton className="bg-light p-3">
+                        {/* <Modal.Title className="fs-12">{modalType == "update_account_modal" ? "Update Account Info" : "Add Account"}</Modal.Title> */}
+                        <Modal.Title className="fs-12">Visit Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="px-0 text_color_2 fs-12">
+    {modalData && modalData.account && modalData.account.length > 0 ? (
+        <>
+         <center>
+         <table className="table align-middle table-nowrap table-sm " style={{width:"80%"}} id="customerTable">
+            <thead className="table-light">
+                <tr>
+                    <th className="link_url">Date</th>
+                    <th className="link_url">Bill Number</th>
+                    <th className="link_url">Bill Amount</th>
+                    <th className="link_url">Total Credits</th>
+                </tr>
+            </thead>
+            <tbody className="list form-check-all">
+                {modalData.account.map((item, index) => (
+                    <tr key={index}>
+                        <td>{new Date(item.entry_date).toLocaleDateString()}</td> {/* Format date */}
+                        <td>{item.bill_no}</td>
+                        <td>{item.amount}</td>
+                        <td>{item.credits}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+
+         </center>
+        </>
+       
+       
+    ) : (
+        <p>No data available</p> // Fallback message if no data
+    )}
+
+    <hr />
+    <div className="d-flex align-items-center justify-content-end px-3">
+        <div className="">
+            <button className="btn btn-outline-dark btn_2" type="button" disabled={formSubmitted} onClick={() => handleModalClose()}>Close</button>
+        </div>
+    </div>
+</Modal.Body>
                 </Modal>
             </>
         )

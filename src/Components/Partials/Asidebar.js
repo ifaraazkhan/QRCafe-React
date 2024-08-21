@@ -76,6 +76,14 @@ const Asidebar = ({ layoutType }) => {
         roles:[1]
       },
       {
+        id: "userMembers",
+        label: "Membership",
+        link: "/user/members",
+        parentId: "userMembers",
+        icon:"mdi mdi-account-box-outline",
+        roles:[1]
+      },
+      {
         id: "feedback",
         label: "Feedback",
         link: "/user/feedbacks",
@@ -89,7 +97,7 @@ const Asidebar = ({ layoutType }) => {
         link: "/user/service-requests",
         parentId: "userFeedbacks",
         icon:"mdi mdi-face-agent",
-        roles:[1, -97]
+        roles:[-97]
       },
       {
         id: "admin",
@@ -186,7 +194,7 @@ const Asidebar = ({ layoutType }) => {
               <img src={logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
-              <img src={logoLight} alt="" height="40" />
+              <img src={logoLight} alt="" height="100" />
             </span>
           </Link>
 
@@ -195,7 +203,7 @@ const Asidebar = ({ layoutType }) => {
               <img src={logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
-              <img src={logoDark} alt="" height="40" />
+              <img src={logoDark} alt="" height="100" />
             </span>
           </Link>
           <button
