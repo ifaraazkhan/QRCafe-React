@@ -715,7 +715,7 @@ const StackModal = (intialData) => {
                                                                         <span className="w85 d-inline-block"><img src={recordImg}  className="img-fluid" /></span>
                                                                         {/* <span className="d-block fs-20 fw-400 mt-2">Record your Audio Feedback</span> */}
                                                                         {(modalData?.permission && modalData?.audio)?<span className="d-block fs-20 fw-400 mt-2">Re-Record your Audio Feedback</span>
-                                                                        : <span className="d-block fs-20 fw-400 mt-2">Record your Audio Feedback</span>}
+                                                                        : <span className="d-block fs-20 fw-400 mt-2">Record your Audio/Image Feedback</span>}
                                                                     </button>
                                                                 }
                                                                 {modalData?.recordingStatus == "recording" && <button id="stop" className="ms-3" onClick={() => modalData?.stopRecording() } disabled={modalData?.recordingStatus == "inactive" ? true : false}><span className="w60 d-inline-block"><img src={stopImg}  className="img-fluid" /></span></button>}
@@ -740,38 +740,7 @@ const StackModal = (intialData) => {
                                                                     <audio className="d-block" id="audio" controls src={modalData?.audio}></audio>
                                                                 </div>
                                                                 {/* New fields for FullName, Mobile, and Email */}
-          <div className="col-sm-6 mb-3">
-            <label htmlFor="fullname-field" className="form-label fs-16">Full Name (optional)</label>
-            <input
-              type="text"
-              className="form-control"
-              id="fullname-field"
-              placeholder="Enter your full name"
-              {...register("feedbackForm.fullName")}
-            />
-          </div>
-          
-          <div className="col-sm-6 mb-3">
-            <label htmlFor="mobile-field" className="form-label fs-16">Mobile (optional)</label>
-            <input
-              type="tel"
-              className="form-control"
-              id="mobile-field"
-              placeholder="Enter your mobile number"
-              {...register("feedbackForm.mobile")}
-            />
-          </div>
-          
-          <div className="col-sm-12 mb-3">
-            <label htmlFor="email-field" className="form-label fs-16">Email (optional)</label>
-            <input
-              type="email"
-              className="form-control"
-              id="email-field"
-              placeholder="Enter your email address"
-              {...register("feedbackForm.email")}
-            />
-          </div>
+         
                                                                 <div className="col-sm-12">
                                                                     <div className="form-group">
                                                                         <label className="fs-16"><i className="fa fa-attachment"></i><span>Add an image (optional)</span></label>
@@ -834,6 +803,38 @@ const StackModal = (intialData) => {
                                                                     <textarea rows={5} className="form-control" placeholder="put your thoughts here.." {...register("feedbackForm.feedback_text")}></textarea>
                                                                     {/* {errors && errors.categoryForm && errors.categoryForm?.feedback_text && errors.categoryForm.feedback_text?.type == "required" && <div className="field_err text-danger">{C_MSG.field_required}</div>} */}
                                                                 </div>
+                                                                <div className="col-sm-6 mb-3">
+            <label htmlFor="fullname-field" className="form-label fs-16">Full Name (optional)</label>
+            <input
+              type="text"
+              className="form-control"
+              id="fullname-field"
+              placeholder="Enter your full name"
+              {...register("feedbackForm.fullName")}
+            />
+          </div>
+          
+          <div className="col-sm-6 mb-3">
+            <label htmlFor="mobile-field" className="form-label fs-16">Mobile (optional)</label>
+            <input
+              type="tel"
+              className="form-control"
+              id="mobile-field"
+              placeholder="Enter your mobile number"
+              {...register("feedbackForm.mobile")}
+            />
+          </div>
+          
+          <div className="col-sm-12 mb-3">
+            <label htmlFor="email-field" className="form-label fs-16">Email (optional)</label>
+            <input
+              type="email"
+              className="form-control"
+              id="email-field"
+              placeholder="Enter your email address"
+              {...register("feedbackForm.email")}
+            />
+          </div>
                                                             </div>
                                                             <hr />
                                                             <div className="d-flex align-items-center justify-content-end px-3">
@@ -1152,7 +1153,7 @@ const StackModal = (intialData) => {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input type="text" placeholder="Headline 2 Button" value="Provide Your Feedback" disabled className="form-control" {...register("accountForm.headline2_button", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_button ? modalData.account?.headline2_button : ""} />
+                                        <input type="text" placeholder="Headline 2 Button" value="Give Feedback & Earn Rewards" disabled className="form-control" {...register("accountForm.headline2_button", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_button ? modalData.account?.headline2_button : ""} />
                                         {errors.accountForm?.headline2_button && errors.accountForm?.headline2_button.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>

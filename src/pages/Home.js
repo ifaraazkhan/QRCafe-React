@@ -5,9 +5,9 @@ import logoImg from "../assets/images/home/core-img/logo.png";
 import foodMenuImg from "../assets/images/home/demo-img/foodmenu.png";
 import aboutImg from "../assets/images/home/demo-img/about.png";
 import locationImg from "../assets/images/home/demo-img/location.png";
-import discountImg from "../assets/images/home/demo-img/discount.png";
-import starsImg from "../assets/images/home/demo-img/stars.png";
-import starImg from "../assets/images/home/demo-img/star.png";
+import discountImg from "../assets/images/home/demo-img/handstar.png";
+import discountSVG from "../assets/images/home/demo-img/animated-discount-icon-svg.svg";
+import speakerSVG from "../assets/images/home/demo-img/audio-feedback-icon.svg";
 import elegantImg from "../assets/images/home/demo-img/elegant.png";
 import lightningtImg from "../assets/images/home/demo-img/lightning.png";
 
@@ -17,6 +17,7 @@ import { ApiService } from "../Services/ApiService";
 import StackModal from "../Components/Elements/StackModal";
 import C_MSG from "../Helpers/MsgsList";
 import { encryptData } from "../Helpers/Helper";
+import Marquee from "react-fast-marquee";
 
 const Home = (props) => {
 
@@ -463,25 +464,27 @@ const Home = (props) => {
 
                 <div className="page-content-wrapper">
 
-                    <div className="container">
-                        <div className="card card-bg-img bg-img bg-overlay" style={{backgroundImage:accInfo?.background_img ? `url(${accInfo?.background_img})` : "radial-gradient(black, transparent)"}} >
-                            <div className="card-body p-5 direction-rtl">
-                                <h2 className="text-white display-3 mb-3 text-center home_header">{accInfo?.title}</h2>
-                                <p className="text-white text-center fs-20">{accInfo?.sub_title}</p>
+                    <div className="container ml-0 mr-0" style={{paddingLeft:"0px", paddingRight:"0px"}}>
+                   
+                        <div className="card card-bg-img bg-img positio-relative min_h_320 banner_box" style={{marginBottom:"1px",backgroundImage:accInfo?.background_img ? `url(${accInfo?.background_img})` : "radial-gradient(black, transparent)"}} >
+                            <div className="direction-rtl position-absolute w-100 banner_text_box">
+                                <h2 className="text-white display-3 mb-2 text-center home_header fs-30 fw-600">{accInfo?.title}</h2>
+                                <p className="text-white text-center fs-18">{accInfo?.sub_title}</p>
                             </div>
+                        
                             <div className="container direction-rtl">
                                 <div className="card mb-3 bg-transparent">
                                     <div className="card-body">
                                         <div className="row g-3">
                                         <div className="col-4"></div>
-                                            <div className="col-4">
+                                            {/* <div className="col-4">
                                                 <div className="feature-card mx-auto text-center link_url"  onClick={() => showModal("view_pdf_modal",{fileUrl: accInfo.menu_path})}>
                                                     <div className="card mx-auto bg-gray">
                                                         <img src={foodMenuImg} alt="" />
                                                     </div>
                                                     <p className="mb-0">Food Menu</p>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
                                             {/* <div className="col-4">
                                                 <div className="feature-card mx-auto text-center link_url" onClick={() => showModal("view_text_modal", {title: "About Us",text:accInfo?.about_us})}>
@@ -506,6 +509,11 @@ const Home = (props) => {
                             </div>
 
                         </div>
+                        <Marquee gradient={true} gradientColor={'#E0A800'} gradientWidth={150}>
+      <span style={{ fontWeight: "bold", fontSize: "18px", color: "#fff" }}>
+        EXCLUSIVE OFFER : Special discount on Pizza's today Get flat 30% off .!   {'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'} {'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+      </span>
+    </Marquee>
                     </div>
 
                     <div className="pt-3"></div>
@@ -518,8 +526,8 @@ const Home = (props) => {
                                 <div className="card-img-wrap">
                                     <img src={discountImg} alt="" />
                                 </div>
-                                <div className="card-content">
-                                    <h5 className="mb-3">{accInfo?.headline1_text}</h5>
+                                <div className="card-content" style={{width:"230px"}}>
+                                <Marquee > <h5 className="mb-3" style={{ whiteSpace: 'pre' }}>{accInfo?.headline1_text}     </h5></Marquee>
                                     <a className="btn btn-info rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline1_button}</a>
                                 </div>
                             </div>
@@ -531,7 +539,7 @@ const Home = (props) => {
                         <div className="card card-round">
                             <div className="card-body d-flex align-items-center direction-rtl">
                                 <div className="card-img-wrap">
-                                    <img src={starsImg} alt="" />
+                                    <img src={discountSVG} alt="" />
                                 </div>
                                 <div className="card-content">
                                     <h5 className="mb-3">{`Share Your Voice, Shape Our Future`}</h5>
@@ -547,10 +555,10 @@ const Home = (props) => {
                         <div className="card card-round">
                             <div className="card-body d-flex align-items-center direction-rtl">
                                 <div className="card-img-wrap">
-                                    <img src={starsImg} alt="" />
+                                    <img src={speakerSVG} alt="" />
                                 </div>
-                                <div className="card-content">
-                                    <h5 className="mb-3">{accInfo?.headline2_text}</h5>
+                                <div className="card-content" style={{width:"230px"}}>
+                                <Marquee >  <h5 className="mb-3" style={{ whiteSpace: 'pre' }}>{accInfo?.headline2_text}     </h5></Marquee>
                                     <a className="btn btn-warning rounded-pill link_url" onClick={() => onStartRecordAudio()}>{accInfo?.headline2_button}</a>
                                 </div>
                             </div>
@@ -565,7 +573,7 @@ const Home = (props) => {
                                 <div className="card card-round">
                                     <div className="card-body d-flex align-items-center direction-rtl">
                                         <div className="card-img-wrap">
-                                            <img src={starsImg} alt="" />
+                                            <img src={discountSVG} alt="" />
                                         </div>
                                         <div className="card-content">
                                             <h5 className="mb-3">{accInfo?.headline3_text}</h5>
@@ -578,7 +586,7 @@ const Home = (props) => {
                     }
                     <div className="pt-3"></div>
 
-                    <div className="container direction-rtl">
+                    {/* <div className="container direction-rtl">
                         <div className="card">
                             <div className="card-body">
                                 <div className="row">
@@ -611,7 +619,7 @@ const Home = (props) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="pt-3"></div>
                     <div className="copyright-info">
                         <p>

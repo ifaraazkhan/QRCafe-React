@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <style>
+    .speaker {
+      fill: #ffd54f;
+      stroke: #ff6f00;
+      stroke-width: 3;
+    }
+    .sound-wave {
+      fill: none;
+      stroke: #ff6f00;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+    .dollar-sign {
+      font-family: Arial, sans-serif;
+      font-size: 20px;
+      font-weight: bold;
+      fill: #ff6f00;
+    }
+    @keyframes wave {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(5px); }
+    }
+    .animated-wave {
+      animation: wave 1.5s linear infinite;
+    }
+  </style>
+  
+  <!-- Static Speaker -->
+  <path class="speaker" d="M30,35 H50 L70,20 V80 L50,65 H30 Z" />
+  
+  <!-- Static Dollar Sign -->
+  <text x="40" y="55" class="dollar-sign">$</text>
+  
+  <!-- Animated Sound Waves -->
+  <g class="animated-wave">
+    <path class="sound-wave" d="M75,40 Q78,50 75,60 M80,35 Q86,50 80,65 M85,30 Q94,50 85,70" />
+  </g>
+</svg>
