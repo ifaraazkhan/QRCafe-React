@@ -509,11 +509,14 @@ const Home = (props) => {
                             </div>
 
                         </div>
-                        <Marquee gradient={true} gradientColor={'#E0A800'} gradientWidth={150}>
+                        {(accInfo?.running_text)?<>
+                            <Marquee gradient={true} gradientColor={'#E0A800'} gradientWidth={150}>
       <span style={{ fontWeight: "bold", fontSize: "18px", color: "#fff" }}>
-        EXCLUSIVE OFFER : Special discount on Pizza's today Get flat 30% off .!   {'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'} {'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
+        {accInfo?.running_text}   {'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'} {'\u00A0'}{'\u00A0'}{'\u00A0'}{'\u00A0'}
       </span>
     </Marquee>
+                        </>:<></>}
+                       
                     </div>
 
                     <div className="pt-3"></div>
@@ -528,7 +531,7 @@ const Home = (props) => {
                                 </div>
                                 <div className="card-content" style={{width:"230px"}}>
                                 <Marquee > <h5 className="mb-3" style={{ whiteSpace: 'pre' }}>{accInfo?.headline1_text}     </h5></Marquee>
-                                    <a className="btn btn-info rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline1_button}</a>
+                                    <a className="btn btn-info rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.button_1_details})}>{accInfo?.headline1_button}</a>
                                 </div>
                             </div>
                         </div>
@@ -577,7 +580,7 @@ const Home = (props) => {
                                         </div>
                                         <div className="card-content">
                                             <h5 className="mb-3">{accInfo?.headline3_text}</h5>
-                                            <a className="btn btn-warning rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.offer})}>{accInfo?.headline3_button}</a>
+                                            <a className="btn btn-warning rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.button_3_details})}>{accInfo?.headline3_button}</a>
                                         </div>
                                     </div>
                                 </div>

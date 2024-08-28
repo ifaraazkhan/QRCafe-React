@@ -4,7 +4,7 @@ import demoUser from "../../assets/images/users/user-dummy-img.jpg"
 
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react";
 import { Accordion, Button, Modal, OverlayTrigger, ProgressBar, Tooltip } from "react-bootstrap";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch,Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 // import Loader from "../components/partials/Loader";
 import StackCalender from "./StackCalendar";
@@ -17,16 +17,19 @@ import { getFileName } from "../../Helpers/Helper";
 import Styles from "../../Styles/StackModal.module.css"
 import HTMLFlipBook from 'react-pageflip';
 import { pdfjs, Document, Page as ReactPdfPage } from "react-pdf";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import DOMPurify from 'dompurify';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const StackModal = (intialData) => {
     const { modalType, formSubmit, show, hideModal, modalData, cSize = "xl", customClass = "", formType = "",mClass } = intialData
-    const { projectId = null, user:AuthUser = {} } = useContext(AuthContext)
+    const { projectId = null,isSuperAdmin = false, user:AuthUser = {} } = useContext(AuthContext)
     const user = AuthUser?.user || {}
     const { user_id } = user;
     const navigate = useNavigate();
-    const { register, handleSubmit, watch, setValue, getValues, formState: { errors }, trigger, clearErrors } = useForm();
+    const { register, handleSubmit,control,watch, setValue, getValues, formState: { errors }, trigger, clearErrors } = useForm();
     const [formRes, setFormRes] = useState({ staus: false, err: false, data: {} })
     const [formSubmitted, setFormSbmt] = useState(false)
     const [modalFormData, setModalFormData] = useState({})
@@ -53,6 +56,10 @@ const StackModal = (intialData) => {
 
     const form = watch()
     const chatScroller = useRef();
+
+    const createMarkup = (html) => {
+        return { __html: DOMPurify.sanitize(html) };
+      };
     
 
     useEffect(() => {
@@ -584,10 +591,10 @@ const StackModal = (intialData) => {
                                 <div className="container">
                                     <div className="row pb-5 justify-content-center">
                                         <div className="col-12 col-md-12">
-                                            <div className="text_section">
-                                                {/* <h2 className="fs20">{modalData?.title}</h2> */}
-                                                <p>{modalData?.text}</p>
-                                            </div>
+                                        <div className="text_section">
+                  {/* <h2 className="fs20">{modalData?.title}</h2> */}
+                  <div dangerouslySetInnerHTML={createMarkup(modalData?.text)} />
+                </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1084,14 +1091,15 @@ const StackModal = (intialData) => {
 
                     <Modal.Header closeButton className="bg-light p-3">
                         {/* <Modal.Title className="fs-12">{modalType == "update_account_modal" ? "Update Account Info" : "Add Account"}</Modal.Title> */}
-                        <Modal.Title className="fs-12"></Modal.Title>
+                        <Modal.Title className="fs-12">Complete Details</Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="px-0 text_color_2 fs-12">
                         <form id="" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                             <div className="row align-items-start m-0">
                                 <div className="col-sm-12">
                                     <div className="form-group">
-                                        <select disabled className="form-control fw-600" {...register("accountForm.user_id", { required: true })} defaultValue={modalData && modalData.account?.user_id ? modalData.account?.user_id : ""}>
+                                      
+                                        <select className="form-control fw-600" {...register("accountForm.user_id", { required: true })} defaultValue={modalData && modalData.account?.user_id ? modalData.account?.user_id : ""}>
                                             <option value={''}>Select User</option>
                                             {modalData?.users && modalData?.users.length > 0 && React.Children.toArray(modalData?.users.map((item, uKey) => {
                                                 return <option value={item.user_id}>{item.username} ({item.email})</option>
@@ -1132,6 +1140,20 @@ const StackModal = (intialData) => {
                                     </div>
                                 </div>
 
+                                <div className="col-sm-12">
+            <div className="form-group">
+              <label>Running text - Marquee</label>
+              <input 
+                type="text" 
+                placeholder="Running text - Marquee" 
+                className="form-control" 
+                {...register("accountForm.running_text")} 
+                autoComplete="off" 
+                defaultValue={modalData && modalData.account?.running_text ? modalData.account?.running_text : ""} 
+              />
+            </div>
+          </div>
+
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input type="text" placeholder="Headline 1" className="form-control" {...register("accountForm.headline1_text", { required: true })} autoComplete="off" defaultValue={modalData && modalData.account?.headline1_text ? modalData.account?.headline1_text : ""} />
@@ -1145,6 +1167,26 @@ const StackModal = (intialData) => {
                                     </div>
                                 </div>
 
+                                <div className="col-sm-12">
+  <div className="form-group">
+    <label>Button -1 click details</label>
+    <Controller
+      name="accountForm.button_1_details"
+      control={control}
+      defaultValue={modalData && modalData.account?.button_1_details ? modalData.account?.button_1_details : ""}
+      render={({ field }) => (
+        <ReactQuill
+          theme="snow"
+          placeholder="Button -1 click details"
+          value={field.value}
+          onChange={field.onChange}
+        />
+      )}
+    />
+  </div>
+</div>
+                                
+
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input type="text" placeholder="Headline 2" className="form-control" {...register("accountForm.headline2_text", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_text ? modalData.account?.headline2_text : ""} />
@@ -1152,10 +1194,22 @@ const StackModal = (intialData) => {
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
-                                    <div className="form-group">
-                                        <input type="text" placeholder="Headline 2 Button" value="Give Feedback & Earn Rewards" disabled className="form-control" {...register("accountForm.headline2_button", { required: false })} autoComplete="off" defaultValue={modalData && modalData.account?.headline2_button ? modalData.account?.headline2_button : ""} />
-                                        {errors.accountForm?.headline2_button && errors.accountForm?.headline2_button.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
-                                    </div>
+                                <div className="form-group">
+  <input
+    type="text"
+    placeholder="Headline 2 Button"
+    defaultValue="Give Feedback & Earn Rewards"
+    readOnly
+    className="form-control"
+    {...register("accountForm.headline2_button", { required: false })}
+    autoComplete="off"
+  />
+  {errors.accountForm?.headline2_button && errors.accountForm?.headline2_button.type == "required" && (
+    <div className="field_err text-danger">
+      <div>{C_MSG.field_required}</div>
+    </div>
+  )}
+</div>
                                 </div>
 
                                 <div className="col-sm-6">
@@ -1170,6 +1224,26 @@ const StackModal = (intialData) => {
                                         {errors.accountForm?.headline3_button && errors.accountForm?.headline3_button.type == "required" && <div className="field_err text-danger"><div>{C_MSG.field_required}</div></div>}
                                     </div>
                                 </div>
+
+                                <div className="col-sm-12">
+  <div className="form-group">
+    <label>Button -3 click details</label>
+    <Controller
+      name="accountForm.button_3_details"
+      control={control}
+      defaultValue={modalData && modalData.account?.button_3_details ? modalData.account?.button_3_details : ""}
+      render={({ field }) => (
+        <ReactQuill
+          theme="snow"
+          placeholder="Button -3 click details"
+          value={field.value}
+          onChange={field.onChange}
+        />
+      )}
+    />
+  </div>
+</div>
+
 
                                 <div className="col-sm-6">
                                     <div className="form-group">

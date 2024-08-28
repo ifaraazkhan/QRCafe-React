@@ -11,7 +11,7 @@ import StackPagination from "../../Components/Elements/StackPagination";
 import { configs } from "../../config";
 
 const UserAccounts = (props) => {
-    const { user: authUser = null, projectId = null } = useContext(AuthContext)
+    const {user:authUser = null, isSuperAdmin = false, projectId = null} = useContext(AuthContext)
     const user = authUser?.user || {}
     const userId = user.user_id || null
 
@@ -202,7 +202,10 @@ const UserAccounts = (props) => {
 
     const getUsers = async () => {
         setFormSbmt(true)
-        let payloadUrl = `admin/getUser`
+        let payloadUrl = `user/getUser`
+        if(isSuperAdmin){
+            payloadUrl = `admin/getUser`
+        }
         let method = "GET"
         
         const res = await ApiService.fetchData(payloadUrl,method)
