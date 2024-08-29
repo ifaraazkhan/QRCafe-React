@@ -1,12 +1,10 @@
 
 
-#home_section *:not(.fa){
-  font-family: "Poppins", sans-serif !important;
-}
-#home_section .home_header{
-  font-family:cursive !important;
+
+#home_section .home_header {
+  font-family: cursive !important;
   font-weight: bolder;
-  font-size: 40px;
+  font-size: 48px !important;
 }
 
 /* :: Preloader */

@@ -1168,7 +1168,7 @@ const StackModal = (intialData) => {
                                 </div>
 
                                 <div className="col-sm-12">
-  <div className="form-group">
+  <div className="form-group" style={{ marginBottom: '50px' }}>
     <label>Button -1 click details</label>
     <Controller
       name="accountForm.button_1_details"
@@ -1180,6 +1180,8 @@ const StackModal = (intialData) => {
           placeholder="Button -1 click details"
           value={field.value}
           onChange={field.onChange}
+          style={{ height: '200px' }}
+          
         />
       )}
     />
@@ -1226,7 +1228,7 @@ const StackModal = (intialData) => {
                                 </div>
 
                                 <div className="col-sm-12">
-  <div className="form-group">
+  <div className="form-group" style={{ marginBottom: '50px' }}>
     <label>Button -3 click details</label>
     <Controller
       name="accountForm.button_3_details"
@@ -1238,6 +1240,7 @@ const StackModal = (intialData) => {
           placeholder="Button -3 click details"
           value={field.value}
           onChange={field.onChange}
+          style={{ height: '200px' }}
         />
       )}
     />

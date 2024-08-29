@@ -395,9 +395,9 @@ const Home = (props) => {
                             </div>
 
                             <ul className="sidenav-nav ps-0">
-                                <li>
+                                {/* <li>
                                     <a className="link_url" onClick={() => showModal("view_pdf_modal",{fileUrl: accInfo.menu_path})}><i className="bi bi-card-list"></i> Food Menu</a>
-                                </li>
+                                </li> */}
                                 <li>
                                     <a className={"link_url"} onClick={() => showModal("view_text_modal", {title: "About Us",text:accInfo?.about_us})}><i className="bi bi-info-square"></i> About us
                                     </a>
@@ -469,7 +469,7 @@ const Home = (props) => {
                         <div className="card card-bg-img bg-img positio-relative min_h_320 banner_box" style={{marginBottom:"1px",backgroundImage:accInfo?.background_img ? `url(${accInfo?.background_img})` : "radial-gradient(black, transparent)"}} >
                             <div className="direction-rtl position-absolute w-100 banner_text_box">
                                 <h2 className="text-white display-3 mb-2 text-center home_header fs-30 fw-600">{accInfo?.title}</h2>
-                                <p className="text-white text-center fs-18">{accInfo?.sub_title}</p>
+                                <p className="text-white text-center fs-22" style={{fontFamily:"Dancing Script"}}>{accInfo?.sub_title}</p>
                             </div>
                         
                             <div className="container direction-rtl">
