@@ -5,7 +5,7 @@ import logoImg from "../assets/images/home/core-img/logo.png";
 import foodMenuImg from "../assets/images/home/demo-img/foodmenu.png";
 import aboutImg from "../assets/images/home/demo-img/about.png";
 import locationImg from "../assets/images/home/demo-img/location.png";
-import discountImg from "../assets/images/home/demo-img/handstar.png";
+import discountImg from "../assets/images/home/demo-img/animated-tag-curved-stars-final.svg";
 import discountSVG from "../assets/images/home/demo-img/animated-discount-icon-svg.svg";
 import speakerSVG from "../assets/images/home/demo-img/audio-feedback-icon.svg";
 import elegantImg from "../assets/images/home/demo-img/elegant.png";
@@ -530,7 +530,7 @@ const Home = (props) => {
                                     <img src={discountImg} alt="" />
                                 </div>
                                 <div className="card-content" style={{width:"230px"}}>
-                                <Marquee > <h5 className="mb-3" style={{ whiteSpace: 'pre' }}>{accInfo?.headline1_text}     </h5></Marquee>
+                                <Marquee > <h5 className="mb-3 " style={{ whiteSpace: 'pre' }}>{accInfo?.headline1_text}     </h5></Marquee>
                                     <a className="btn btn-info rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.button_1_details})}>{accInfo?.headline1_button}</a>
                                 </div>
                             </div>
@@ -578,8 +578,8 @@ const Home = (props) => {
                                         <div className="card-img-wrap">
                                             <img src={discountSVG} alt="" />
                                         </div>
-                                        <div className="card-content">
-                                            <h5 className="mb-3">{accInfo?.headline3_text}</h5>
+                                        <div className="card-content" style={{width:"230px"}}>
+                                        <Marquee >  <h5 className="mb-3" style={{ whiteSpace: 'pre' }}>{accInfo?.headline3_text}</h5></Marquee>
                                             <a className="btn btn-warning rounded-pill link_url" onClick={() => showModal("view_text_modal", {title: "Offers",text:accInfo?.button_3_details})}>{accInfo?.headline3_button}</a>
                                         </div>
                                     </div>
@@ -625,6 +625,7 @@ const Home = (props) => {
                     </div> */}
                     <div className="pt-3"></div>
                     <div className="copyright-info">
+                    <img src={logoImg} />
                         <p>
                             <span id="copyrightYear"></span>
                             &copy; Powered by <a className={"link_url"} onClick={() => newtabURL("")}>HappyVibes</a>

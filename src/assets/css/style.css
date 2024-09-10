@@ -8650,3 +8650,27 @@ caption,
 #home_section[data-theme=dark] .single-plan-check {
   border-color: rgba(255, 255, 255, 0.1);
 }
+
+@keyframes flow {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+}
+
+.flowing-color-text {
+  background: linear-gradient(
+      to right,
+      #4169E1, #6A5ACD, #8B008B, #800080, #FF1493, #FF0000, #FFD700
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 300% auto;
+  animation: flow 8s linear infinite;
+}
